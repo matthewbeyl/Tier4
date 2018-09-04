@@ -2,7 +2,7 @@ const express = require('express');
 const pool = require('../modules/pool');
 const router = express.Router();
 
-router.get('/', (req, res) => {
+router.get('/pastChallenge', (req, res) => {
     console.log('/api/challenge/get');
     // reconsider how to handle current challenge vs past:
     const queryText = `SELECT users.first_name, users.last_name, 

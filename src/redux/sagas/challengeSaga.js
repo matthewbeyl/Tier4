@@ -4,7 +4,7 @@ import axios from 'axios';
 
 function* fetchCurrent() {
   try {
-    const currentChallenge = yield call(axios.get, '/api/challenge');
+    const currentChallenge = yield call(axios.get, '/api/challenge/pastChallenge');
     console.log(currentChallenge);
     yield dispatch({
         type: CHALLENGE_ACTIONS.SET_CURRENT_CHALLENGE,
