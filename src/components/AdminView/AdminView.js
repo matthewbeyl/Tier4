@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import Header from '../Header/Header';
+import NavBar from '../NavBar/NavBar';
 
 const mapStateToProps = state => ({
     user: state.user,
@@ -21,6 +23,7 @@ class AdminView extends Component {
 
         return (
             <main>
+                <NavBar />
                 <h1>This is the Admin View</h1>
                 {/* display button for admin to make new challenge, 
                 render conditionally*/}
