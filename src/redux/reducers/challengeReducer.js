@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import { CHALLENGE_ACTIONS } from '../actions/loginActions';
+import { CHALLENGE_ACTIONS } from '../actions/challengeActions';
 
 const current = (state = '', action) => {
   switch (action.type) {

@@ -4,7 +4,7 @@ import axios from 'axios';
 
 function* fetchCurrent() {
   try {
-    const currentChallenge = yield call(axios.get, `/api/challenge`);
+    const currentChallenge = yield call(axios.get, '/api/challenge');
     console.log(currentChallenge);
     yield dispatch({
         type: CHALLENGE_ACTIONS.SET_CURRENT_CHALLENGE,
@@ -17,7 +17,6 @@ function* fetchCurrent() {
 
 function* challengeSaga() {
   yield takeLatest(CHALLENGE_ACTIONS.FETCH_CURRENT_CHALLENGE, fetchCurrent);
-
 }
 
 export default challengeSaga;
