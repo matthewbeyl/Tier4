@@ -1,10 +1,9 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Route, Router, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 const NavBar = () => (
   <div className="NavBar">
-    <div>
         <li>
           <Link to="/home">
             Home
@@ -19,7 +18,6 @@ const NavBar = () => (
             Admin
           </Link>
         </li>
-    </div>
   </div>
 );
 
