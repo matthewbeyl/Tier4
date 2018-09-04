@@ -1,61 +1,61 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+// import React, { Component } from 'react';
+// import { connect } from 'react-redux';
 
-import Nav from '../../components/Nav/Nav';
+// import NavBar from '../../components/NavBar/NavBar';
 
-import { USER_ACTIONS } from '../../redux/actions/userActions';
-import { triggerLogout } from '../../redux/actions/loginActions';
+// import { USER_ACTIONS } from '../../redux/actions/userActions';
+// import { triggerLogout } from '../../redux/actions/loginActions';
 
 
-const mapStateToProps = state => ({
-  user: state.user,
-});
+// const mapStateToProps = state => ({
+//   user: state.user,
+// });
 
-class UserPage extends Component {
-  componentDidMount() {
-    this.props.dispatch({ type: USER_ACTIONS.FETCH_USER });
-  }
+// class UserPage extends Component {
+//   componentDidMount() {
+//     this.props.dispatch({ type: USER_ACTIONS.FETCH_USER });
+//   }
 
-  componentDidUpdate() {
-    if (!this.props.user.isLoading && this.props.user.userName === null) {
-      this.props.history.push('home');
-    }
-  }
+//   componentDidUpdate() {
+//     if (!this.props.user.isLoading && this.props.user.userName === null) {
+//       this.props.history.push('home');
+//     }
+//   }
 
-  logout = () => {
-    this.props.dispatch(triggerLogout());
-  }
+//   logout = () => {
+//     this.props.dispatch(triggerLogout());
+//   }
 
-  render() {
-    let content = null;
+//   render() {
+//     let content = null;
 
-    if (this.props.user.userName) {
-      content = (
-        <div>
-          <h1
-            id="welcome"
-          >
-            Welcome, { this.props.user.userName }!
-          </h1>
-          <p>Your ID is: {this.props.user.id}</p>
-          <button
-            onClick={this.logout}
-          >
-            Log Out
-          </button>
-        </div>
-      );
-    }
+//     if (this.props.user.userName) {
+//       content = (
+//         <div>
+//           <h1
+//             id="welcome"
+//           >
+//             Welcome, { this.props.user.userName }!
+//           </h1>
+//           <p>Your ID is: {this.props.user.id}</p>
+//           <button
+//             onClick={this.logout}
+//           >
+//             Log Out
+//           </button>
+//         </div>
+//       );
+//     }
 
-    return (
-      <div>
-        <Nav />
-        { content }
-      </div>
-    );
-  }
-}
+//     return (
+//       <div>
+//         <NavBar />
+//         { content }
+//       </div>
+//     );
+//   }
+// }
 
-// this allows us to use <App /> in index.js
-export default connect(mapStateToProps)(UserPage);
+// // this allows us to use <App /> in index.js
+// export default connect(mapStateToProps)(UserPage);
 

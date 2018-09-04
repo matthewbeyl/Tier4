@@ -9,14 +9,15 @@ import {
 import Header from './components/Header/Header';
 import LoginPage from './components/LoginPage/LoginPage';
 import RegisterPage from './components/RegisterPage/RegisterPage';
-import UserPage from './components/UserPage/UserPage';
-import InfoPage from './components/InfoPage/InfoPage';
+import HomeView from './components/HomeView/HomeView';
+import DashboardView from './components/DashboardView/DashboardView';
+import AdminView from './components/AdminView/AdminView';
 
 import './styles/main.css';
 
 const App = () => (
   <div>
-    <Header title="Project Base" />
+    <Header title="Tier Four" />
     <Router>
       <Switch>
         <Redirect exact from="/" to="/home" />
@@ -29,12 +30,16 @@ const App = () => (
           component={RegisterPage}
         />
         <Route
-          path="/user"
-          component={UserPage}
+          path="/admin"
+          component={AdminView}
         />
         <Route
-          path="/info"
-          component={InfoPage}
+          path="/home"
+          component={HomeView}
+        />
+        <Route
+          path="/dashboard"
+          component={DashboardView}
         />
         {/* OTHERWISE (no path!) */}
         <Route render={() => <h1>404</h1>} />
