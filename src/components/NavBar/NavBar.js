@@ -1,25 +1,17 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { connect } from 'react-redux';
 
 const NavBar = () => (
-  <div className="NavBar">
-    <div>
-        <li>
+  <div className="NavBar">        
           <Link to="/home">
             Home
-          </Link>
-        </li><li>
+          </Link>       
           <Link to="/dashboard">
             Dashboard
-          </Link>
-        </li>
-        <li>
+          </Link>        
           <Link to="/admin">
             Admin
           </Link>
-        </li>
-    </div>
   </div>
 );
 
