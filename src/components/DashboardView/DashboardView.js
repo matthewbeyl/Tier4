@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import Header from '../Header/Header.js';
+import NavBar from '../NavBar/NavBar';
 
 class DashboardView extends Component {
     render() {
         return (
             <main>
-                <Header />
-                <h1>This is the Dashboard View</h1>
+                <NavBar />
+                <h1>This is the Dashbaord View</h1>
             </main>
         )
     }
