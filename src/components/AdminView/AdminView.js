@@ -11,7 +11,7 @@ const mapStateToProps = state => ({
 class AdminView extends Component {
 
     componentDidMount() {
-        // on mounth, dispatch an action to saga - axios - db to get user data 
+        this.props.dispatch({type: 'FETCH_CURRENT_CHALLENGE'})
     }
 
     render() {
