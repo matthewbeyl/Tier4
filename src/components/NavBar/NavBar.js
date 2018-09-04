@@ -1,23 +1,17 @@
 import React from 'react';
-import { Link, Route, Router, withRouter } from 'react-router-dom';
-import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 const NavBar = () => (
-  <div className="NavBar">
-        <li>
+  <div className="NavBar">        
           <Link to="/home">
             Home
-          </Link>
-        </li><li>
+          </Link>       
           <Link to="/dashboard">
             Dashboard
-          </Link>
-        </li>
-        <li>
+          </Link>        
           <Link to="/admin">
             Admin
           </Link>
-        </li>
   </div>
 );
 
