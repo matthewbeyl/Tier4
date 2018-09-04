@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import NavBar from '../NavBar/NavBar';
+import Header from '../Header/Header';
 
 class DashboardView extends Component {
     render() {
         return (
             <main>
-                <NavBar />
+                <Header title="Tier Four" />
                 <h1>This is the Dashbaord View</h1>
             </main>
         )
