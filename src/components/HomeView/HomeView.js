@@ -1,22 +1,37 @@
 import React, { Component } from 'react';
-import NavBar from '../NavBar/NavBar';
+import Header from '../Header/Header';
+import { fetchStartDate } from '../../redux/actions/countdownActions';
+import { connect } from 'react-redux';
+
+
+const mapStateToProps = state => ({
+        challengedate: state.challengedate
+    });
 
 class HomeView extends Component {
+    
     constructor(props) {
         super(props);
+        
         this.state = {
-            challegeDate: new Date() // set default challengeDate to cuurent date
+            challengedate: '',
         }
     }
 
-    handleInputChange = (event) => {
-        this.setState({
-            challegeDate: event.target.value
-        })
+    componentDidMount() {
+        this.props.dispatch(fetchStartDate());
+        this.kittyFoo();
     }
 
-    handleClickEvent = () => {
-        let deadline = this.state.challegeDate;
+    // handleInputChange = (event) => {
+    //     this.setState({
+    //         //get challenge Date from Database and replace event.target.value.
+    //         challengeDate: event.target.value
+    //     })
+    // }
+
+    kittyFoo = () => {        
+        let deadline = this.props.challengedate;                
         // use a for loop and parse out YYYY, MM, DD
         let year = '';
         let month = '';
@@ -38,6 +53,7 @@ class HomeView extends Component {
         let dateFormatted = new Date(year, month, day);
         this.initializeClock('clockdiv', dateFormatted);
     }
+    // ----------------------------------------------------------------------------------------
 
     initializeClock = (id, endDate) => {
         let clock = document.getElementById(id);
@@ -77,20 +93,15 @@ class HomeView extends Component {
     }
 
     render() {
+        console.log(this.props.challengedate);
+        
         return (
             <main>
-                <p>I'm the Home View - Public</p>
-                <p><i>Countdown</i></p>
+                <Header title="Tier Four" />
+                <br/>
                 <section>
-                    <label>Start Date :</label>
-                    <input
-                        type="date"
-                        format="long"
-                        onChange={this.handleInputChange}
-                    />
-                    <button onClick={this.handleClickEvent}>submit</button>
-                    <h3>GitHub Commit Sprint</h3>
-                    here is the countdown: 
+                    <h5>Sign up before next challenge!</h5>
+                    <br/>
                     <div id="clockdiv">
                         <div>
                             <span className="days"></span>
@@ -109,14 +120,13 @@ class HomeView extends Component {
                             <div>Seconds</div>
                         </div>
                     </div>
-                    <p>Sign up before the next Challenge!</p>
                 </section>
             </main >
         )
     }
 }
 
-export default HomeView;
+export default connect(mapStateToProps) (HomeView);
 
 
 
