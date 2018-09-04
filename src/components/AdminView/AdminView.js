@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 const mapStateToProps = state => ({
     user: state.user,
     login: state.login,
-    // saga should hold user data, get it here 
+    // saga should hold current challenge data && past data, call it here
   });
 
 class AdminView extends Component {
@@ -14,6 +14,11 @@ class AdminView extends Component {
     }
 
     render() {
+
+        // map over mapStateToProps state here for user data 
+
+        // add logic for conditional rendering 
+
         return (
             <main>
                 <h1>This is the Admin View</h1>
