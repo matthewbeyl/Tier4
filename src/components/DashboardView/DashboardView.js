@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
 import Header from '../Header/Header.js';
 
-class DashbaordView extends Component {
+class DashboardView extends Component {
     render() {
         return (
             <main>
                 <Header />
-                <h1>This is the Dashbaord View</h1>
+                <h1>This is the Dashboard View</h1>
             </main>
         )
     }
 }
 
-export default DashbaordView;
+export default DashboardView;
