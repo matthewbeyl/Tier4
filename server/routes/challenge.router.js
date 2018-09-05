@@ -19,8 +19,9 @@ router.get('/pastChallenge', (req, res) => {
     })
 });
 
-// router.post('/', (req, res) => {
-
-// });
+router.post('/newChallenge', (req, res) => {
+    console.log(req.body);
+    console.log(req.params);
+});
 
 module.exports = router;
