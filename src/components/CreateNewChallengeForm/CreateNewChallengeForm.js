@@ -29,7 +29,7 @@ class CreateNewChallengeForm extends Component {
         this.setState({
             newChallenge: {
                 ...this.state.newChallenge,
-                [propertyName]: event.target.checked
+                [propertyName]: event.target.check
             }
         })
         console.log(this.state.newChallenge);
@@ -68,13 +68,13 @@ class CreateNewChallengeForm extends Component {
                             // MYL : fix this bug
                             type="checkbox"
                             // value={this.state.newChallenge.exclude_weekends}
-                            onChange={this.handleChangeFor('exclude_weekends')}
+                            // onChange={this.handleChangeFor('exclude_weekends')}
                         /><br />
                         Exclude Holidays:
                     <input
                             type="checkbox"
                             // value={this.state.newChallenge.exclude_holidays}
-                            onChange={this.handleChangeFor('exclude_holidays')}
+                            // onChange={this.handleChangeFor('exclude_holidays')}
                         /><br />
                         <button onClick={this.handleNewChallengeSubmit}>Create Challenge</button><br />
                         <button onClick={this.props.closePopupForm}>Cancel</button>

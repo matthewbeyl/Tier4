@@ -20,8 +20,22 @@ router.get('/pastChallenge', (req, res) => {
 });
 
 router.post('/newChallenge', (req, res) => {
-    console.log(req.body);
-    console.log(req.params);
+    let newChallenge = req.body;
+    const queryText = `INSERT INTO challenges ("title", "date", "exclude_weekends", "exclude_holidays") 
+    VALUES ($1, $2, $3, $4);`;
+    const queryValues = [
+        newChallenge.title,
+        newChallenge.date,
+        newChallenge.exclude_weekends,
+        newChallenge.exclude_holidays
+    ];
+    pool.query(queryText,queryValues)
+    .then(()=>{
+        res.sendStatus(201);
+    }).catch((error)=>{
+        console.log('error creating new challenge: ', error);
+        res.sendStatus(500);
+    })
 });
 
 module.exports = router;
