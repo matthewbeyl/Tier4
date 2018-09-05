@@ -66,6 +66,12 @@ class DashboardView extends Component {
                     <br />
                     <button type="submit">Submit Feedback</button>
                 </form>
+                <br/>
+                <button>JOIN CHALLENGE</button>
+                <br/>
+                <form>
+                    
+                </form>
             </main>
         )
     }
