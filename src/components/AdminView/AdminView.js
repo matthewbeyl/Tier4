@@ -2,19 +2,40 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Header from '../Header/Header';
 
-class PopupForm extends React.Component {
+class CreateNewChallengeForm extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            newChallenge: {
+                title: '',
+                date: new Date(),
+                exclude_weekends: false,
+                exclude_holidays: false
+            }
+        }
+    }
+
+    handleChange = (event) => {
+        this.setState({
+            newChallenge: {
+                ...this.state.newChallenge, 
+                title: event.target.value
+            }
+        })
+    }
+
     render() {
         return (
             <div style={{ display: 'flex', position: 'fixed', width: '100%', height: '100%', top: '0', left: '0', right: '0', bottom: '0', margin: 'auto', backgroundColor: 'rgba(0,0,0,0.5)' }}>
-                <div style={{ alignContent: 'center', postion: 'absolute', left: '25%', right: '25%', top: '25%', bottom: '25%', margin: 'auto', backgroundColor: 'white' }}>
+                <div style={{ postion: 'absolute', width: '500px', height: '250px', margin: 'auto', backgroundColor: 'white' }}>
                     <p>{this.props.text}</p>
-                    <form>
-                        <label>Challenge Title</label>
-                        <input type="text" placeholder="Title" />
-                        <label>Start Date</label><br />
-                        <input type="date" />
-                        <button>Create Challenge</button>
-                    </form>
+                    <label>Challenge Title</label>
+                    <input type="text" placeholder="Title" onChange={this.handleChange}/><br />
+                    <label>Start Date</label>
+                    <input type="date" /><br />
+                    Exclude Weekends: <input type="checkbox" id="exclude_weekends" /><br />
+                    Exclude Holidays: <input type="checkbox" id="exclude_holidays" /><br />
+                    <button>Create Challenge</button><br />
                     <button onClick={this.props.closePopupForm}>Cancel</button>
                 </div>
             </div>
@@ -78,7 +99,7 @@ class AdminView extends Component {
 
                 <button onClick={this.toggleCreateNewChallengePopupForm.bind(this)}>Create New Challenge</button>
                 {this.state.showPopupForm ?
-                    <PopupForm
+                    <CreateNewChallengeForm
                         text='Create a New Challenge'
                         closePopupForm={this.toggleCreateNewChallengePopupForm.bind(this)}
                     />
