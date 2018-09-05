@@ -121,6 +121,7 @@ class HomeView extends Component {
                         </div>
                     </div>
                 </section>
+                <img src=""/>
             </main >
         )
     }
