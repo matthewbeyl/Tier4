@@ -2,18 +2,19 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Header from '../Header/Header';
 import CreateNewChallengeForm from '../CreateNewChallengeForm/CreateNewChallengeForm.js';
+import PastChallenges from '../PastChallenges/PastChallenges';
 
 const mapStateToProps = state => ({
     user: state.user,
     login: state.login,
-    currentChallengeData: state.challenge.current
 });
 
 class AdminView extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            showPopupForm: false
+            showPopupForm: false,
+            toggleDisplayTable: false
         }
     }
 
@@ -21,12 +22,20 @@ class AdminView extends Component {
         this.props.dispatch({ type: 'FETCH_CURRENT_CHALLENGE' });
     }
 
-    showCurrentChallenge = () => {
-        console.log('current challenge button clicked');
+    toggleDisplayTableTrue = () => {
+        console.log('show current challenge');
+        this.setState({
+            toggleDisplayTable: true
+        })
+        console.log(this.state.toggleDisplayTable);
     }
 
-    showPastChallenges = () => {
-        console.log('past challenge button clicked');
+    toggleDisplayTableFalse = () => {
+        console.log('show past challenges');
+        this.setState({
+            toggleDisplayTable: false
+        })
+        console.log(this.state.toggleDisplayTable);
     }
 
     toggleCreateNewChallengePopupForm = () => {
@@ -34,57 +43,25 @@ class AdminView extends Component {
             showPopupForm: !this.state.showPopupForm
         });
     }
-    render() {
-        let apiChallengeResults = null;
-        this.props.currentChallengeData.map((user, index) => {
-            apiChallengeResults = user.map((eachUser, index) => {
-                return (
-                    <tr key={index}>
-                        <td>{eachUser.first_name} {eachUser.last_name}</td>
-                        <td>{eachUser.commit_percentage}</td>
-                        <td>{eachUser.longest_streak}</td>
-                        <td>{eachUser.daily_email_reminders.toString()}</td>
-                        <td>{eachUser.weekly_email_reminders.toString()}</td>
-                        <td><button>Delete</button></td>
-                    </tr>
-                )
-            })
-        })
 
-        // add logic for conditional rendering 
+    render() {
         return (
             <main>
                 <Header title="Tier Four" />
                 <h1>This is the Admin View</h1>
-
                 <button onClick={this.toggleCreateNewChallengePopupForm.bind(this)}>Create New Challenge</button>
                 {this.state.showPopupForm ?
                     <CreateNewChallengeForm
                         text='Create a New Challenge'
                         closePopupForm={this.toggleCreateNewChallengePopupForm.bind(this)}
-                    />
-                    : null
+                    />: null
                 }
-                <button onClick={this.showCurrentChallenge}>Current Challenge</button>
-                <button onClick={this.showPastChallenges}>Past Challenges</button>
-
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Commit %</th>
-                            <th>Streak</th>
-                            <th>Daily Reminder</th>
-                            <th>Weekly Reminder</th>
-                            <th>Delete</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {apiChallengeResults}
-                    </tbody>
-                </table>
-
-
+                <button onClick={this.toggleDisplayTableTrue}>Current Challenge</button>
+                <button onClick={this.toggleDisplayTableFalse}>Past Challenges</button>
+                {this.state.toggleDisplayTable ?
+                <PastChallenges 
+                />: null 
+                }
             </main>
         )
     }
