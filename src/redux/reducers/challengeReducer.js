@@ -1,10 +1,11 @@
 import { combineReducers } from 'redux';
 import { CHALLENGE_ACTIONS } from '../actions/challengeActions';
 
-const current = (state = '', action) => {
+const current = (state = [], action) => {
   switch (action.type) {
     case CHALLENGE_ACTIONS.SET_CURRENT_CHALLENGE:
-      return action.payload;
+        state = [...state,action.payload]
+      return state;
     default:
       return state;
   }

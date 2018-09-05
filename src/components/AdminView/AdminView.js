@@ -5,20 +5,34 @@ import Header from '../Header/Header';
 const mapStateToProps = state => ({
     user: state.user,
     login: state.login,
-    // saga should hold current challenge data && past data, call it here
-  });
+    currentChallengeData: state.challenge.current
+});
 
 class AdminView extends Component {
-
+    constructor(props) {
+        super(props);
+        this.state = {
+            current: '',
+        }
+    }
     componentDidMount() {
-        this.props.dispatch({type: 'FETCH_CURRENT_CHALLENGE'})
+        this.props.dispatch({ type: 'FETCH_CURRENT_CHALLENGE' });
     }
 
     render() {
-        
+        let apiChallengeResults = null;
         // map over mapStateToProps state here for user data
-        // add logic for conditional rendering 
+        this.props.currentChallengeData.map((user, index) => {
+            apiChallengeResults = user.map((eachUser, index) => {
+                return(
+                    <div key={index}>
+                        {eachUser.first_name} {eachUser.last_name}
+                    </div>
+                )
+            })
+        })
 
+        // add logic for conditional rendering 
         return (
             <main>
                 <Header title="Tier Four" />
@@ -33,7 +47,8 @@ class AdminView extends Component {
                     <button>Current Challenge</button>
                     <button>Past Challenges</button>
                 </section>
-                {/* display either  */}
+
+                {apiChallengeResults}
             </main>
         )
     }
