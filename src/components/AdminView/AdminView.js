@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import Header from '../Header/Header';
 import CreateNewChallengeForm from '../CreateNewChallengeForm/CreateNewChallengeForm.js';
 import PastChallenges from '../PastChallenges/PastChallenges';
+import CurrentChallenge from '../CurrentChallenge/CurrentChallenge';
 
 const mapStateToProps = state => ({
     user: state.user,
@@ -14,7 +15,8 @@ class AdminView extends Component {
         super(props);
         this.state = {
             showPopupForm: false,
-            toggleDisplayTable: false
+            displayCurrentChallenge: false,
+            displayPastChallenges: false
         }
     }
 
@@ -22,20 +24,20 @@ class AdminView extends Component {
         this.props.dispatch({ type: 'FETCH_CURRENT_CHALLENGE' });
     }
 
-    toggleDisplayTableTrue = () => {
+    displayCurrentChallenge = () => {
         console.log('show current challenge');
         this.setState({
-            toggleDisplayTable: true
+            displayCurrentChallenge: !this.state.displayCurrentChallenge,
         })
-        console.log(this.state.toggleDisplayTable);
+        console.log(this.state.displayCurrentChallenge);
     }
 
-    toggleDisplayTableFalse = () => {
+    displayPastChallenges = () => {
         console.log('show past challenges');
         this.setState({
-            toggleDisplayTable: false
+            displayPastChallenge: !this.state.displayPastChallenge,
         })
-        console.log(this.state.toggleDisplayTable);
+        console.log(this.state.displayPastChallenge);
     }
 
     toggleCreateNewChallengePopupForm = () => {
@@ -56,10 +58,14 @@ class AdminView extends Component {
                         closePopupForm={this.toggleCreateNewChallengePopupForm.bind(this)}
                     />: null
                 }
-                <button onClick={this.toggleDisplayTableTrue}>Current Challenge</button>
-                <button onClick={this.toggleDisplayTableFalse}>Past Challenges</button>
-                {this.state.toggleDisplayTable ?
+                <button onClick={this.displayCurrentChallenge}>Current Challenge</button>
+                <button onClick={this.displayPastChallenges}>Past Challenges</button>
+                {this.state.displayPastChallenge ?
                 <PastChallenges 
+                />: null 
+                }
+                {this.state.displayCurrentChallenge ?
+                <CurrentChallenge 
                 />: null 
                 }
             </main>
