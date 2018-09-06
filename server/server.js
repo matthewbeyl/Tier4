@@ -12,7 +12,7 @@ const passport = require('./strategies/github.strategy');
 const userRouter = require('./routes/user.router');
 const challengeRouter = require('./routes/challenge.router');
 const authRouter = require('./routes/auth.router.js');
-const feedbackRouter = require('./routes/feedback.router');
+const dashboardRouter = require('./routes/dashboard.router');
 
 // Body parser middleware
 app.use(bodyParser.json());
@@ -29,7 +29,7 @@ app.use(passport.session());
 app.use('/api/user', userRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/challenge', challengeRouter);
-app.use('/api/feedback', feedbackRouter);
+app.use('/api/dashboard', dashboardRouter);
 
 // Serve static files
 app.use(express.static('build'));

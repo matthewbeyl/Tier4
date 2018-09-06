@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import Header from '../Header/Header';
 import { fetchStartDate } from '../../redux/actions/countdownActions';
 import { connect } from 'react-redux';
-import NavBar from '../NavBar/NavBar';
 import axios from 'axios';
 
 
@@ -25,14 +24,6 @@ class HomeView extends Component {
         this.props.dispatch(fetchStartDate());
     }
 
-    // handleInputChange = (event) => {
-    //     this.setState({
-    //         //get challenge Date from Database and replace event.target.value.
-    //         challengeDate: event.target.value
-    //     })
-    // }
-
-
     logout = () => {
         axios.get('/api/auth/logout').then(response => {
             alert('Logged out')
@@ -54,7 +45,6 @@ class HomeView extends Component {
 
         }).catch(err => {
             console.log(err);
-
         })
     }
 
