@@ -5,44 +5,57 @@ const rp = require('request-promise')
 
 
 let userList = []
+let challengeDate = ''
 
 var date = new Date();
-date.setMonth(date.getMonth() - 1);
-// date = date.toString()
+tempDate = date.toString()
+date.setDate(date.getDay() - 30);
 date = JSON.stringify(date)
 actualDate = date.substring(1, 11)
-console.log(date, date.substring(1, 11));
+console.log(tempDate, date.substring(1, 11));
+
+function findTotalWeekendDays(){
+    if (tempDate === 'Sun') {
+        
+    }
+}
 
 
 router.get('/get-gh-data', (req, res) => {
     console.log('getting user list');
-        const queryText = 'SELECT * FROM "users" WHERE "active" = TRUE';
-        pool.query(queryText)
-        .then((response) => {
-            userList = response.rows
-            console.log('getting gh data');
-            const requestPromises = []
-            userList.forEach(user => {
-                const requestOptions = {
-                    uri: `https://api.github.com/search/commits?q=committer:${user.github}+committer-date:>${actualDate}&sort=committer-date&per_page=100`,
-                    headers: { "User-Agent": 'reverended', Accept: 'application/vnd.github.cloak-preview+json' },
-                    method: 'GET',
-                    json: true
-                }
-                requestPromises.push(rp(requestOptions));
+        pool.query(`SELECT "date" FROM "challenges" ORDER BY "date" DESC;`)
+        .then((response)=>{
+            challengeDate = response.rows[0].date
+            challengeDate = JSON.stringify(challengeDate)
+            challengeDate = challengeDate.substring(1, 11)
+            const queryText = 'SELECT * FROM "users" WHERE "active" = TRUE';
+            pool.query(queryText)
+            .then((response) => {
+                userList = response.rows
+                console.log('getting gh data');
+                const requestPromises = []
+                userList.forEach(user => {
+                    const requestOptions = {
+                        uri: `https://api.github.com/search/commits?q=committer:${user.github}+committer-date:>${challengeDate}&sort=committer-date&per_page=100`,
+                        headers: { "User-Agent": 'reverended', Accept: 'application/vnd.github.cloak-preview+json' },
+                        method: 'GET',
+                        json: true
+                    }
+                    requestPromises.push(rp(requestOptions));
+                })
+                Promise.all(requestPromises)
+                .then((data) => {
+                    console.log(data);
+                    res.send(data)
+                })
+                .catch((error) => {
+                    console.log(error);
+                })
             })
-            Promise.all(requestPromises)
-            .then((data) => {
-                console.log(data);
-                res.send(data)
-            })
-            .catch((error) => {
-                console.log(error);
-            })
-        })
         .catch((error) => {
             console.log('error on get-user-list', error);
         })
+    })
 })
 
 
