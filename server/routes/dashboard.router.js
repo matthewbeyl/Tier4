@@ -10,14 +10,21 @@ const router = express.Router();
  * POST route template
  */
 
+
 router.post('/email', (req, res) => {
     console.log('in email POST');
     console.log(req.body);
-    pool.query(`INSERT INTO "users" ("email", "queued_for_next_challenge", "weekly_email_reminders", "daily_email_reminders") VALUES ($1, $2, $3, $4);`,
-    [req.body.email, req.body.queued_for_next_challenge , req.body.weekly_email_reminders , req.body.daily_email_reminders ])
+    pool.query(`UPDATE "users"
+        SET "email" = $1,
+            "queued_for_next_challenge" = $2,
+            "weekly_email_reminders" = $3,
+            "daily_email_reminders" = $4
+            WHERE "id" = $5;`, [req.body.email, req.body.queued_for_next_challenge , req.body.weekly_email_reminders , req.body.daily_email_reminders, req.user.id])
     .then((results) => {
         res.sendStatus(201);
     }).catch((errorFromPG) => {
+        console.log(errorFromPG);
+        
         res.sendStatus(500);
     })
 });

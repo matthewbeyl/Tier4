@@ -83,13 +83,13 @@ class DashboardView extends Component {
                 <h3>Welcome, User</h3>
                 <form onSubmit={this.submitFeedback}>
                     <label>What did you learn?</label>
-                    <input type="text" placeholder="I learned..." value={this.state.applied} onChange={this.handleFeedbackChange('applied')} />
+                    <input type="text" placeholder="I learned..." value={this.state.learned} onChange={this.handleFeedbackChange('learned')} />
                     <br />
                     <label>What did you build?</label>
-                    <input type="text" placeholder="I built..." value={this.state.learned} onChange={this.handleFeedbackChange('learned')} />
+                    <input type="text" placeholder="I built..." value={this.state.built} onChange={this.handleFeedbackChange('built')} />
                     <br />
                     <label>Where did you apply?</label>
-                    <input type="text" placeholder="I applied..." value={this.state.built} onChange={this.handleFeedbackChange('built')} />
+                    <input type="text" placeholder="I applied..." value={this.state.applied} onChange={this.handleFeedbackChange('applied')} />
                     <br />
                     <label>Who did you follow up with?</label>
                     <input type="text" placeholder="I followed up..." value={this.state.followed_up} onChange={this.handleFeedbackChange('followed_up')} />
