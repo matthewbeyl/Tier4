@@ -1,40 +1,79 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import Header from '../Header/Header.jsx';
+import Header from '../Header/Header';
+import CreateNewChallengeForm from '../CreateNewChallengeForm/CreateNewChallengeForm.js';
+import PastChallenges from '../PastChallenges/PastChallenges';
+import CurrentChallenge from '../CurrentChallenge/CurrentChallenge';
 
 const mapStateToProps = state => ({
     user: state.user,
     login: state.login,
-    // saga should hold current challenge data && past data, call it here
-  });
+});
 
 class AdminView extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            showPopupForm: false,
+            displayCurrentChallenge: true,
+            displayPastChallenges: false
+        }
+    }
 
     componentDidMount() {
-        // on mounth, dispatch an action to saga - axios - db to get user data 
+        this.props.dispatch({ type: 'FETCH_CURRENT_CHALLENGE' });
+    }
+
+    displayCurrentChallenge = () => {
+        if(this.state.displayPastChallenges === true){
+            this.setState({
+                displayPastChallenges: false
+            })
+        }
+        this.setState({
+            displayCurrentChallenge: !this.state.displayCurrentChallenge,
+        })
+    }
+
+    displayPastChallenges = () => {
+        if(this.state.displayCurrentChallenge === true){
+            this.setState({
+                displayCurrentChallenge: false
+            })
+        }
+        this.setState({
+            displayPastChallenges: !this.state.displayPastChallenges,
+        })
+    }
+
+    toggleCreateNewChallengePopupForm = () => {
+        this.setState({
+            showPopupForm: !this.state.showPopupForm
+        });
     }
 
     render() {
-
-        // map over mapStateToProps state here for user data 
-
-        // add logic for conditional rendering 
-
         return (
             <main>
                 <Header title="Tier Four" />
                 <h1>This is the Admin View</h1>
-                {/* display button for admin to make new challenge, 
-                render conditionally*/}
-                <section>
-                    <button>Create New Challenge</button>
-                </section>
-                {/* always viewable, two buttons that changes which table to show */}
-                <section>
-                    <button>Current Challenge</button>
-                    <button>Past Challenges</button>
-                </section>
-                {/* display either  */}
+                <button onClick={this.toggleCreateNewChallengePopupForm.bind(this)}>Create New Challenge</button>
+                {this.state.showPopupForm ?
+                    <CreateNewChallengeForm
+                        text='Create a New Challenge'
+                        closePopupForm={this.toggleCreateNewChallengePopupForm.bind(this)}
+                    />: null
+                }
+                <button onClick={this.displayCurrentChallenge}>Current Challenge</button>
+                <button onClick={this.displayPastChallenges}>Past Challenges</button>
+                {this.state.displayPastChallenges ?
+                <PastChallenges 
+                />: null 
+                }
+                {this.state.displayCurrentChallenge ?
+                <CurrentChallenge 
+                />: null 
+                }
             </main>
         )
     }
