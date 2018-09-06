@@ -3,10 +3,6 @@ import NavBar from '../NavBar/NavBar';
 
 class Header extends Component {
 
- constructor(props){
-    super(props);
- }
-
  render(){
    return (
      <div className="instructions">

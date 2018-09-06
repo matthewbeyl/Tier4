@@ -13,7 +13,7 @@ function* addPreferencesSaga() {
 function* addPreferences(action){
     console.log(action);
     try{
-        yield call(axios.post, '/api/email', action.payload)
+        yield call(axios.post, '/api/dashboard/email', action.payload)
         yield alert('Preferences Updated')
     } catch (error) {
         console.log('Error - ', error);

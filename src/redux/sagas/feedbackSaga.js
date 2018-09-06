@@ -13,7 +13,7 @@ function* addFeedbackSaga() {
 function* addFeedback(action){
     console.log(action);
     try{
-        yield call(axios.post, '/api/feedback', action.payload)
+        yield call(axios.post, '/api/dashboard/feedback', action.payload)
         yield alert('Feedback Submitted')
     } catch (error) {
         console.log('Error - ', error);
