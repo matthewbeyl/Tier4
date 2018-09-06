@@ -7,6 +7,7 @@
     "axios": "^0.17.1",
     "bcrypt": "^2.0.1",
     "body-parser": "^1.18.2",
+    "cookie-parser": "^1.4.3",
     "cookie-session": "^2.0.0-beta.3",
     "dotenv": "^4.0.0",
     "eslint": "^4.19.0",
@@ -15,7 +16,11 @@
     "eslint-plugin-jsx-a11y": "^6.0.3",
     "eslint-plugin-react": "^7.7.0",
     "express": "^4.16.3",
+    "express-session": "^1.15.6",
+    "morgan": "^1.9.0",
+    "node-cron": "^1.2.1",
     "passport": "^0.4.0",
+    "passport-github2": "^0.1.11",
     "passport-local": "^1.0.0",
     "pg": "^7.4.1",
     "prop-types": "^15.6.1",
@@ -26,7 +31,9 @@
     "react-scripts": "^1.1.1",
     "redux": "^3.7.2",
     "redux-logger": "^3.0.6",
-    "redux-saga": "^0.16.0"
+    "redux-saga": "^0.16.0",
+    "request": "^2.88.0",
+    "request-promise": "^4.2.2"
   },
   "scripts": {
     "start": "node server/server.js",
