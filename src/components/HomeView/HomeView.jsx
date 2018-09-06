@@ -2,17 +2,20 @@ import React, { Component } from 'react';
 import Header from '../Header/Header';
 import { fetchStartDate } from '../../redux/actions/countdownActions';
 import { connect } from 'react-redux';
+import NavBar from '../NavBar/NavBar';
+import axios from 'axios';
 
 
 const mapStateToProps = state => ({
-        challengedate: state.challengedate
-    });
+    challengedate: state.challengedate
+});
+
 
 class HomeView extends Component {
-    
+
     constructor(props) {
         super(props);
-        
+
         this.state = {
             challengedate: '',
         }
@@ -30,8 +33,34 @@ class HomeView extends Component {
     //     })
     // }
 
-    kittyFoo = () => {        
-        let deadline = this.props.challengedate;                
+
+    logout = () => {
+        axios.get('/api/auth/logout').then(response => {
+            alert('Logged out')
+        }).catch(err => {
+            alert('error on logout', err)
+        })
+    }
+
+
+    handleInputChange = (event) => {
+        this.setState({
+            challegeDate: event.target.value
+        })
+    }
+
+    reqDotUser = () => {
+        axios.get('/api/auth/profile').then(response => {
+            console.log(response.data);
+
+        }).catch(err => {
+            console.log(err);
+
+        })
+    }
+
+    handleClickEvent = () => {
+        let deadline = this.state.challegeDate;
         // use a for loop and parse out YYYY, MM, DD
         let year = '';
         let month = '';
@@ -48,7 +77,7 @@ class HomeView extends Component {
                 day = day + deadline[i];
             }
         }
-        let monthCorrected = (parseInt(month,10) - 1);
+        let monthCorrected = (parseInt(month, 10) - 1);
         month = monthCorrected.toString();
         let dateFormatted = new Date(year, month, day);
         this.initializeClock('clockdiv', dateFormatted);
@@ -62,7 +91,7 @@ class HomeView extends Component {
         let minutesSpan = clock.querySelector('.minutes');
         let secondsSpan = clock.querySelector('.seconds');
 
-        function getTimeRemaining (endTime) {
+        function getTimeRemaining(endTime) {
             let total = Date.parse(endTime) - Date.parse(new Date());
             let seconds = Math.floor((total / 1000) % 60);
             let minutes = Math.floor((total / 1000 / 60) % 60);
@@ -94,14 +123,14 @@ class HomeView extends Component {
 
     render() {
         console.log(this.props.challengedate);
-        
+
         return (
             <main>
                 <Header title="Tier Four" />
-                <br/>
+                <br />
                 <section>
                     <h5>Sign up before next challenge!</h5>
-                    <br/>
+                    <br />
                     <div id="clockdiv">
                         <div>
                             <span className="days"></span>
@@ -121,13 +150,16 @@ class HomeView extends Component {
                         </div>
                     </div>
                 </section>
-                <img src=""/>
+                <img src="" />
+                <button onClick={this.reqDotUser}>Log req.user</button>
+                <button onClick={this.logout}>Sign out</button>
+                <a href="http://localhost:5000/api/auth/login">Sign In</a>
             </main >
         )
     }
 }
 
-export default connect(mapStateToProps) (HomeView);
+export default connect(mapStateToProps)(HomeView);
 
 
 
