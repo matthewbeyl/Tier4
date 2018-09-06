@@ -6,13 +6,16 @@ const rp = require('request-promise')
 
 let userList = []
 let challengeDate = ''
+let challengeDateString = ''
+let calendar = []
+
 
 var date = new Date();
 tempDate = date.toString()
 date.setDate(date.getDay() - 30);
 date = JSON.stringify(date)
 actualDate = date.substring(1, 11)
-console.log(tempDate, date.substring(1, 11));
+console.log(tempDate, date);
 
 function findTotalWeekendDays(){
     if (tempDate === 'Sun') {
@@ -26,8 +29,8 @@ router.get('/get-gh-data', (req, res) => {
         pool.query(`SELECT "date" FROM "challenges" ORDER BY "date" DESC;`)
         .then((response)=>{
             challengeDate = response.rows[0].date
-            challengeDate = JSON.stringify(challengeDate)
-            challengeDate = challengeDate.substring(1, 11)
+            challengeDateString = JSON.stringify(challengeDate)
+            challengeDateString = challengeDateString.substring(1, 11)
             const queryText = 'SELECT * FROM "users" WHERE "active" = TRUE';
             pool.query(queryText)
             .then((response) => {
@@ -36,7 +39,7 @@ router.get('/get-gh-data', (req, res) => {
                 const requestPromises = []
                 userList.forEach(user => {
                     const requestOptions = {
-                        uri: `https://api.github.com/search/commits?q=committer:${user.github}+committer-date:>${challengeDate}&sort=committer-date&per_page=100`,
+                        uri: `https://api.github.com/search/commits?q=committer:${user.github}+committer-date:>${challengeDateString}&sort=committer-date&per_page=100`,
                         headers: { "User-Agent": 'reverended', Accept: 'application/vnd.github.cloak-preview+json' },
                         method: 'GET',
                         json: true
@@ -46,6 +49,9 @@ router.get('/get-gh-data', (req, res) => {
                 Promise.all(requestPromises)
                 .then((data) => {
                     console.log(data);
+
+                    sortData(data);
+
                     res.send(data)
                 })
                 .catch((error) => {
@@ -58,6 +64,49 @@ router.get('/get-gh-data', (req, res) => {
     })
 })
 
+function sortData(tempData){
+    console.log(tempData);
+    for (let i = 0; i < tempData.length; i++) {
+        let tempUserData = tempData[i].items;
+        let tempUserName = userList[i];
+        let tempDate = challengeDate;
+        let processedData = processData(tempUserData, tempDate)
+        console.log(processedData);
+        
+        //packageData(tempUserName, processedData);
+        
+    }
+}
+
+function processData(userData, datestring){
+    let userCommitArray = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
+    for (let i = 0; i < 30; i++) {
+        let date = new Date(datestring)
+        date.setDate(date.getDay() + i);
+        userData.forEach(commit=>{
+            let tempDate = JSON.stringify(date)
+            let commitDate = JSON.stringify(commit.commit.author.date)
+            if (commitDate.substring(1, 11) == tempDate.substring(1, 11)) {
+                console.log(commitDate.substring(1, 11), tempDate.substring(1, 11));
+                userCommitArray[i]={
+                    date: commitDate,
+                    commit: true
+                }
+            }
+            else{
+                userCommitArray[i]={
+                    date: commitDate,
+                    commit: false
+                }
+            }
+        })
+    }
+    return userCommitArray;
+}
+
+function packageData(){
+
+}
 
 
 // router.get('/get-gh-data', (req, res) => {
@@ -104,35 +153,6 @@ router.get('/get-gh-data', (req, res) => {
 
 
 
-    async function getData(){
-        console.log('getting user list');
-        const queryText = 'SELECT * FROM "users" WHERE "active" = TRUE';
-        pool.query(queryText)
-        .then((response) => {
-            userList = response.rows
-            console.log('getting gh data');
-            const requestPromises = []
-            userList.forEach(user => {
-                const requestOptions = {
-                    uri: `https://api.github.com/search/commits?q=committer:${user.github}+committer-date:>${actualDate}&sort=committer-date&per_page=100`,
-                    headers: { "User-Agent": 'reverended', Accept: 'application/vnd.github.cloak-preview+json' },
-                    method: 'GET',
-                    json: true
-                }
-                requestPromises.push(rp(requestOptions));
-            })
-            Promise.all(requestPromises)
-            .then((data) => {
-                console.log(data);
-                return data
-            })
-            .catch((error) => {
-                console.log(error);
-            })
-        })
-        .catch((error) => {
-            console.log('error on get-user-list', error);
-        })
-    }
+
 
 module.exports = router;

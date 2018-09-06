@@ -10,7 +10,7 @@ class TestComponent extends Component {
     }
 
     componentDidMount(){
-        // this.getUserList();
+        this.getGHData();
     //     axios({
     //         url: 'https://api.github.com/graphql',
     //         headers: {
@@ -41,15 +41,6 @@ class TestComponent extends Component {
     //     })
     }
 
-    getUserList = ()=>{
-        axios({
-            url: '/api/gh-router/get-user-list',
-            method: 'GET'
-        })
-        .then((response)=>{
-            console.log(response.data);
-        })
-    }
 
     getGHData = ()=>{
         axios({
@@ -61,14 +52,22 @@ class TestComponent extends Component {
         })
     }
 
-
+    getSortedData = ()=>{
+        axios({
+            url: '/api/gh-router/get-sorted-data',
+            method: 'GET'
+        })
+        .then((response)=>{
+            console.log(response.data);
+        })
+    }
 
     render() {
         return (
             <main>
 
                 <h1>I am the test component. My function is to be used for testing server routes and I have no purpose beyond that.</h1>
-                <button onClick={()=>this.getGHData()}>Click me to do thing</button>
+                <button onClick={()=>this.getSortedData()}>Click me to do thing</button>
             </main>
         )
     }
