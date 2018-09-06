@@ -78,3 +78,13 @@ ALTER TABLE "user_challenge" ADD CONSTRAINT "user_challenge_fk1" FOREIGN KEY ("c
 ALTER TABLE "email_termination_reason" ADD CONSTRAINT "email_termination_reason_fk0" FOREIGN KEY ("user_id") REFERENCES "users"("id");
 
 ALTER TABLE "weekly_progress_form" ADD CONSTRAINT "weekly_progress_form_fk0" FOREIGN KEY ("user_id") REFERENCES "users"("id");
+ALTER TABLE "public"."users" ADD COLUMN "image_url" text;
+ALTER TABLE "public"."users" RENAME COLUMN "first_name" TO "name";
+ALTER TABLE "public"."users" DROP COLUMN "last_name";
+ALTER TABLE "public"."users"
+  ALTER COLUMN "weekly_email_reminders" SET DEFAULT false,
+  ALTER COLUMN "daily_email_reminders" SET DEFAULT false;
+ALTER TABLE "public"."users" ALTER COLUMN "active" SET DEFAULT 'true';
+ALTER TABLE "public"."users" ALTER COLUMN "email" DROP NOT NULL;
+
+
