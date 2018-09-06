@@ -5,33 +5,44 @@ const rp = require('request-promise')
 
 
 let userList = []
+
 var date = new Date();
-date.setMonth(date.getMonth() -1);
+date.setMonth(date.getMonth() - 1);
 // date = date.toString()
 date = JSON.stringify(date)
 actualDate = date.substring(1, 11)
 console.log(date, date.substring(1, 11));
 
 
-router.get('/get-gh-data', (req, res)=>{
-    console.log('getting gh data');
-    const requestPromises = []
-    userList.forEach(user=>{
-        const requestOptions = {
-            uri: `https://api.github.com/search/commits?q=committer:${user.github}+committer-date:>${actualDate}&sort=committer-date&per_page=100`,
-            headers : {"User-Agent": user.github, Accept: 'application/vnd.github.cloak-preview+json'},
-            method: 'GET',
-            json: true
-        }
-        requestPromises.push(rp(requestOptions));      
-    })
-    Promise.all(requestPromises)
-    .then((data)=>{
-        res.send(data)
-    })
-    .catch((error)=>{
-        res.sendStatus(500)
-    })
+router.get('/get-gh-data', (req, res) => {
+    console.log('getting user list');
+        const queryText = 'SELECT * FROM "users" WHERE "active" = TRUE';
+        pool.query(queryText)
+        .then((response) => {
+            userList = response.rows
+            console.log('getting gh data');
+            const requestPromises = []
+            userList.forEach(user => {
+                const requestOptions = {
+                    uri: `https://api.github.com/search/commits?q=committer:${user.github}+committer-date:>${actualDate}&sort=committer-date&per_page=100`,
+                    headers: { "User-Agent": 'reverended', Accept: 'application/vnd.github.cloak-preview+json' },
+                    method: 'GET',
+                    json: true
+                }
+                requestPromises.push(rp(requestOptions));
+            })
+            Promise.all(requestPromises)
+            .then((data) => {
+                console.log(data);
+                res.send(data)
+            })
+            .catch((error) => {
+                console.log(error);
+            })
+        })
+        .catch((error) => {
+            console.log('error on get-user-list', error);
+        })
 })
 
 
@@ -59,7 +70,7 @@ router.get('/get-gh-data', (req, res)=>{
 //                         }
 //                       }
 //                     }
-                   
+
 //                    }
 //                 `
 //               },
@@ -80,24 +91,35 @@ router.get('/get-gh-data', (req, res)=>{
 
 
 
-router.get('/get-user-list', (req, res) => {
-    console.log('getting user list');
-    const queryText = 'SELECT * FROM "users" WHERE "active" = TRUE';
-    pool.query(queryText)
+    async function getData(){
+        console.log('getting user list');
+        const queryText = 'SELECT * FROM "users" WHERE "active" = TRUE';
+        pool.query(queryText)
         .then((response) => {
             userList = response.rows
-            res.send(userList)
+            console.log('getting gh data');
+            const requestPromises = []
+            userList.forEach(user => {
+                const requestOptions = {
+                    uri: `https://api.github.com/search/commits?q=committer:${user.github}+committer-date:>${actualDate}&sort=committer-date&per_page=100`,
+                    headers: { "User-Agent": 'reverended', Accept: 'application/vnd.github.cloak-preview+json' },
+                    method: 'GET',
+                    json: true
+                }
+                requestPromises.push(rp(requestOptions));
+            })
+            Promise.all(requestPromises)
+            .then((data) => {
+                console.log(data);
+                return data
+            })
+            .catch((error) => {
+                console.log(error);
+            })
         })
         .catch((error) => {
             console.log('error on get-user-list', error);
         })
-})
-
-/**
- * POST route template
- */
-router.post('/', (req, res) => {
-
-});
+    }
 
 module.exports = router;

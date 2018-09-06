@@ -10,7 +10,7 @@ class TestComponent extends Component {
     }
 
     componentDidMount(){
-        this.getUserList();
+        // this.getUserList();
     //     axios({
     //         url: 'https://api.github.com/graphql',
     //         headers: {
