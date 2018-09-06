@@ -10,7 +10,7 @@ class TestComponent extends Component {
     }
 
     componentDidMount(){
-
+        // this.getUserList();
         // axios({
         //     url: 'https://api.github.com/graphql',
         //     headers: {
@@ -41,6 +41,15 @@ class TestComponent extends Component {
         // })
     }
 
+    getUserList = ()=>{
+        axios({
+            url: '/api/gh-router/get-user-list',
+            method: 'GET'
+        })
+        .then((response)=>{
+            console.log(response.data);
+        })
+    }
 
     getGHData = ()=>{
         axios({
