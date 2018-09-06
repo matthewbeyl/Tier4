@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import NavBar from '../NavBar/NavBar';
+import axios from 'axios';
 
 class HomeView extends Component {
     constructor(props) {
@@ -9,9 +10,27 @@ class HomeView extends Component {
         }
     }
 
+    logout = () => {
+        axios.get('/api/auth/logout').then(response => {
+            alert('Logged out')
+        }).catch(err => {
+            alert('error on logout', err)
+        })
+    }
+
     handleInputChange = (event) => {
         this.setState({
             challegeDate: event.target.value
+        })
+    }
+
+    reqDotUser = () => {
+        axios.get('/api/auth/profile').then(response => {
+            console.log(response.data);
+            
+        }).catch(err => {
+            console.log(err);
+            
         })
     }
 
@@ -111,6 +130,9 @@ class HomeView extends Component {
                     </div>
                     <p>Sign up before the next Challenge!</p>
                 </section>
+                <button onClick={this.reqDotUser}>Log req.user</button>
+                <button onClick={this.logout}>Sign out</button>
+                <a href="http://localhost:5000/api/auth/login">Sign In</a>
             </main >
         )
     }
