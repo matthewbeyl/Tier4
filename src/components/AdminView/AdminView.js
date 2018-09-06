@@ -15,7 +15,7 @@ class AdminView extends Component {
         super(props);
         this.state = {
             showPopupForm: false,
-            displayCurrentChallenge: false,
+            displayCurrentChallenge: true,
             displayPastChallenges: false
         }
     }
@@ -25,6 +25,11 @@ class AdminView extends Component {
     }
 
     displayCurrentChallenge = () => {
+        if(this.state.displayPastChallenges === true){
+            this.setState({
+                displayPastChallenges: false
+            })
+        }
         console.log('show current challenge');
         this.setState({
             displayCurrentChallenge: !this.state.displayCurrentChallenge,
@@ -33,11 +38,16 @@ class AdminView extends Component {
     }
 
     displayPastChallenges = () => {
+        if(this.state.displayCurrentChallenge === true){
+            this.setState({
+                displayCurrentChallenge: false
+            })
+        }
         console.log('show past challenges');
         this.setState({
-            displayPastChallenge: !this.state.displayPastChallenge,
+            displayPastChallenges: !this.state.displayPastChallenges,
         })
-        console.log(this.state.displayPastChallenge);
+        console.log(this.state.displayPastChallenges);
     }
 
     toggleCreateNewChallengePopupForm = () => {
@@ -60,7 +70,7 @@ class AdminView extends Component {
                 }
                 <button onClick={this.displayCurrentChallenge}>Current Challenge</button>
                 <button onClick={this.displayPastChallenges}>Past Challenges</button>
-                {this.state.displayPastChallenge ?
+                {this.state.displayPastChallenges ?
                 <PastChallenges 
                 />: null 
                 }
