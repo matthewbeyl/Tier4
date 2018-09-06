@@ -30,11 +30,9 @@ class AdminView extends Component {
                 displayPastChallenges: false
             })
         }
-        console.log('show current challenge');
         this.setState({
             displayCurrentChallenge: !this.state.displayCurrentChallenge,
         })
-        console.log(this.state.displayCurrentChallenge);
     }
 
     displayPastChallenges = () => {
@@ -43,11 +41,9 @@ class AdminView extends Component {
                 displayCurrentChallenge: false
             })
         }
-        console.log('show past challenges');
         this.setState({
             displayPastChallenges: !this.state.displayPastChallenges,
         })
-        console.log(this.state.displayPastChallenges);
     }
 
     toggleCreateNewChallengePopupForm = () => {

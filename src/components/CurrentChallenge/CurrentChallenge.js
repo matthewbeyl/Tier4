@@ -8,7 +8,10 @@ const mapStateToProps = state => ({
 class CurrentChallenge extends Component {
     render(){
         return (
-            <h1>Current Challenge</h1>
+            <div>
+                <p>Current Challenge</p>
+                <button>Delete Current Challenge</button>
+            </div>
         )
     }
 }
