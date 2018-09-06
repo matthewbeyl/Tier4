@@ -3,6 +3,7 @@ import userSaga from './userSaga';
 import loginSaga from './loginSaga';
 import countdownSaga from './countdownSaga';
 import addFeedbackSaga from './feedbackSaga';
+import addPreferencesSaga from './emailSaga';
 
 
 export default function* rootSaga() {
@@ -11,6 +12,7 @@ export default function* rootSaga() {
     loginSaga(),
     countdownSaga(),
     addFeedbackSaga(),
+    addPreferencesSaga(),
     // watchIncrementAsync()
   ]);
 }

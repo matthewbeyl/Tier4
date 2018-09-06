@@ -1,6 +1,6 @@
 import { takeEvery, call } from 'redux-saga/effects';
 import axios from 'axios';
-import { FEEDBACK_ACTION } from '../actions/feedbackActions';
+import { FEEDBACK_ACTION } from '../actions/dashboardActions';
 
 function* addFeedbackSaga() {
     try {
