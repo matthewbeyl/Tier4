@@ -75,7 +75,7 @@ passport.use( new Strategy({
 //check db for ex
     console.log('Strategy', profile);
     
-    return cb(null, profile);
+    // return cb(null, foundUser);
   }));
 
 module.exports = passport;

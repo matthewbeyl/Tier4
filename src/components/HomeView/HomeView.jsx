@@ -23,7 +23,6 @@ class HomeView extends Component {
 
     componentDidMount() {
         this.props.dispatch(fetchStartDate());
-        this.kittyFoo();
     }
 
     // handleInputChange = (event) => {
