@@ -102,8 +102,8 @@ function processData(userData, datestring){
 }
 
 function packageData(username, data){
-    data.username = username.id;
-    data.date = challengeDate;
+    data.userID = username.id;
+    data.challengeID = challengeDateID;
     return data
 }
 
