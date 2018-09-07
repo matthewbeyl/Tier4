@@ -15,7 +15,6 @@ tempDate = date.toString()
 date.setDate(date.getDay() - 30);
 date = JSON.stringify(date)
 actualDate = date.substring(1, 11)
-console.log(tempDate, date);
 
 function findTotalWeekendDays(){
     if (tempDate === 'Sun') {
@@ -48,7 +47,6 @@ router.get('/get-gh-data', (req, res) => {
                 })
                 Promise.all(requestPromises)
                 .then((data) => {
-                    console.log(data);
 
                     sortData(data);
 
@@ -65,47 +63,90 @@ router.get('/get-gh-data', (req, res) => {
 })
 
 function sortData(tempData){
-    console.log(tempData);
+    let date = JSON.stringify(challengeDate)
+    let currentDate = JSON.stringify(new Date())
+    let date1 = new Date(date.substring(1, 11));
+    let date2 = new Date(currentDate.substring(1, 11));
+    let timeDiff = Math.abs(date2.getTime() - date1.getTime());
+    let diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24)); 
+
     for (let i = 0; i < tempData.length; i++) {
         let tempUserData = tempData[i].items;
         let tempUserName = userList[i];
         let tempDate = challengeDate;
-        let processedData = processData(tempUserData, tempDate)
-        console.log(processedData);
-        
-        //packageData(tempUserName, processedData);
-        
+        let processedData = getStreakAndPercent(processData(tempUserData, tempDate), diffDays)
+
+        let data = packageData(tempUserName, processedData);
+        console.log(data);
+        //this is where everything has finished ok
     }
 }
 
 function processData(userData, datestring){
-    let userCommitArray = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
-    for (let i = 0; i < 30; i++) {
+    let userCommitArray = [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false];
+    for (let i = 0; i < userCommitArray.length; i++) {
         let date = new Date(datestring)
-        date.setDate(date.getDay() + i);
+        date.setDate(date.getDay() + i);       
         userData.forEach(commit=>{
             let tempDate = JSON.stringify(date)
             let commitDate = JSON.stringify(commit.commit.author.date)
             if (commitDate.substring(1, 11) == tempDate.substring(1, 11)) {
-                console.log(commitDate.substring(1, 11), tempDate.substring(1, 11));
-                userCommitArray[i]={
-                    date: commitDate,
-                    commit: true
-                }
-            }
-            else{
-                userCommitArray[i]={
-                    date: commitDate,
-                    commit: false
-                }
+                userCommitArray[i]= true;
             }
         })
     }
     return userCommitArray;
 }
 
-function packageData(){
+function packageData(username, data){
+    data.username = username.github;
+    return data
+}
 
+function getStreakAndPercent(data, diffDays){
+    let longestStreak = getStreak(data)
+    let commitPercent = getPercent(data, diffDays)
+    //console.log(longestStreak, commitPercent);
+    return {
+        longestStreak,
+        commitPercent
+    }
+}
+
+function getStreak(data){
+    let currentStreak = 0;
+    let maxStreak = 0;
+    let previousVal = false;
+    data.forEach(index=>{
+        if (index === true) {
+            previousVal = true;
+        }
+        if (index && previousVal) {
+            currentStreak++;
+        }
+        if (currentStreak > maxStreak) {
+            maxStreak = currentStreak;
+        }
+        if (index === false) {
+            previousVal = false;
+            currentStreak = 0;
+        }
+    })
+    return maxStreak
+}
+
+function getPercent(data, diffDays){
+    let newData = data.slice(0, diffDays)
+    //console.log('dataArray',newData );
+    let commitCount = 0;
+    for (let i = 0; i < newData.length; i++) {
+        if (newData[i]) {
+            commitCount++
+        }
+    }
+    commitCount = commitCount/diffDays * 100;
+
+    return commitCount
 }
 
 
