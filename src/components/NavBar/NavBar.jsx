@@ -48,15 +48,29 @@ class NavBar extends Component {
     }
   }
 
+  dashboardNav = () => {
+    try { 
+      if(this.props.user.github && !this.props.user.admin){
+        return(
+          <Link to="/dashboard">
+            Dashboard
+          </Link>
+        )
+      } else {
+        return null;
+      } 
+    } catch (error) {
+      return null;
+    }
+  }
+
   render() {
     return (
       <div className="NavBar" >
         <Link to="/home">
           Home
           </Link>
-        <Link to="/dashboard">
-          Dashboard
-        </Link>
+        {this.dashboardNav()}
         {this.adminNav()}
         {this.logInLogOut()}
       </div>
