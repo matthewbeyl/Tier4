@@ -4,6 +4,7 @@ import Header from '../Header/Header';
 import CreateNewChallengeForm from '../CreateNewChallengeForm/CreateNewChallengeForm.js';
 import PastChallenges from '../PastChallenges/PastChallenges';
 import CurrentChallenge from '../CurrentChallenge/CurrentChallenge';
+import { USER_ACTIONS } from '../../redux/actions/userActions';
 
 const mapStateToProps = state => ({
     user: state.user,
@@ -18,6 +19,12 @@ class AdminView extends Component {
             displayCurrentChallenge: true,
             displayPastChallenges: false
         }
+    }
+
+    componentWillMount() {
+        this.props.dispatch({
+            type: USER_ACTIONS.FETCH_USER
+        })
     }
 
     componentDidMount() {
