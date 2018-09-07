@@ -3,10 +3,13 @@ import Header from '../Header/Header';
 import { fetchStartDate } from '../../redux/actions/countdownActions';
 import { connect } from 'react-redux';
 import axios from 'axios';
+import LOGIN_ACTIONS from '../../redux/actions/loginActions'
+import { USER_ACTIONS } from '../../redux/actions/userActions';
 
 
 const mapStateToProps = state => ({
-    challengedate: state.challengedate
+    challengedate: state.challengedate,
+    user: state.user
 });
 
 
@@ -20,18 +23,28 @@ class HomeView extends Component {
         }
     }
 
+    componentWillMount() {
+        this.props.dispatch({
+            type: USER_ACTIONS.FETCH_USER
+        })
+    }
+
     componentDidMount() {
         this.props.dispatch(fetchStartDate());
     }
 
     logout = () => {
-        axios.get('/api/auth/logout').then(response => {
-            alert('Logged out')
-        }).catch(err => {
-            alert('error on logout', err)
-        })
+        // axios.get('/api/auth/logout').then(response => {
+        //     alert('Logged out')
+        // }).catch(err => {
+        //     alert('error on logout', err)
+        // })
+        this.props.dispatch({type: LOGIN_ACTIONS.LOGOUT})
     }
 
+    login = () => {
+        this.props.dispatch({type: LOGIN_ACTIONS.LOGIN})
+    }
 
     handleInputChange = (event) => {
         this.setState({
@@ -46,6 +59,8 @@ class HomeView extends Component {
         }).catch(err => {
             console.log(err);
         })
+        console.log('from REDUX, USER:', this.props.user.user);
+        
     }
 
     handleClickEvent = () => {
@@ -141,8 +156,9 @@ class HomeView extends Component {
                 </section>
                 <img src="" />
                 <button onClick={this.reqDotUser}>Log req.user</button>
-                <button onClick={this.logout}>Sign out</button>
-                <a href="http://localhost:5000/api/auth/login">Sign In</a>
+                <button onClick={this.logout}>Log out</button>
+                <button onClick={this.login}>Sign In</button>
+                <a href="http://localhost:5000/api/auth/login">Log In</a>
             </main >
         )
     }

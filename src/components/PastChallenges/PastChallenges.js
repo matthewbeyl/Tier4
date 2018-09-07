@@ -1,11 +1,19 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { USER_ACTIONS } from '../../redux/actions/userActions';
 
 const mapStateToProps = state => ({
     currentChallengeData: state.challenge.current
 });
 
 class PastChallenges extends Component {
+
+    componentWillMount() {
+        this.props.dispatch({
+            type: USER_ACTIONS.FETCH_USER
+        })
+    }
+
     render(){
         let apiChallengeResults = null;
         this.props.currentChallengeData.map((user, index) => {
