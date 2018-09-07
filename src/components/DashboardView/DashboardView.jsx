@@ -26,9 +26,6 @@ class DashboardView extends Component {
 
     submitFeedback = (event) => {
         event.preventDefault();
-        console.log('Submit clicked, good job!');
-        console.log(this.state);
-
         if (this.state.applied !== ''
             && this.state.learned !== ''
             && this.state.built !== ''
@@ -42,9 +39,6 @@ class DashboardView extends Component {
 
     setPreferences = (event) => {
         event.preventDefault();
-        console.log('Click-ed');
-        console.log(this.state);
-
         if (this.state.email !== '') {
             this.props.dispatch(addPreferences(this.state))
         } else {

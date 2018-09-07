@@ -4,11 +4,9 @@ import { fetchStartDate } from '../../redux/actions/countdownActions';
 import { connect } from 'react-redux';
 import axios from 'axios';
 
-
 const mapStateToProps = state => ({
-    challengedate: state.challengedate
+    challengeDate: state.challengeDate
 });
-
 
 class HomeView extends Component {
 
@@ -16,12 +14,12 @@ class HomeView extends Component {
         super(props);
 
         this.state = {
-            challengedate: '',
+            challengeDate: ''
         }
     }
 
     componentDidMount() {
-        this.props.dispatch(fetchStartDate());
+        this.props.dispatch(fetchStartDate()); 
     }
 
     logout = () => {
@@ -29,13 +27,6 @@ class HomeView extends Component {
             alert('Logged out')
         }).catch(err => {
             alert('error on logout', err)
-        })
-    }
-
-
-    handleInputChange = (event) => {
-        this.setState({
-            challegeDate: event.target.value
         })
     }
 
@@ -48,8 +39,10 @@ class HomeView extends Component {
         })
     }
 
-    handleClickEvent = () => {
-        let deadline = this.state.challegeDate;
+    startCountdown = () => {
+        console.log(this.challengeDate);
+        
+        let deadline = this.challengeDate;        
         // use a for loop and parse out YYYY, MM, DD
         let year = '';
         let month = '';
@@ -111,8 +104,6 @@ class HomeView extends Component {
     }
 
     render() {
-        console.log(this.props.challengedate);
-
         return (
             <main>
                 <Header title="Tier Four" />
