@@ -31,3 +31,5 @@ export function formError() {
     payload: 'Enter your username and password!',
   };
 }
+
+export default LOGIN_ACTIONS;
