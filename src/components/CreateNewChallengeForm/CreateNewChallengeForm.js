@@ -22,7 +22,6 @@ class CreateNewChallengeForm extends Component {
                 [propertyName]: event.target.value
             }
         })
-        console.log(this.state.newChallenge);
     }
 
     handleChangeForExclusion = (propertyName) => (event) => {
@@ -32,11 +31,9 @@ class CreateNewChallengeForm extends Component {
                 [propertyName]: event.target.check
             }
         })
-        console.log(this.state.newChallenge);
     }
 
     handleNewChallengeSubmit = () => {
-        console.log(this.state.newChallenge);
         this.props.dispatch({type:'CREATE_NEW_CHALLENGE', payload: this.state.newChallenge})
     }
 
