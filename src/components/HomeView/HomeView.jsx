@@ -7,12 +7,10 @@ import Countdown from '../Countdown/Countdown';
 import LOGIN_ACTIONS from '../../redux/actions/loginActions'
 import { USER_ACTIONS } from '../../redux/actions/userActions';
 
-
 const mapStateToProps = state => ({
-    challengedate: state.challengedate,
-    user: state.user
+    challengeDate: state.challengeDate,
+    user: state.user.user
 });
-
 
 class HomeView extends Component {
 
@@ -20,19 +18,22 @@ class HomeView extends Component {
         super(props);
 
         this.state = {
-            challengedate: '',
+            challengeDate: ''
         }
     }
+
+    componentDidMount() {
+        this.props.dispatch(fetchStartDate()); 
+    }
+    
+
 
     componentWillMount() {
         this.props.dispatch({
             type: USER_ACTIONS.FETCH_USER
         })
     }
-
-    componentDidMount() {
-        this.props.dispatch(fetchStartDate());
-    }
+    
 
 
     login = () => {
@@ -55,6 +56,7 @@ class HomeView extends Component {
         console.log('from REDUX, USER:', this.props.user.user);
         
     }
+
 
     render() {
         return (

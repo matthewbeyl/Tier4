@@ -3,6 +3,11 @@ import Header from '../Header/Header';
 import { connect } from 'react-redux';
 import { addFeedback } from '../../redux/actions/dashboardActions';
 import { addPreferences } from '../../redux/actions/dashboardActions';
+import { USER_ACTIONS } from '../../redux/actions/userActions';
+
+const mapStateToProps = state => ({
+    user: state.user.user
+});
 
 class DashboardView extends Component {
 
@@ -24,11 +29,15 @@ class DashboardView extends Component {
             };
     }
 
+    componentDidMount() {
+        this.props.dispatch({ type: USER_ACTIONS.FETCH_USER });
+        if (!this.props.user && this.props.user === null) {
+            this.props.history.push('home');
+        }
+    }
+
     submitFeedback = (event) => {
         event.preventDefault();
-        console.log('Submit clicked, good job!');
-        console.log(this.state);
-
         if (this.state.applied !== ''
             && this.state.learned !== ''
             && this.state.built !== ''
@@ -42,9 +51,6 @@ class DashboardView extends Component {
 
     setPreferences = (event) => {
         event.preventDefault();
-        console.log('Click-ed');
-        console.log(this.state);
-
         if (this.state.email !== '') {
             this.props.dispatch(addPreferences(this.state))
         } else {
@@ -83,13 +89,13 @@ class DashboardView extends Component {
                 <h3>Welcome, User</h3>
                 <form onSubmit={this.submitFeedback}>
                     <label>What did you learn?</label>
-                    <input type="text" placeholder="I learned..." value={this.state.applied} onChange={this.handleFeedbackChange('applied')} />
+                    <input type="text" placeholder="I learned..." value={this.state.learned} onChange={this.handleFeedbackChange('learned')} />
                     <br />
                     <label>What did you build?</label>
-                    <input type="text" placeholder="I built..." value={this.state.learned} onChange={this.handleFeedbackChange('learned')} />
+                    <input type="text" placeholder="I built..." value={this.state.built} onChange={this.handleFeedbackChange('built')} />
                     <br />
                     <label>Where did you apply?</label>
-                    <input type="text" placeholder="I applied..." value={this.state.built} onChange={this.handleFeedbackChange('built')} />
+                    <input type="text" placeholder="I applied..." value={this.state.applied} onChange={this.handleFeedbackChange('applied')} />
                     <br />
                     <label>Who did you follow up with?</label>
                     <input type="text" placeholder="I followed up..." value={this.state.followed_up} onChange={this.handleFeedbackChange('followed_up')} />
@@ -124,4 +130,4 @@ class DashboardView extends Component {
     }
 }
 
-export default connect()(DashboardView);
+export default connect(mapStateToProps)(DashboardView);
