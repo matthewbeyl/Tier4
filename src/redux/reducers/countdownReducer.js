@@ -1,6 +1,6 @@
 import { COUNTDOWN_ACTIONS } from '../actions/countdownActions';
 
-const challengedate = (state = '', action) => {
+const challengeDate = (state = '', action) => {
     switch (action.type) {
         case COUNTDOWN_ACTIONS.SET_COUNTDOWN:
             return action.payload || state;
@@ -9,4 +9,4 @@ const challengedate = (state = '', action) => {
     }
 }
 
-export default challengedate;
+export default challengeDate;
