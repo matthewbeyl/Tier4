@@ -24,10 +24,6 @@ cron.schedule('*/20 * * * * *', function(){
     getData();
 });
 
-cron.schedule('0 0 0 * * *', function(){
-    console.log('happy birthday ross!');
-
-});
 
 function getData(){
     console.log('getting user list');

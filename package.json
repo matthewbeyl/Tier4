@@ -37,7 +37,8 @@
     "redux-logger": "^3.0.6",
     "redux-saga": "^0.16.0",
     "request": "^2.88.0",
-    "request-promise": "^4.2.2"
+    "request-promise": "^4.2.2",
+    "twilio": "^3.19.2"
   },
   "scripts": {
     "start": "node server/server.js",
