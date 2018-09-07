@@ -25,7 +25,7 @@ class AdminView extends Component {
         this.props.dispatch({
             type: USER_ACTIONS.FETCH_USER
         })
-        
+
         // user who are not logged will directed to the home view
         if (!this.props.user) {
             this.props.history.push('/home');
@@ -34,7 +34,7 @@ class AdminView extends Component {
 
     componentDidUpdate() {
         console.log(this.props.user.admin)
-        // this.props.dispatch({ type: 'FETCH_CURRENT_CHALLENGE' });
+        this.props.dispatch({ type: 'FETCH_CURRENT_CHALLENGE' });
 
         // user who are logged in and are not Admin will be directed to the home view
         if (!this.props.user.admin || this.props.user.admin === null) {
@@ -75,7 +75,7 @@ class AdminView extends Component {
         let content = null;
         content = (
             <div>
-                <h1>This is the Admin View</h1>
+                <p>Welcome, Luke</p>
                 <button onClick={this.toggleCreateNewChallengePopupForm.bind(this)}>Create New Challenge</button>
                 {this.state.showPopupForm ?
                     <CreateNewChallengeForm
@@ -83,12 +83,20 @@ class AdminView extends Component {
                         closePopupForm={this.toggleCreateNewChallengePopupForm.bind(this)}
                     /> : null
                 }
-                <button onClick={this.displayCurrentChallenge}>Current Challenge</button>
-                <button onClick={this.displayPastChallenges}>Past Challenges</button>
+                <button
+                    style={{ float: "right" }}
+                    onClick={this.displayCurrentChallenge}
+                >Current Challenge</button>
+                <button
+                    style={{ float: "right" }}
+                    onClick={this.displayPastChallenges}
+                >Past Challenges</button>
+                {/* displays when past challenge state variable is true */}
                 {this.state.displayPastChallenges ?
                     <PastChallenges
                     /> : null
                 }
+                {/* displays when curent challenges state variable is true */}
                 {this.state.displayCurrentChallenge ?
                     <CurrentChallenge
                     /> : null
