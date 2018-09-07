@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { USER_ACTIONS } from '../../redux/actions/userActions';
 import { connect } from 'react-redux';
 import LOGIN_ACTIONS from '../../redux/actions/loginActions'
+import {Button} from '@material-ui/core'
 
 class NavBar extends Component {
 
@@ -17,17 +18,33 @@ class NavBar extends Component {
     this.props.dispatch({type: LOGIN_ACTIONS.LOGOUT})
   }
 
-  signInSignOut = () => {
+  logInLogOut = () => {
     try { 
       if(this.props.user.github){
         return(
-          <button onClick={this.logout}>Log out</button>
+          <Button variant="outlined" onClick={this.logout}>Log out</Button>
         )
       } else {
-        return (<a href="http://localhost:5000/api/auth/login">Log In</a>);
+        return (<Button variant="outlined" href="http://localhost:5000/api/auth/login">Log In</Button>);
       } 
     } catch (error) {
-      return (<a href="http://localhost:5000/api/auth/login">Log In</a>);
+      return (<Button variant="outlined" href="http://localhost:5000/api/auth/login">Log In</Button>);
+    }
+  }
+
+  adminNav = () => {
+    try { 
+      if(this.props.user.admin){
+        return(
+          <Link to="/admin">
+            Admin
+          </Link>
+        )
+      } else {
+        return null;
+      } 
+    } catch (error) {
+      return null;
     }
   }
 
@@ -39,11 +56,9 @@ class NavBar extends Component {
           </Link>
         <Link to="/dashboard">
           Dashboard
-          </Link>
-        <Link to="/admin">
-          Admin
-          </Link>
-        {this.signInSignOut()}
+        </Link>
+        {this.adminNav()}
+        {this.logInLogOut()}
       </div>
     )
   }

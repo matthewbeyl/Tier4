@@ -22,35 +22,41 @@ router.get('/pastChallenge', rejectUnauthenticated, (req, res) => {
     } else{res.sendStatus(403);}
 });
 
-router.post('/newChallenge', (req, res) => {
-    let newChallenge = req.body;
-    const queryText = `INSERT INTO challenges ("title", "date", "exclude_weekends", "exclude_holidays") 
-    VALUES ($1, $2, $3, $4);`;
-    const queryValues = [
-        newChallenge.title,
-        newChallenge.date,
-        newChallenge.exclude_weekends,
-        newChallenge.exclude_holidays
-    ];
-    pool.query(queryText,queryValues)
-    .then(()=>{
-        res.sendStatus(201);
-    }).catch((error)=>{
-        console.log('error creating new challenge: ', error);
-        res.sendStatus(500);
-    })
+router.post('/newChallenge', rejectUnauthenticated, (req, res) => {
+    if(req.user.admin){
+        let newChallenge = req.body;
+        const queryText = `INSERT INTO challenges ("title", "date", "exclude_weekends", "exclude_holidays") 
+        VALUES ($1, $2, $3, $4);`;
+        const queryValues = [
+            newChallenge.title,
+            newChallenge.date,
+            newChallenge.exclude_weekends,
+            newChallenge.exclude_holidays
+        ];
+        pool.query(queryText,queryValues)
+        .then(()=>{
+            res.sendStatus(201);
+        }).catch((error)=>{
+            console.log('error creating new challenge: ', error);
+            res.sendStatus(500);
+        })
+    } else {
+        res.sendStatus(403);
+    }
 });
 
-router.get('/date', (req, res) => {
-    pool.query(`SELECT "date" FROM "challenges"
-    ORDER BY "date" DESC
-    LIMIT 1;`)
+router.get('/date', rejectUnauthenticated, (req, res) => {
+    if(req.user.admin){
+        pool.query(`SELECT "date" FROM "challenges"
+            ORDER BY "date" DESC
+            LIMIT 1;`)
         .then((result) => {
             res.send(result.rows);
         }).catch((error) => {
             console.log('Error - ', error);
             res.sendStatus(500)
         })
+    }
 });
 
 
