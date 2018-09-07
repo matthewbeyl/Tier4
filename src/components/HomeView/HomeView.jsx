@@ -34,14 +34,6 @@ class HomeView extends Component {
     }
     
 
-    logout = () => {
-        // axios.get('/api/auth/logout').then(response => {
-        //     alert('Logged out')
-        // }).catch(err => {
-        //     alert('error on logout', err)
-        // })
-        this.props.dispatch({type: LOGIN_ACTIONS.LOGOUT})
-    }
 
     login = () => {
         this.props.dispatch({type: LOGIN_ACTIONS.LOGIN})
@@ -158,7 +150,6 @@ class HomeView extends Component {
                 <img src="" />
                 <button onClick={this.reqDotUser}>Log req.user</button>
                 <button onClick={this.logout}>Log out</button>
-                <button onClick={this.login}>Sign In</button>
                 <a href="http://localhost:5000/api/auth/login">Log In</a>
             </main >
         )
