@@ -10,7 +10,7 @@ const mapStateToProps = state => ({
     user: state.user.user,
     login: state.login,
 });
-
+//  Bug: if Admin, and on admin view => refreshing will bring admin back to home
 class AdminView extends Component {
     constructor(props) {
         super(props);
@@ -25,18 +25,26 @@ class AdminView extends Component {
         this.props.dispatch({
             type: USER_ACTIONS.FETCH_USER
         })
+        
+        // user who are not logged will directed to the home view
+        if (!this.props.user) {
+            this.props.history.push('/home');
+        }
     }
 
-    componentDidMount() {
-        this.props.dispatch({ type: 'FETCH_CURRENT_CHALLENGE' });
-        if(!this.props.user && this.props.user === null){
-            console.log('user is not logged in')
-            this.props.history.push('home');
-        } 
+    componentDidUpdate() {
+        console.log(this.props.user.admin)
+        // this.props.dispatch({ type: 'FETCH_CURRENT_CHALLENGE' });
+
+        // user who are logged in and are not Admin will be directed to the home view
+        if (!this.props.user.admin || this.props.user.admin === null) {
+            console.log('user is not an admin')
+            this.props.history.push('/home');
+        }
     }
 
     displayCurrentChallenge = () => {
-        if(this.state.displayPastChallenges === true){
+        if (this.state.displayPastChallenges === true) {
             this.setState({
                 displayPastChallenges: false
             })
@@ -47,7 +55,7 @@ class AdminView extends Component {
     }
 
     displayPastChallenges = () => {
-        if(this.state.displayCurrentChallenge === true){
+        if (this.state.displayCurrentChallenge === true) {
             this.setState({
                 displayCurrentChallenge: false
             })
@@ -65,30 +73,28 @@ class AdminView extends Component {
 
     render() {
         let content = null;
-        if (this.props.user) {
-            content = (
-                <div>
-                     <h1>This is the Admin View</h1>
+        content = (
+            <div>
+                <h1>This is the Admin View</h1>
                 <button onClick={this.toggleCreateNewChallengePopupForm.bind(this)}>Create New Challenge</button>
                 {this.state.showPopupForm ?
                     <CreateNewChallengeForm
                         text='Create a New Challenge'
                         closePopupForm={this.toggleCreateNewChallengePopupForm.bind(this)}
-                    />: null
+                    /> : null
                 }
                 <button onClick={this.displayCurrentChallenge}>Current Challenge</button>
                 <button onClick={this.displayPastChallenges}>Past Challenges</button>
                 {this.state.displayPastChallenges ?
-                <PastChallenges 
-                />: null 
+                    <PastChallenges
+                    /> : null
                 }
                 {this.state.displayCurrentChallenge ?
-                <CurrentChallenge 
-                />: null 
+                    <CurrentChallenge
+                    /> : null
                 }
-                </div>
-            );
-        }
+            </div>
+        );
         return (
             <main>
                 <Header title="Tier Four" />

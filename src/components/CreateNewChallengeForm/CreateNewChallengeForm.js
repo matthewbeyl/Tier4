@@ -12,7 +12,6 @@ class CreateNewChallengeForm extends Component {
                 exclude_holidays: false
             }
         }
-
     }
 
     handleChangeFor = (propertyName) => (event) => {
