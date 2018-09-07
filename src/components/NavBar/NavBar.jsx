@@ -32,8 +32,6 @@ class NavBar extends Component {
   }
 
   render() {
-    console.log('USER', this.props.user);
-    
     return (
       <div className="NavBar" >
         <Link to="/home">

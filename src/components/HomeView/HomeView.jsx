@@ -45,12 +45,6 @@ class HomeView extends Component {
     }
 
     reqDotUser = () => {
-        axios.get('/api/auth/profile').then(response => {
-            console.log(response.data);
-
-        }).catch(err => {
-            console.log(err);
-        })
         console.log('from REDUX, USER:', this.props.user.user);
         
     }
