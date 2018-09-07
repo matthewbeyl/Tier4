@@ -79,15 +79,15 @@ class Countdown extends Component {
         //         </div>
         //     )
         // })
-        let dateArray = this.props.challengedate;
-        console.log('date array is: ',dateArray);
-        let dateItem = dateArray.map((item, index)=>{
-            return(
-                <div key={index}>
-                    {item.date}
-                </div>
-            )
-        })
+        // let dateArray = this.props.challengedate;
+        // console.log('date array is: ',dateArray);
+        // let dateItem = dateArray.map((item, index)=>{
+        //     return(
+        //         <div key={index}>
+        //             {item.date}
+        //         </div>
+        //     )
+        // })
         return (
             <main>
                 <br />
