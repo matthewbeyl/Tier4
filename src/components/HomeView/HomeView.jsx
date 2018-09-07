@@ -7,8 +7,8 @@ import LOGIN_ACTIONS from '../../redux/actions/loginActions'
 import { USER_ACTIONS } from '../../redux/actions/userActions';
 
 const mapStateToProps = state => ({
-    challengeDate: state.challengeDate
-    user: state.user
+    challengeDate: state.challengeDate,
+    user: state.user.user
 });
 
 class HomeView extends Component {
@@ -21,15 +21,18 @@ class HomeView extends Component {
         }
     }
 
+    componentDidMount() {
+        this.props.dispatch(fetchStartDate()); 
+    }
+    
+
+
     componentWillMount() {
         this.props.dispatch({
             type: USER_ACTIONS.FETCH_USER
         })
     }
-
-    componentDidMount() {
-        this.props.dispatch(fetchStartDate()); 
-    }
+    
 
     logout = () => {
         // axios.get('/api/auth/logout').then(response => {

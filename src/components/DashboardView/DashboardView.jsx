@@ -3,6 +3,11 @@ import Header from '../Header/Header';
 import { connect } from 'react-redux';
 import { addFeedback } from '../../redux/actions/dashboardActions';
 import { addPreferences } from '../../redux/actions/dashboardActions';
+import { USER_ACTIONS } from '../../redux/actions/userActions';
+
+const mapStateToProps = state => ({
+    user: state.user.user
+});
 
 class DashboardView extends Component {
 
@@ -22,6 +27,13 @@ class DashboardView extends Component {
                 daily_email_reminders: false,
                 email: '',
             };
+    }
+
+    componentDidMount() {
+        this.props.dispatch({ type: USER_ACTIONS.FETCH_USER });
+        if (!this.props.user && this.props.user === null) {
+            this.props.history.push('home');
+        }
     }
 
     submitFeedback = (event) => {
@@ -118,4 +130,4 @@ class DashboardView extends Component {
     }
 }
 
-export default connect()(DashboardView);
+export default connect(mapStateToProps)(DashboardView);
