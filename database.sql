@@ -24,6 +24,7 @@ CREATE TABLE "challenges" (
 	"date" DATE NOT NULL UNIQUE,
 	"exclude_weekends" BOOLEAN NOT NULL DEFAULT 'false',
 	"exclude_holidays" BOOLEAN NOT NULL DEFAULT 'false',
+	"active" BOOLEAN NOT NULL DEFAULT 'false',
 	CONSTRAINT challenges_pk PRIMARY KEY ("id")
 ) WITH (
   OIDS=FALSE

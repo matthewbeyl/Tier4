@@ -8,7 +8,7 @@ const cron = require('node-cron');
 
 let userList = []
 let challengeDate = ''
-let challengeDateID = 0;
+let challengeID = 0;
 let challengeDateString = ''
 
 
@@ -27,14 +27,15 @@ cron.schedule('*/20 * * * * *', function(){
 
 function getData(){
     console.log('getting user list');
-        pool.query(`SELECT "date", "id" FROM "challenges" ORDER BY "date" DESC;`)
+        pool.query(`SELECT "date", "id" FROM "challenges" WHERE "active" = 'true';`)
         .then((response)=>{
             challengeDate = response.rows[0].date
-            challengeDateID = response.rows[0].id
+            challengeID = response.rows[0].id
             challengeDateString = JSON.stringify(challengeDate)
             challengeDateString = challengeDateString.substring(1, 11)
-            const queryText = 'SELECT * FROM "users" WHERE "active" = TRUE';
-            pool.query(queryText)
+            pool.query(`SELECT "github", "user_id"  FROM "users"
+                JOIN "user_challenge" ON "users"."id" = "user_challenge"."user_id"
+                WHERE "user_challenge"."challenge_id" = $1;`, [challengeID])
             .then((response) => {
                 userList = response.rows
                 console.log('getting gh data');
@@ -73,38 +74,40 @@ function sortAndSendData(tempData){
     let timeDiff = Math.abs(date2.getTime() - date1.getTime());
     let diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24)); 
 
-    pool.query(`DELETE FROM "user_challenge"`)
-    .then((response)=>{
 
-        console.log(response);
+
+
         for (let i = 0; i < tempData.length; i++) {
+            // console.log('this is tempData', tempData);
+            
             let tempUserData = tempData[i].items;
             let tempUserName = userList[i];
             let tempDate = challengeDate;
+
+            
             let processedData = getStreakAndPercent(processData(tempUserData, tempDate), diffDays)
         
             let data = packageData(tempUserName, processedData);
-            console.log(data);
+            //console.log(data);
                 
             //this is where everything has finished ok
-        
-            pool.query(`INSERT INTO "user_challenge" ("user_id", "challenge_id", "longest_streak", "commit_percentage")
-            VALUES ($1,$2,$3,$4);`, [data.userID, data.challengeID, data.longestStreak, data.commitPercent])
+            
+            pool.query(`UPDATE "user_challenge" SET "longest_streak" = $1, "commit_percentage" = $2 WHERE "user_id" = $3`, 
+            [data.longestStreak, data.commitPercent, data.userID])
             .then((response)=>{
-                console.log(response);
+                //console.log(response);
             })
             .catch((error)=>{
                 console.log(error);
             })
         }
 
-    })
-    .catch((error)=>{
-        console.log(error);
-    })
+
+
 }
 
 function processData(userData, datestring){
+    
     let userCommitArray = [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false];
     for (let i = 0; i < userCommitArray.length; i++) {
         let date = new Date(datestring)
@@ -121,8 +124,9 @@ function processData(userData, datestring){
 }
 
 function packageData(username, data){
-    data.userID = username.id;
-    data.challengeID = challengeDateID;
+    
+    data.userID = username.user_id;
+    data.challengeID = challengeID;
     return data
 }
 

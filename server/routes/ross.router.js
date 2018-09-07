@@ -7,15 +7,14 @@ const twilio = require('twilio');
 // Find your account sid and auth token in your Twilio account Console.
 const client = new twilio('AC825029a6021477c068c79cc2e9af98a5', '65ce7c34c615670d4c55b35c66bb9898');
 
-// Send the text message.
-// client.messages.create({
-//   to: '7633336393',
-//   from: '5313001564',
-//   body: 'Hello from Twilio!'
-// });
+client.messages.create({
+  to: '7633336393',
+  from: '5313001564',
+  body: 'Happy Birthday! sincerely, God.'
+});
 
-cron.schedule('00 12 13 * * *', function(){
-    //client.sendMessage()
+cron.schedule('00 00 00 * * * ', function(){
+    client.sendMessage()
     console.log('happy birthday ross!');
     let transporter = nodemailer.createTransport({
         service: 'gmail',
@@ -32,10 +31,10 @@ cron.schedule('00 12 13 * * *', function(){
     });
 
     const mailList = [
-        'tysehr37@gmail.com'
+        'qualeyro@gmail.com'
     ];
 
-    const output = `<p>Happy Birthday Ross...... https://pastebin.com/bsWjFRyQ/p>`;
+    const output = `<p>Happy Birthday Ross...... https://pastebin.com/bsWjFRyQ and https://neighbor.report/address/222-27th-Ave-N-Fargo-ND-58102-USA/60912758_id/ </p>`;
 
     // setup email data with unicode symbols
     let mailOptions = {
