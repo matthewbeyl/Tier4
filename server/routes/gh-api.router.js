@@ -6,6 +6,7 @@ const rp = require('request-promise')
 
 let userList = []
 let challengeDate = ''
+let challengeDateID = 0;
 let challengeDateString = ''
 let calendar = []
 
@@ -25,9 +26,10 @@ function findTotalWeekendDays(){
 
 router.get('/get-gh-data', (req, res) => {
     console.log('getting user list');
-        pool.query(`SELECT "date" FROM "challenges" ORDER BY "date" DESC;`)
+        pool.query(`SELECT "date", "id" FROM "challenges" ORDER BY "date" DESC;`)
         .then((response)=>{
             challengeDate = response.rows[0].date
+            challengeDateID = response.rows[0].id
             challengeDateString = JSON.stringify(challengeDate)
             challengeDateString = challengeDateString.substring(1, 11)
             const queryText = 'SELECT * FROM "users" WHERE "active" = TRUE';
@@ -78,6 +80,7 @@ function sortData(tempData){
 
         let data = packageData(tempUserName, processedData);
         console.log(data);
+
         //this is where everything has finished ok
     }
 }
@@ -99,7 +102,8 @@ function processData(userData, datestring){
 }
 
 function packageData(username, data){
-    data.username = username.github;
+    data.username = username.id;
+    data.date = challengeDate;
     return data
 }
 
