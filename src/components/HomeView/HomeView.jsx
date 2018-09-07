@@ -61,15 +61,10 @@ class HomeView extends Component {
             <main>
                 <Header title="Tier Four" />
                 <button onClick={this.reqDotUser}>Log req.user</button>
-<<<<<<< HEAD
                 <button onClick={this.logout}>Sign out</button>
                 <a href="http://localhost:5000/api/auth/login">Sign In</a>
                 <br />
                 <Countdown />
-=======
-                <button onClick={this.logout}>Log out</button>
-                <a href="http://localhost:5000/api/auth/login">Log In</a>
->>>>>>> 45fcb75c715d484f0aa61fa367710ec2eff29036
             </main >
         )
     }
