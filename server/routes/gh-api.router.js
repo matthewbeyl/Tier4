@@ -72,6 +72,14 @@ function sortData(tempData){
     let timeDiff = Math.abs(date2.getTime() - date1.getTime());
     let diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24)); 
 
+    pool.query(`DELETE FROM "user_challenge"`)
+        .then((response)=>{
+            console.log(response);
+        })
+        .catch((error)=>{
+            console.log(error);
+    })
+
     for (let i = 0; i < tempData.length; i++) {
         let tempUserData = tempData[i].items;
         let tempUserName = userList[i];
@@ -80,9 +88,20 @@ function sortData(tempData){
 
         let data = packageData(tempUserName, processedData);
         console.log(data);
-
+        
+        
         //this is where everything has finished ok
+
+            pool.query(`INSERT INTO "user_challenge" ("user_id", "challenge_id", "longest_streak", "commit_percentage")
+            VALUES ($1,$2,$3,$4);`, [data.userID, data.challengeID, data.longestStreak, data.commitPercent])
+            .then((response)=>{
+                console.log(response);
+            })
+            .catch((error)=>{
+                console.log(error);
+            })
     }
+    
 }
 
 function processData(userData, datestring){
@@ -109,7 +128,7 @@ function packageData(username, data){
 
 function getStreakAndPercent(data, diffDays){
     let longestStreak = getStreak(data)
-    let commitPercent = getPercent(data, diffDays)
+    let commitPercent = Math.round(getPercent(data, diffDays))
     //console.log(longestStreak, commitPercent);
     return {
         longestStreak,
