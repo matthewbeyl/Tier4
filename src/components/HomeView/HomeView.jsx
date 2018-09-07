@@ -6,12 +6,10 @@ import axios from 'axios';
 import LOGIN_ACTIONS from '../../redux/actions/loginActions'
 import { USER_ACTIONS } from '../../redux/actions/userActions';
 
-
 const mapStateToProps = state => ({
-    challengedate: state.challengedate,
-    user: state.user
+    challengeDate: state.challengeDate,
+    user: state.user.user
 });
-
 
 class HomeView extends Component {
 
@@ -19,19 +17,22 @@ class HomeView extends Component {
         super(props);
 
         this.state = {
-            challengedate: '',
+            challengeDate: ''
         }
     }
+
+    componentDidMount() {
+        this.props.dispatch(fetchStartDate()); 
+    }
+    
+
 
     componentWillMount() {
         this.props.dispatch({
             type: USER_ACTIONS.FETCH_USER
         })
     }
-
-    componentDidMount() {
-        this.props.dispatch(fetchStartDate());
-    }
+    
 
 
     login = () => {
@@ -55,8 +56,10 @@ class HomeView extends Component {
         
     }
 
-    handleClickEvent = () => {
-        let deadline = this.state.challegeDate;
+    startCountdown = () => {
+        console.log(this.challengeDate);
+        
+        let deadline = this.challengeDate;        
         // use a for loop and parse out YYYY, MM, DD
         let year = '';
         let month = '';
@@ -118,8 +121,6 @@ class HomeView extends Component {
     }
 
     render() {
-        console.log(this.props.challengedate);
-
         return (
             <main>
                 <Header title="Tier Four" />
