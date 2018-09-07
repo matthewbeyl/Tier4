@@ -13,6 +13,7 @@ const userRouter = require('./routes/user.router');
 const challengeRouter = require('./routes/challenge.router');
 const authRouter = require('./routes/auth.router.js');
 const dashboardRouter = require('./routes/dashboard.router');
+const GHAPIRouter = require('./routes/gh-api.router')
 
 // Body parser middleware
 app.use(bodyParser.json());
@@ -30,6 +31,7 @@ app.use('/api/user', userRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/challenge', challengeRouter);
 app.use('/api/dashboard', dashboardRouter);
+app.use('/api/gh-router', GHAPIRouter)
 
 // Serve static files
 app.use(express.static('build'));
