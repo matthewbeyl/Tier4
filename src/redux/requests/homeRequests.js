@@ -7,3 +7,7 @@ export function getChallengeDate() {
         return response.data})
     .catch((error) => { throw error; });
 }
+
+export function getLeaders() {
+    return axios.get('/api/')
+}

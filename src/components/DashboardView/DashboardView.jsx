@@ -36,6 +36,12 @@ class DashboardView extends Component {
         }
     }
 
+    componentDidUpdate() {
+        if (!this.props.user && this.props.user === null) {
+            this.props.history.push('home');
+        }
+    }
+
     submitFeedback = (event) => {
         event.preventDefault();
         if (this.state.applied !== ''

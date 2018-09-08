@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import { USER_ACTIONS } from '../../redux/actions/userActions';
 import { connect } from 'react-redux';
 import LOGIN_ACTIONS from '../../redux/actions/loginActions'
-import {Button} from '@material-ui/core'
 
 class NavBar extends Component {
 
@@ -18,61 +17,35 @@ class NavBar extends Component {
     this.props.dispatch({type: LOGIN_ACTIONS.LOGOUT})
   }
 
-  logInLogOut = () => {
+  signInSignOut = () => {
     try { 
       if(this.props.user.github){
         return(
-          <Button variant="outlined" onClick={this.logout}>Log out</Button>
+          <button onClick={this.logout}>Log out</button>
         )
       } else {
-        return (<Button variant="outlined" href="http://localhost:5000/api/auth/login">Log In</Button>);
+        return (<a href="http://localhost:5000/api/auth/login">Log In</a>);
       } 
     } catch (error) {
-      return (<Button variant="outlined" href="http://localhost:5000/api/auth/login">Log In</Button>);
-    }
-  }
-
-  adminNav = () => {
-    try { 
-      if(this.props.user.admin){
-        return(
-          <Link to="/admin">
-            Admin
-          </Link>
-        )
-      } else {
-        return null;
-      } 
-    } catch (error) {
-      return null;
-    }
-  }
-
-  dashboardNav = () => {
-    try { 
-      if(this.props.user.github && !this.props.user.admin){
-        return(
-          <Link to="/dashboard">
-            Dashboard
-          </Link>
-        )
-      } else {
-        return null;
-      } 
-    } catch (error) {
-      return null;
+      return (<a href="http://localhost:5000/api/auth/login">Log In</a>);
     }
   }
 
   render() {
+    console.log('USER', this.props.user);
+    
     return (
       <div className="NavBar" >
         <Link to="/home">
           Home
           </Link>
-        {this.dashboardNav()}
-        {this.adminNav()}
-        {this.logInLogOut()}
+        <Link to="/dashboard">
+          Dashboard
+          </Link>
+        <Link to="/admin">
+          Admin
+          </Link>
+        {this.signInSignOut()}
       </div>
     )
   }

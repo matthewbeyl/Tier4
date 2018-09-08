@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Header from '../Header/Header';
-import { fetchStartDate } from '../../redux/actions/countdownActions';
+import { fetchStartDate } from '../../redux/actions/homeActions';
 import { connect } from 'react-redux';
 import axios from 'axios';
 import Countdown from '../Countdown/Countdown';
