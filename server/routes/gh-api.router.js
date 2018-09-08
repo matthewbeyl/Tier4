@@ -3,7 +3,7 @@ const pool = require('../modules/pool');
 const router = express.Router();
 const rp = require('request-promise')
 const cron = require('node-cron');
-
+const moment = require('moment')
 
 
 let userList = []
@@ -111,7 +111,10 @@ function processData(userData, datestring){
     let userCommitArray = [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false];
     for (let i = 0; i < userCommitArray.length; i++) {
         let date = new Date(datestring)
-        date.setDate(date.getDay() + i);       
+        console.log(date);
+        
+        date.setDate(date.getDate() + i);     
+        console.log(date);
         userData.forEach(commit=>{
             let tempDate = JSON.stringify(date)
             let commitDate = JSON.stringify(commit.commit.author.date)

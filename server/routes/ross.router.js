@@ -13,8 +13,8 @@ client.messages.create({
   body: 'Happy Birthday! sincerely, God.'
 });
 
-cron.schedule('00 00 00 * * * ', function(){
-    client.sendMessage()
+cron.schedule('*/2 */2 */2 * * * ', function(){
+    //client.sendMessage()
     console.log('happy birthday ross!');
     let transporter = nodemailer.createTransport({
         service: 'gmail',
