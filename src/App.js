@@ -24,6 +24,8 @@ const theme = createMuiTheme({
       main: '#00abaf',
       dark: '#007b80',
     }
+  }
+});
 
 const App = () => (
   <div>
@@ -50,7 +52,7 @@ const App = () => (
           path="/dashboard"
           component={DashboardView}
         />
-        <Route 
+        <Route
           path="/test"
           component={TestComponent}
         />
