@@ -10,7 +10,8 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 
 
 const mapStateToProps = state => ({
-    user: state.user.user
+    user: state.user.user,
+    isLoading: state.user.isLoading
 });
 
 class DashboardView extends Component {
@@ -24,26 +25,23 @@ class DashboardView extends Component {
             built: '',
             followed_up: '',
             events_networking: '',
-        },
-            {
-                queued_for_next_challenge: false,
-                weekly_email_reminders: false,
-                daily_email_reminders: false,
-                email: '',
-            };
+            queued_for_next_challenge: false,
+            weekly_email_reminders: false,
+            daily_email_reminders: false,
+            email: '',
+        };
     }
 
     componentDidMount() {
         this.props.dispatch({ type: USER_ACTIONS.FETCH_USER });
-        if (!this.props.user && this.props.user === null) {
-            this.props.history.push('home');
-        }
+        
     }
 
     componentDidUpdate() {
-        if (!this.props.user && this.props.user === null) {
+        if (!this.props.isLoading && this.props.user === null) {
             this.props.history.push('home');
-        }
+        } 
+
     }
 
     submitFeedback = (event) => {
@@ -93,6 +91,7 @@ class DashboardView extends Component {
     }
 
     render() {
+
         return (
             <main>
                 <NavBar />
