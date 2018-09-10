@@ -10,7 +10,7 @@ class TestComponent extends Component {
     }
 
     componentDidMount(){
-        this.getGHData();
+        //this.getGHData();
     //     axios({
     //         url: 'https://api.github.com/graphql',
     //         headers: {
@@ -54,7 +54,7 @@ class TestComponent extends Component {
 
     getSortedData = ()=>{
         axios({
-            url: '/api/gh-router/get-sorted-data',
+            url: '/api/gh-router/get-data',
             method: 'GET'
         })
         .then((response)=>{

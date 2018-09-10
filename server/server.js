@@ -14,7 +14,7 @@ const challengeRouter = require('./routes/challenge.router');
 const authRouter = require('./routes/auth.router.js');
 const dashboardRouter = require('./routes/dashboard.router');
 const GHAPIRouter = require('./routes/gh-api.router')
-//const rossRouter = require('./routes/ross.router')
+const scheduler = require('./routes/scheduler.router')
 
 // Body parser middleware
 app.use(bodyParser.json());
@@ -32,8 +32,8 @@ app.use('/api/user', userRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/challenge', challengeRouter);
 app.use('/api/dashboard', dashboardRouter);
-app.use('/api/gh-router', GHAPIRouter)
-//app.use('/api/ross-router', rossRouter)
+app.use('/api/gh-router',GHAPIRouter)
+app.use(scheduler)
 
 // Serve static files
 app.use(express.static('build'));

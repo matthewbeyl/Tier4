@@ -3,7 +3,7 @@ const pool = require('../modules/pool');
 const router = express.Router();
 const rp = require('request-promise')
 const cron = require('node-cron');
-const moment = require('moment')
+// const moment = require('moment')
 
 
 let userList = []
@@ -25,6 +25,15 @@ cron.schedule('*/20 * * * * *', function(){
 });
 
 
+let theData;
+
+
+
+router.get('/get-data', (req, res)=>{
+    res.send(theData)
+})
+
+
 function getData(){
     console.log('getting user list');
         pool.query(`SELECT "date", "id" FROM "challenges" WHERE "active" = 'true';`)
@@ -43,7 +52,7 @@ function getData(){
                 userList.forEach(user => {
                     const requestOptions = {
                         uri: `https://api.github.com/search/commits?q=committer:${user.github}+committer-date:>${challengeDateString}&sort=committer-date&per_page=100`,
-                        headers: { "User-Agent": 'reverended', Accept: 'application/vnd.github.cloak-preview+json', Authorization: 'token 23982af669baa75e29e52bbd5a45594c65b7f7b2'},
+                        headers: { "User-Agent": 'KingGodGodGodKing', Accept: 'application/vnd.github.cloak-preview+json', Authorization: 'token 559904b34effa3e34f4990c5132fa5e852bcd0f3'},
                         method: 'GET',
                         json: true
                     }
@@ -51,7 +60,7 @@ function getData(){
                 })
                 Promise.all(requestPromises)
                 .then((data) => {
-
+                    theData = data;
                     sortAndSendData(data);
 
                 })
@@ -107,22 +116,23 @@ function sortAndSendData(tempData){
 }
 
 function processData(userData, datestring){
-    
+    //create function to create userCommitArray with different values for weekends and stuff.
     let userCommitArray = [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false];
     for (let i = 0; i < userCommitArray.length; i++) {
         let date = new Date(datestring)
-        console.log(date);
+        //console.log(date);
         
         date.setDate(date.getDate() + i);     
-        console.log(date);
+        //console.log(date);
         userData.forEach(commit=>{
             let tempDate = JSON.stringify(date)
             let commitDate = JSON.stringify(commit.commit.author.date)
-            if (commitDate.substring(1, 11) == tempDate.substring(1, 11)) {
+            if (commitDate.substring(1, 11) === tempDate.substring(1, 11)) {
                 userCommitArray[i]= true;
             }
         })
     }
+    //console.log(userCommitArray);
     return userCommitArray;
 }
 
