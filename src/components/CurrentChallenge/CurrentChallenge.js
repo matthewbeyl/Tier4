@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import Button from '@material-ui/core/Button';
 
 const mapStateToProps = state => ({
     currentChallengeData: state.challenge.current
@@ -10,7 +11,7 @@ class CurrentChallenge extends Component {
         return (
             <div>
                 <p>Current Challenge</p>
-                <button>Delete Current Challenge</button>
+                <Button>Delete Current Challenge</Button>
             </div>
         )
     }

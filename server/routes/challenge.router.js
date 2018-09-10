@@ -3,10 +3,10 @@ const pool = require('../modules/pool');
 const { rejectUnauthenticated } = require('../modules/authentication-middleware');
 const router = express.Router();
 
-router.get('/pastChallenge', rejectUnauthenticated, (req, res) => {
-    if(req.user.admin){
-        console.log('/api/challenge/get');
-        // reconsider how to handle current challenge vs past:
+router.get('/currentChallenge', rejectUnauthenticated, (req, res) => {
+    if (req.user.admin) {
+        console.log('/api/challenge/currentChallenge/get');
+
         const queryText = `SELECT users.first_name, users.last_name, 
                             user_challenge.commit_percentage, 
                             user_challenge.longest_streak, 
@@ -14,16 +14,18 @@ router.get('/pastChallenge', rejectUnauthenticated, (req, res) => {
                             users.weekly_email_reminders 
                             FROM users JOIN user_challenge 
                             ON users.id = user_challenge.id;`
-        pool.query(queryText).then((result)=>{
+        pool.query(queryText).then((result) => {
             res.send(result.rows);
-        }).catch((err)=> {
+        }).catch((err) => {
             console.log('error fetching current ')
         })
-    } else{res.sendStatus(403);}
+    } else {
+        res.sendStatus(403);
+    }
 });
 
 router.post('/newChallenge', rejectUnauthenticated, (req, res) => {
-    if(req.user.admin){
+    if (req.user.admin) {
         let newChallenge = req.body;
         const queryText = `INSERT INTO challenges ("title", "date", "exclude_weekends", "exclude_holidays") 
         VALUES ($1, $2, $3, $4);`;
@@ -33,29 +35,29 @@ router.post('/newChallenge', rejectUnauthenticated, (req, res) => {
             newChallenge.exclude_weekends,
             newChallenge.exclude_holidays
         ];
-        pool.query(queryText,queryValues)
-        .then(()=>{
-            res.sendStatus(201);
-        }).catch((error)=>{
-            console.log('error creating new challenge: ', error);
-            res.sendStatus(500);
-        })
+        pool.query(queryText, queryValues)
+            .then(() => {
+                res.sendStatus(201);
+            }).catch((error) => {
+                console.log('error creating new challenge: ', error);
+                res.sendStatus(500);
+            })
     } else {
         res.sendStatus(403);
     }
 });
 
 router.get('/date', rejectUnauthenticated, (req, res) => {
-    if(req.user.admin){
+    if (req.user.admin) {
         pool.query(`SELECT "date" FROM "challenges"
             ORDER BY "date" DESC
             LIMIT 1;`)
-        .then((result) => {
-            res.send(result.rows);
-        }).catch((error) => {
-            console.log('Error - ', error);
-            res.sendStatus(500)
-        })
+            .then((result) => {
+                res.send(result.rows);
+            }).catch((error) => {
+                console.log('Error - ', error);
+                res.sendStatus(500)
+            })
     }
 });
 

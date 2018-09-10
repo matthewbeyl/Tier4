@@ -14,7 +14,7 @@ class PastChallenges extends Component {
         })
     }
 
-    render(){
+    render() {
         let apiChallengeResults = null;
         this.props.currentChallengeData.map((user, index) => {
             apiChallengeResults = user.map((eachUser, index) => {
@@ -31,21 +31,24 @@ class PastChallenges extends Component {
             })
         })
         return (
-            <table>
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Commit %</th>
-                    <th>Streak</th>
-                    <th>Daily Reminder</th>
-                    <th>Weekly Reminder</th>
-                    <th>Delete</th>
-                </tr>
-            </thead>
-            <tbody>
-                {apiChallengeResults}
-            </tbody>
-        </table>
+            <div>
+                <p>Past Challenges</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Commit %</th>
+                            <th>Streak</th>
+                            <th>Daily Reminder</th>
+                            <th>Weekly Reminder</th>
+                            <th>Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {apiChallengeResults}
+                    </tbody>
+                </table>
+            </div>
         )
     }
 }
