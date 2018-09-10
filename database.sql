@@ -86,5 +86,7 @@ ALTER TABLE "public"."users"
   ALTER COLUMN "daily_email_reminders" SET DEFAULT false;
 ALTER TABLE "public"."users" ALTER COLUMN "active" SET DEFAULT 'true';
 ALTER TABLE "public"."users" ALTER COLUMN "email" DROP NOT NULL;
+ALTER TABLE "public"."challenges" ADD COLUMN "active" boolean NOT NULL DEFAULT 'false';
+
 
 
