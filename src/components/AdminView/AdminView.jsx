@@ -53,9 +53,11 @@ class AdminView extends Component {
                 displayPastChallenges: false
             })
         }
-        this.setState({
-            displayCurrentChallenge: !this.state.displayCurrentChallenge,
-        })
+        if (this.state.displayCurrentChallenge === false) {
+            this.setState({
+                displayCurrentChallenge: true
+            })
+        }
     }
 
     displayPastChallenges = () => {
@@ -64,9 +66,11 @@ class AdminView extends Component {
                 displayCurrentChallenge: false
             })
         }
-        this.setState({
-            displayPastChallenges: !this.state.displayPastChallenges,
-        })
+        if (this.state.displayPastChallenges === false) {
+            this.setState({
+                displayPastChallenges: true
+            })
+        }
     }
 
     openNewChallengeDialog = () => {
@@ -91,7 +95,7 @@ class AdminView extends Component {
     }
 
     handleCreateNewChallenge = () => {
-        this.props.dispatch({type: CHALLENGE_ACTIONS.CREATE_NEW_CHALLENGE, payload: this.state.newChallenge});
+        this.props.dispatch({ type: CHALLENGE_ACTIONS.CREATE_NEW_CHALLENGE, payload: this.state.newChallenge });
         this.setState({
             open: false
         })
@@ -110,21 +114,19 @@ class AdminView extends Component {
             <div>
                 <p>Welcome,{this.state.adminName}</p>
 
-                <Tabs 
+                <Tabs
                     indicatorColor="primary"
                     value={value}
                     onChange={this.handleDisplayChange}>
-                    <Tab 
+                    <Tab
                         label="Current Challenge"
-                        onClick={this.displayCurrentChallenge}/>
-                    <Tab 
+                        onClick={this.displayCurrentChallenge} />
+                    <Tab
                         label="Past Challenges"
-                        onClick={this.displayPastChallenges}/>
+                        onClick={this.displayPastChallenges} />
                 </Tabs>
-
-                {value === 0 }
-                {value === 1 }
-
+                {value === 0}
+                {value === 1}
                 <Button
                     onClick={this.openNewChallengeDialog}
                 >Create New Challenge
@@ -156,7 +158,7 @@ class AdminView extends Component {
                         />
                     </DialogContent>
                     <DialogActions>
-                        <Button 
+                        <Button
                             onClick={this.handleClose}>
                             Cancel
                         </Button>
@@ -178,8 +180,6 @@ class AdminView extends Component {
                     style={{ float: "right" }}
                     onClick={this.displayPastChallenges}
                 >Past Challenges</Button> */}
-
-
                 {this.state.displayPastChallenges ?
                     <PastChallenges
                     /> : null
