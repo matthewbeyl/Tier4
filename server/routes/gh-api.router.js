@@ -20,7 +20,7 @@ date = JSON.stringify(date)
 todaysDate = date.substring(1, 11)
 //calculate todays date so that we only get todays commits in getData()
 
-cron.schedule('*/20 * * * * *', function () {
+cron.schedule('*/1 * * * * *', function () {
     console.log('running once every 20 seconds');
     getData();
 });
@@ -54,7 +54,7 @@ function getData() {
                         userList.forEach(user => { //loop through the userlist we just got from postgres and generate an api call using each users information.
                             const requestOptions = {
                                 uri: `https://api.github.com/search/commits?q=committer:${user.github}+committer-date:${todaysDate}&sort=committer-date&per_page=1`,
-                                headers: { "User-Agent": 'reverended', Accept: 'application/vnd.github.cloak-preview+json', Authorization: 'token 23982af669baa75e29e52bbd5a45594c65b7f7b2' },
+                                headers: { "User-Agent": user.github, Accept: 'application/vnd.github.cloak-preview+json', Authorization: 'token 23982af669baa75e29e52bbd5a45594c65b7f7b2' },
                                 method: 'GET',
                                 json: true
                             }
@@ -113,6 +113,9 @@ function processData(userData, diffDays, username) {
     let userCommitArray = username.calendar 
     if (userData.length !== 0 && diffDays<= 30) { //set the corresponding array index to the value true if the user has committed that day.
         userCommitArray[diffDays] = true;         //if the user committed on the second day of the challenge, the second value in userCommitArray will be true, the rest will be false
+    }
+    else if (diffDays>30){
+        console.log('the current challenge should have ended or should end soon. ');
     }
     return userCommitArray; //return the processed array.
 }
