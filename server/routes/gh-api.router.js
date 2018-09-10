@@ -153,7 +153,6 @@
 //     return commitCount
 // }
 
-
 // // router.get('/get-gh-data', (req, res) => {
 // //     console.log('getting gh data');
 // //     const requestPromises = []

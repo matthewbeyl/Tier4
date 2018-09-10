@@ -4,6 +4,8 @@ const router = express.Router();
 const { rejectUnauthenticated } = require('../modules/authentication-middleware');
 
 router.post('/email', rejectUnauthenticated, (req, res) => {
+    console.log(req.body);
+    
     pool.query(`UPDATE "users"
         SET "email" = $1,
             "queued_for_next_challenge" = $2,
@@ -13,6 +15,8 @@ router.post('/email', rejectUnauthenticated, (req, res) => {
     .then((results) => {
         res.sendStatus(201);
     }).catch((errorFromPG) => {
+        console.log(errorFromPG);
+        
         res.sendStatus(500);
     })
 });

@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import Header from '../Header/Header';
 import CreateNewChallengeForm from '../CreateNewChallengeForm/CreateNewChallengeForm.js';
 import PastChallenges from '../PastChallenges/PastChallenges';
 import CurrentChallenge from '../CurrentChallenge/CurrentChallenge';
 import { USER_ACTIONS } from '../../redux/actions/userActions';
 import { CHALLENGE_ACTIONS } from '../../redux/actions/challengeActions';
 import Button from '@material-ui/core/Button';
-import { Dialog, DialogTitle, DialogContent, DialogActions, TextField, DialogContentText } from '@material-ui/core';
-
+import { Dialog, DialogTitle, DialogContent, DialogActions, TextField } from '@material-ui/core';
+import NavBar from '../NavBar/NavBar';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
 
 const mapStateToProps = state => ({
     user: state.user.user,
@@ -24,7 +25,14 @@ class AdminView extends Component {
             open: false,
             displayCurrentChallenge: true,
             displayPastChallenges: false,
-            adminName: ''
+            adminName: '',
+            newChallenge: {
+                title: '',
+                date: new Date(),
+                exclude_weekends: false,
+                exclude_holidays: false
+            },
+            value: 0,
         }
     }
 
@@ -35,7 +43,6 @@ class AdminView extends Component {
 
     componentDidUpdate() {
         if (this.props.user === null || !this.props.user.admin) {
-            console.log('user is not an admin')
             this.props.history.push('/home');
         }
     }
@@ -74,13 +81,49 @@ class AdminView extends Component {
         })
     }
 
+    handleChangeFor = (propertyName) => (event) => {
+        this.setState({
+            newChallenge: {
+                ...this.state.newChallenge,
+                [propertyName]: event.target.value
+            }
+        })
+    }
+
+    handleCreateNewChallenge = () => {
+        this.props.dispatch({type: CHALLENGE_ACTIONS.CREATE_NEW_CHALLENGE, payload: this.state.newChallenge});
+        this.setState({
+            open: false
+        })
+    }
+
+    handleDisplayChange = (event, value) => {
+        this.setState({
+            value: value
+        })
+    }
+
     render() {
         let content = null;
+        const { value } = this.state;
         content = (
             <div>
                 <p>Welcome,{this.state.adminName}</p>
 
+                <Tabs 
+                    indicatorColor="primary"
+                    value={value}
+                    onChange={this.handleDisplayChange}>
+                    <Tab 
+                        label="Current Challenge"
+                        onClick={this.displayCurrentChallenge}/>
+                    <Tab 
+                        label="Past Challenges"
+                        onClick={this.displayPastChallenges}/>
+                </Tabs>
 
+                {value === 0 }
+                {value === 1 }
 
                 <Button
                     onClick={this.openNewChallengeDialog}
@@ -100,49 +143,43 @@ class AdminView extends Component {
                             type="text"
                             fullWidth
                             required
-
+                            onChange={this.handleChangeFor('title')}
                         />
                         <TextField
                             autoFocus
                             margin="dense"
                             id="date"
                             type="date"
-                            // label="Start Date"
                             fullWidth
                             required
+                            onChange={this.handleChangeFor('date')}
                         />
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={this.handleClose}>
+                        <Button 
+                            onClick={this.handleClose}>
                             Cancel
-                    </Button>
-                        <Button>
+                        </Button>
+                        <Button
+                            onClick={this.handleCreateNewChallenge}>
                             Create
-                    </Button>
+                        </Button>
                     </DialogActions>
                 </Dialog>
 
 
 
-                {/* {this.state.showPopupForm ?
-                    <CreateNewChallengeForm
-                        text='Create a New Challenge'
-                        closePopupForm={this.toggleCreateNewChallengePopupForm}
-                    /> : null
-                } */}
 
-
-
-
-
-                <Button
+                {/* <Button
                     style={{ float: "right" }}
                     onClick={this.displayCurrentChallenge}
                 >Current Challenge</Button>
                 <Button
                     style={{ float: "right" }}
                     onClick={this.displayPastChallenges}
-                >Past Challenges</Button>
+                >Past Challenges</Button> */}
+
+
                 {this.state.displayPastChallenges ?
                     <PastChallenges
                     /> : null
@@ -155,7 +192,7 @@ class AdminView extends Component {
         );
         return (
             <main>
-                <Header title="Tier Four" />
+                <NavBar />
                 {content}
             </main>
         )

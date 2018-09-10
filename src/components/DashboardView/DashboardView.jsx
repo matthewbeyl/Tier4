@@ -1,9 +1,13 @@
 import React, { Component } from 'react';
-import Header from '../Header/Header';
 import { connect } from 'react-redux';
 import { addFeedback } from '../../redux/actions/dashboardActions';
 import { addPreferences } from '../../redux/actions/dashboardActions';
 import { USER_ACTIONS } from '../../redux/actions/userActions';
+import NavBar from '../NavBar/NavBar';
+
+import { Paper, Grid, Button, TextField, Checkbox } from '@material-ui/core';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+
 
 const mapStateToProps = state => ({
     user: state.user.user
@@ -31,6 +35,12 @@ class DashboardView extends Component {
 
     componentDidMount() {
         this.props.dispatch({ type: USER_ACTIONS.FETCH_USER });
+        if (!this.props.user && this.props.user === null) {
+            this.props.history.push('home');
+        }
+    }
+
+    componentDidUpdate() {
         if (!this.props.user && this.props.user === null) {
             this.props.history.push('home');
         }
@@ -85,46 +95,107 @@ class DashboardView extends Component {
     render() {
         return (
             <main>
-                <Header title="Tier Four" />
-                <h3>Welcome, User</h3>
-                <form onSubmit={this.submitFeedback}>
-                    <label>What did you learn?</label>
-                    <input type="text" placeholder="I learned..." value={this.state.learned} onChange={this.handleFeedbackChange('learned')} />
-                    <br />
-                    <label>What did you build?</label>
-                    <input type="text" placeholder="I built..." value={this.state.built} onChange={this.handleFeedbackChange('built')} />
-                    <br />
-                    <label>Where did you apply?</label>
-                    <input type="text" placeholder="I applied..." value={this.state.applied} onChange={this.handleFeedbackChange('applied')} />
-                    <br />
-                    <label>Who did you follow up with?</label>
-                    <input type="text" placeholder="I followed up..." value={this.state.followed_up} onChange={this.handleFeedbackChange('followed_up')} />
-                    <br />
-                    <label>What kind of events/networking did you do?</label>
-                    <input type="text" placeholder="I attended..." value={this.state.events_networking} onChange={this.handleFeedbackChange('events_networking')} />
-                    <br />
-                    <button type="submit">Submit Feedback</button>
-                </form>
-                <br />
-                <button>Join Challenge</button>
-                <br />
-                <form onSubmit={this.setPreferences}>
-                    <input type="checkbox"
-                        name="challenge"
-                        onChange={this.handleCheckboxBoolean('queued_for_next_challenge')}
-                        checked={this.state.queued_for_next_challenge} />I would like e-mail notification for the next challenge<br />
-                    <input type="checkbox"
-                        name="commit"
-                        onChange={this.handleCheckboxBoolean('daily_email_reminders')}
-                        checked={this.state.daily_email_reminders} />I would like daily e-mail reminders to commit<br />
-                    <input type="checkbox"
-                        name="feedback"
-                        onChange={this.handleCheckboxBoolean('weekly_email_reminders')}
-                        checked={this.state.weekly_email_reminders} />I would like weekly e-mail reminders to commit<br />
-                    <label>E-mail Address</label>
-                    <input type="text" placeholder="email@email.com" value={this.state.email} onChange={this.handleEmailInput('email')} />
-                    <button type="submit">Update Preferences</button>
-                </form>
+                <NavBar />
+                <Button variant="outlined" color="primary">Join Challenge</Button>
+
+                <Grid container>
+                    <Grid item sm>
+                        <Paper>
+                            <form onSubmit={this.setPreferences}>
+                                <FormControlLabel
+                                    control={
+                                        <Checkbox
+                                            checked={this.state.queued_for_next_challenge}
+                                            onChange={this.handleCheckboxBoolean('queued_for_next_challenge')}
+                                            value="challenge"
+                                            color="primary"
+                                        />
+                                    }
+                                    label="I would like to receive an e-mail notification fo the next challenge"
+                                />
+                                <br />
+                                <FormControlLabel
+                                    control={
+                                        <Checkbox
+                                            checked={this.state.daily_email_reminders}
+                                            onChange={this.handleCheckboxBoolean('daily_email_reminders')}
+                                            value="commit"
+                                            color="primary"
+                                        />
+                                    }
+                                    label="I would like to receive daily e-mail reminders to commit"
+                                />
+                                <br />
+                                <FormControlLabel
+                                    control={
+                                        <Checkbox
+                                            checked={this.state.weekly_email_reminders}
+                                            onChange={this.handleCheckboxBoolean('weekly_email_reminders')}
+                                            value="feedback"
+                                            color="primary"
+                                        />
+                                    }
+                                    label="I would like to receive weekly e-mail reminders to submit feedback"
+                                />
+                                <TextField
+                                    id="email"
+                                    label="E-mail Address"
+                                    value={this.state.email}
+                                    onChange={this.handleEmailInput('email')}
+                                    margin="normal"
+                                />
+                                <Button type="submit" variant="outlined" color="primary">Update Preferences</Button>
+                            </form>
+                        </Paper>
+                    </Grid>
+                    <Grid item sm>
+                        <Paper>
+                            <form onSubmit={this.submitFeedback}>
+                                <TextField
+                                    id="learned"
+                                    label="What did you learn?"
+                                    value={this.state.learned}
+                                    onChange={this.handleFeedbackChange('learned')}
+                                    margin="normal"
+                                />
+                                <br />
+                                <TextField
+                                    id="built"
+                                    label="What did you build?"
+                                    value={this.state.built}
+                                    onChange={this.handleFeedbackChange('built')}
+                                    margin="normal"
+                                />
+                                <br />
+                                <TextField
+                                    id="applied"
+                                    label="Where did you apply?"
+                                    value={this.state.applied}
+                                    onChange={this.handleFeedbackChange('applied')}
+                                    margin="normal"
+                                />
+                                <br />
+                                <TextField
+                                    id="followed_up"
+                                    label="Who did you follow up with?"
+                                    value={this.state.followed_up}
+                                    onChange={this.handleFeedbackChange('followed_up')}
+                                    margin="normal"
+                                />
+                                <br />
+                                <TextField
+                                    id="events_networking"
+                                    label="What kind of events/networking did you do?"
+                                    value={this.state.events_networking}
+                                    onChange={this.handleFeedbackChange('events_networking')}
+                                    margin="normal"
+                                />
+                                <br />
+                                <Button type="submit" variant="outlined" color="primary">Submit Feedback</Button>
+                            </form>
+                        </Paper>
+                    </Grid>
+                </Grid>
             </main>
         )
     }
