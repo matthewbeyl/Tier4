@@ -21,26 +21,19 @@ class AdminView extends Component {
         }
     }
 
-    componentWillMount() {
-        this.props.dispatch({
-            type: USER_ACTIONS.FETCH_USER
-        })
-
-        // user who are not logged will directed to the home view
-        if (!this.props.user) {
-            this.props.history.push('/home');
-        }
-    }
-
     componentDidUpdate() {
-        console.log(this.props.user.admin)
         this.props.dispatch({ type: 'FETCH_CURRENT_CHALLENGE' });
 
         // user who are logged in and are not Admin will be directed to the home view
-        if (!this.props.user.admin || this.props.user.admin === null) {
-            console.log('user is not an admin')
-            this.props.history.push('/home');
-        }
+
+        if (!this.props.user.isLoading && (!this.props.user.admin || this.props.user.userName === null)) {
+            this.props.history.push('home');
+          }
+    }
+
+    componentDidMount() {
+        this.props.dispatch({ type: USER_ACTIONS.FETCH_USER });
+
     }
 
     displayCurrentChallenge = () => {
