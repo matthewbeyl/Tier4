@@ -1,4 +1,4 @@
-import { COUNTDOWN_ACTIONS } from '../actions/countdownActions';
+import { COUNTDOWN_ACTIONS } from '../actions/homeActions';
 
 const challengeDate = (state = '', action) => {
     switch (action.type) {

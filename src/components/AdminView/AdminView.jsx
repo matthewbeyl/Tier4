@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import Header from '../Header/Header';
 import CreateNewChallengeForm from '../CreateNewChallengeForm/CreateNewChallengeForm.js';
 import PastChallenges from '../PastChallenges/PastChallenges';
 import CurrentChallenge from '../CurrentChallenge/CurrentChallenge';
 import { USER_ACTIONS } from '../../redux/actions/userActions';
+import NavBar from '../NavBar/NavBar';
 
 const mapStateToProps = state => ({
     user: state.user.user,
@@ -98,7 +98,7 @@ class AdminView extends Component {
         );
         return (
             <main>
-                <Header title="Tier Four" />
+                <NavBar />
                 {content}
             </main>
         )

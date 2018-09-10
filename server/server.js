@@ -32,7 +32,7 @@ app.use('/api/user', userRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/challenge', challengeRouter);
 app.use('/api/dashboard', dashboardRouter);
-app.use('/api/gh-router', GHAPIRouter)
+// app.use('/api/gh-router', GHAPIRouter)
 //app.use('/api/ross-router', rossRouter)
 
 // Serve static files
