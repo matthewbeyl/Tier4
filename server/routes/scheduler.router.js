@@ -6,11 +6,12 @@ const pool = require('../modules/pool');
 const rp = require('request-promise')
 
 let didChallengeFinishRecently = false;
-let challengeDate = '01-01-2018'
+let challengeDate = '01-01-2018' 
+//gets the info for the latest challenges status. if the challenge was finished, we will be checking to see when the new challenge begins.
 
 router.get('/challenge-status', (req, res) => {
     res.send(didChallengeFinishRecently)
-})
+}) //endpoint for checking if a challenge recently finished so we can congradulate those who finished the challenge.
 
 let transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -24,36 +25,37 @@ let transporter = nodemailer.createTransport({
     tls: {
         rejectUnauthorized: false
     }
-});
+}); //creates an email transporter.
 
+//ALL THE NODECRON STUFF IS AT THE BOTTOM. THESE FUNCTIONS RUN AT SPECIFIC TIMES THROUGHOUT THE DAY. 
 
-function dailyEmail() {
+function dailyEmail() { 
     console.log('getting email stuff');
-    pool.query(`SELECT "github", "email" FROM "users" WHERE "daily_email_reminders" = true;`)
+    pool.query(`SELECT "github", "email" FROM "users" WHERE "daily_email_reminders" = true;`) //retrieve a list of users who have subscribed to the daily reminder email.
         .then((response) => {
 
             let tempMailList = [];
             response.rows.forEach(user => {
                 tempMailList.push(user.email)
-            })
+            }) //generate a temporary mailing list which we will trim in just a second.
 
-            let userList = response.rows
+            let userList = response.rows //create a userList which will be used to search the github api to see if the user has committed today.
 
             let currentDate = new Date();
             currentDate = JSON.stringify(currentDate)
-            currentDate = currentDate.substring(1, 11)
+            currentDate = currentDate.substring(1, 11) //grabs a string of todays date to be used when searching the api.
 
-            const requestPromises = []
+            const requestPromises = [] //creates an array of requests we are going to send to the api.
             userList.forEach(user => {
                 const requestOptions = {
                     uri: `https://api.github.com/search/commits?q=committer:${user.github}+committer-date:${currentDate}&sort=committer-date&per_page=1`,
                     headers: { "User-Agent": 'reverended', Accept: 'application/vnd.github.cloak-preview+json', Authorization: 'token  23982af669baa75e29e52bbd5a45594c65b7f7b2' },
                     method: 'GET',
                     json: true
-                }
-                requestPromises.push(rp(requestOptions));
+                } 
+                requestPromises.push(rp(requestOptions)); //push each request to the array
             })
-            Promise.all(requestPromises)
+            Promise.all(requestPromises) //promise and wait for each request to complete
                 .then((data) => {
 
                     console.log(data);
