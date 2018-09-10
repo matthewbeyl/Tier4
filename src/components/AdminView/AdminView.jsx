@@ -7,6 +7,8 @@ import CurrentChallenge from '../CurrentChallenge/CurrentChallenge';
 import { USER_ACTIONS } from '../../redux/actions/userActions';
 import { CHALLENGE_ACTIONS } from '../../redux/actions/challengeActions';
 import Button from '@material-ui/core/Button';
+import { Dialog, DialogTitle, DialogContent, DialogActions, TextField, DialogContentText } from '@material-ui/core';
+
 
 const mapStateToProps = state => ({
     user: state.user.user,
@@ -19,7 +21,7 @@ class AdminView extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            showPopupForm: false,
+            open: false,
             displayCurrentChallenge: true,
             displayPastChallenges: false,
             adminName: ''
@@ -60,27 +62,79 @@ class AdminView extends Component {
         })
     }
 
-    toggleCreateNewChallengePopupForm = () => {
+    openNewChallengeDialog = () => {
         this.setState({
-            showPopupForm: !this.state.showPopupForm
+            open: true
         });
     }
- 
+
+    handleClose = () => {
+        this.setState({
+            open: false
+        })
+    }
+
     render() {
         let content = null;
         content = (
             <div>
                 <p>Welcome,{this.state.adminName}</p>
-                <Button 
-                    onClick={this.toggleCreateNewChallengePopupForm}
+
+
+
+                <Button
+                    onClick={this.openNewChallengeDialog}
                 >Create New Challenge
                 </Button>
-                {this.state.showPopupForm ?
+                <Dialog
+                    open={this.state.open}
+                    onClose={this.handleClose}
+                >
+                    <DialogTitle>Create a new challenge:</DialogTitle>
+                    <DialogContent>
+                        <TextField
+                            autoFocus
+                            margin="dense"
+                            id="title"
+                            label="Title"
+                            type="text"
+                            fullWidth
+                            required
+
+                        />
+                        <TextField
+                            autoFocus
+                            margin="dense"
+                            id="date"
+                            type="date"
+                            // label="Start Date"
+                            fullWidth
+                            required
+                        />
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={this.handleClose}>
+                            Cancel
+                    </Button>
+                        <Button>
+                            Create
+                    </Button>
+                    </DialogActions>
+                </Dialog>
+
+
+
+                {/* {this.state.showPopupForm ?
                     <CreateNewChallengeForm
                         text='Create a New Challenge'
                         closePopupForm={this.toggleCreateNewChallengePopupForm}
                     /> : null
-                }
+                } */}
+
+
+
+
+
                 <Button
                     style={{ float: "right" }}
                     onClick={this.displayCurrentChallenge}
