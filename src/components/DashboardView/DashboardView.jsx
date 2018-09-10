@@ -5,7 +5,7 @@ import { addPreferences } from '../../redux/actions/dashboardActions';
 import { USER_ACTIONS } from '../../redux/actions/userActions';
 import NavBar from '../NavBar/NavBar';
 
-import { Paper } from '@material-ui/core';
+import { Paper, Grid } from '@material-ui/core';
 
 
 const mapStateToProps = state => ({
@@ -94,8 +94,30 @@ class DashboardView extends Component {
     render() {
         return (
             <main>
-                {/* <Header title="Tier Four" /> */}
                 <NavBar/>
+                <Grid container>
+                <Grid item sm>
+                <Paper>
+                <form onSubmit={this.setPreferences}>
+                    <input type="checkbox"
+                        name="challenge"
+                        onChange={this.handleCheckboxBoolean('queued_for_next_challenge')}
+                        checked={this.state.queued_for_next_challenge} />I would like e-mail notification for the next challenge<br />
+                    <input type="checkbox"
+                        name="commit"
+                        onChange={this.handleCheckboxBoolean('daily_email_reminders')}
+                        checked={this.state.daily_email_reminders} />I would like daily e-mail reminders to commit<br />
+                    <input type="checkbox"
+                        name="feedback"
+                        onChange={this.handleCheckboxBoolean('weekly_email_reminders')}
+                        checked={this.state.weekly_email_reminders} />I would like weekly e-mail reminders to commit<br />
+                    <label>E-mail Address</label>
+                    <input type="text" placeholder="email@email.com" value={this.state.email} onChange={this.handleEmailInput('email')} />
+                    <button type="submit">Update Preferences</button>
+                </form>
+                </Paper>
+                </Grid>
+                <Grid item sm>
                 <Paper>
                 <form onSubmit={this.submitFeedback}>
                     <label>What did you learn?</label>
@@ -116,28 +138,9 @@ class DashboardView extends Component {
                     <button type="submit">Submit Feedback</button>
                 </form>
                 </Paper>
-                <br />
+                </Grid>
+                </Grid>
                 <button>Join Challenge</button>
-                <br />
-                <Paper>
-                <form onSubmit={this.setPreferences}>
-                    <input type="checkbox"
-                        name="challenge"
-                        onChange={this.handleCheckboxBoolean('queued_for_next_challenge')}
-                        checked={this.state.queued_for_next_challenge} />I would like e-mail notification for the next challenge<br />
-                    <input type="checkbox"
-                        name="commit"
-                        onChange={this.handleCheckboxBoolean('daily_email_reminders')}
-                        checked={this.state.daily_email_reminders} />I would like daily e-mail reminders to commit<br />
-                    <input type="checkbox"
-                        name="feedback"
-                        onChange={this.handleCheckboxBoolean('weekly_email_reminders')}
-                        checked={this.state.weekly_email_reminders} />I would like weekly e-mail reminders to commit<br />
-                    <label>E-mail Address</label>
-                    <input type="text" placeholder="email@email.com" value={this.state.email} onChange={this.handleEmailInput('email')} />
-                    <button type="submit">Update Preferences</button>
-                </form>
-                </Paper>
             </main>
         )
     }

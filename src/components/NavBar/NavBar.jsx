@@ -13,14 +13,12 @@ const AdminLink = props => <Link to="/admin" {...props} />
 const LoginLink = props => <Link to="http://localhost:5000/api/auth/login" {...props} />
 const TestLink = props => <Link to="www.google.com" {...props} />
 
-export const styles = theme => ({
-  toolBar: {
-    margin: theme.spacing.unit,
-    position: 'bottom',
-    // display: 'flex',
-    // alignItems: 'center',
-  }
-})
+const styles = {
+  root: {
+    
+  },
+};
+
 
 class NavBar extends Component {
 
@@ -81,16 +79,15 @@ class NavBar extends Component {
   }
 
   render() {
-    const { classes } = this.props;
 
     return (
-      <Toolbar disableGutters="false" postion="sticky" className={classes.toolBar}>
-        <Button component={HomeLink}>
+      <Toolbar>
+        <Button component={HomeLink} color="primary">
           Home
         </Button>
         {this.dashboardNav()}
         {this.adminNav()}
-        <Typography variant="display2" color="inherit">
+        <Typography variant="display2">
            Tier Four
          </Typography>
         {this.logInLogOut()}
