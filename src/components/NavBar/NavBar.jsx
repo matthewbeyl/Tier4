@@ -82,14 +82,14 @@ class NavBar extends Component {
 
     return (
       <Toolbar>
+        <Typography variant="display2">
+           Tier Four
+         </Typography>
         <Button component={HomeLink} color="primary">
           Home
         </Button>
         {this.dashboardNav()}
         {this.adminNav()}
-        <Typography variant="display2">
-           Tier Four
-         </Typography>
         {this.logInLogOut()}
       </Toolbar>
     )
