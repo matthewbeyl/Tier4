@@ -33,7 +33,7 @@ app.use('/api/auth', authRouter);
 app.use('/api/challenge', challengeRouter);
 app.use('/api/dashboard', dashboardRouter);
 app.use('/api/gh-router',GHAPIRouter)
-app.use(scheduler)
+//app.use(scheduler)
 
 // Serve static files
 app.use(express.static('build'));
