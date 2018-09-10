@@ -50,7 +50,19 @@ class DashboardView extends Component {
     };
 
     openPreferences = () => {
-        this.setState({ prefopen: true });
+        console.log('State before', this.state);
+        console.log('props.user before', this.props.user);
+        
+        this.setState({ 
+            queued_for_next_challenge: this.props.user.queued_for_next_challenge,
+            weekly_email_reminders: this.props.user.weekly_email_reminders,
+            daily_email_reminders: this.props.user.daily_email_reminders,
+            email: this.props.user.email 
+        });
+        console.log('State after', this.state);
+        this.setState({ 
+            prefopen: true
+        });
     };
 
     closePreferences = () => {
@@ -65,19 +77,8 @@ class DashboardView extends Component {
         this.setState({ sumopen: false });
     };
 
-    async componentDidMount() {
+    componentDidMount() {
         this.props.dispatch({ type: USER_ACTIONS.FETCH_USER });
-        await this.props.user
-        try {
-            this.setState({
-                queued_for_next_challenge: this.props.user.queued_for_next_challenge,
-                weekly_email_reminders: this.props.user.weekly_email_reminders,
-                daily_email_reminders: this.props.user.daily_email_reminders,
-                email: this.props.user.email
-            })
-        } catch(err){
-        
-        }
     }
 
     componentDidUpdate() {
@@ -121,6 +122,8 @@ class DashboardView extends Component {
                 [property]: false
             })
         }
+        console.log(this.state);
+        
     }
 
     handleEmailInput = (property) => (event) => {
@@ -161,7 +164,6 @@ class DashboardView extends Component {
                                         <Checkbox
                                             checked={this.state.queued_for_next_challenge}
                                             onChange={this.handleCheckboxBoolean('queued_for_next_challenge')}
-                                            value="challenge"
                                             color="primary"
                                         />
                                     }
@@ -173,7 +175,6 @@ class DashboardView extends Component {
                                         <Checkbox
                                             checked={this.state.daily_email_reminders}
                                             onChange={this.handleCheckboxBoolean('daily_email_reminders')}
-                                            value="commit"
                                             color="primary"
                                         />
                                     }
@@ -185,7 +186,6 @@ class DashboardView extends Component {
                                         <Checkbox
                                             checked={this.state.weekly_email_reminders}
                                             onChange={this.handleCheckboxBoolean('weekly_email_reminders')}
-                                            value="feedback"
                                             color="primary"
                                         />
                                     }
