@@ -32,9 +32,19 @@ class DashboardView extends Component {
         };
     }
 
-    componentDidMount() {
+    async componentDidMount() {
         this.props.dispatch({ type: USER_ACTIONS.FETCH_USER });
+        await this.props.user
+        try {
+            this.setState({
+                queued_for_next_challenge: this.props.user.queued_for_next_challenge,
+                weekly_email_reminders: this.props.user.weekly_email_reminders,
+                daily_email_reminders: this.props.user.daily_email_reminders,
+                email: this.props.user.email
+            })
+        } catch(err){
         
+        }
     }
 
     componentDidUpdate() {
