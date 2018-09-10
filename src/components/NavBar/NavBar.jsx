@@ -14,6 +14,7 @@ const HomeLink = props => <Link to="/home" {...props} />
 const DashLink = props => <Link to="/dashboard" {...props} />
 const AdminLink = props => <Link to="/admin" {...props} />
 const LoginLink = props => <Link to="http://localhost:5000/api/auth/login" {...props} />
+const TestLink = props => <Link to="www.google.com" {...props} />
 
 class NavBar extends Component {
 
@@ -35,9 +36,12 @@ class NavBar extends Component {
           <Button onClick={this.logout}>Log out</Button>
         )
       } else {
+
+        // return (<Button component={TestLink}>Test</Button>);
         return (<a href="http://localhost:5000/api/auth/login">Log In</a>);
       }
     } catch (error) {
+      // return (<Button component={TestLink}>Test</Button>);
       return (<a href="http://localhost:5000/api/auth/login">Log In</a>);
     }
   }
