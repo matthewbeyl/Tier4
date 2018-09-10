@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
-import Header from '../Header/Header';
 import { connect } from 'react-redux';
 import { addFeedback } from '../../redux/actions/dashboardActions';
 import { addPreferences } from '../../redux/actions/dashboardActions';
 import { USER_ACTIONS } from '../../redux/actions/userActions';
+import NavBar from '../NavBar/NavBar';
+
+import { Paper } from '@material-ui/core';
+
 
 const mapStateToProps = state => ({
     user: state.user.user
@@ -91,8 +94,9 @@ class DashboardView extends Component {
     render() {
         return (
             <main>
-                <Header title="Tier Four" />
-                <h3>Welcome, User</h3>
+                {/* <Header title="Tier Four" /> */}
+                <NavBar/>
+                <Paper>
                 <form onSubmit={this.submitFeedback}>
                     <label>What did you learn?</label>
                     <input type="text" placeholder="I learned..." value={this.state.learned} onChange={this.handleFeedbackChange('learned')} />
@@ -111,9 +115,11 @@ class DashboardView extends Component {
                     <br />
                     <button type="submit">Submit Feedback</button>
                 </form>
+                </Paper>
                 <br />
                 <button>Join Challenge</button>
                 <br />
+                <Paper>
                 <form onSubmit={this.setPreferences}>
                     <input type="checkbox"
                         name="challenge"
@@ -131,6 +137,7 @@ class DashboardView extends Component {
                     <input type="text" placeholder="email@email.com" value={this.state.email} onChange={this.handleEmailInput('email')} />
                     <button type="submit">Update Preferences</button>
                 </form>
+                </Paper>
             </main>
         )
     }
