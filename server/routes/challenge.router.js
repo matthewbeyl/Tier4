@@ -9,7 +9,7 @@ router.get('/fetch-active', rejectUnauthenticated, (req,res) => {
     if(req.user.admin) {
         const queryText = `SELECT * FROM challenges WHERE active = true;`;
         pool.query(queryText).then((result) => {
-            console.log(result.rows);
+            console.log(result.rows[0]);
             res.send(result.rows);
         }).catch((error) => {
             console.log('error fetching active challenge status: ', error)

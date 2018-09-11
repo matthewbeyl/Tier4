@@ -5,6 +5,7 @@ import { Dialog, DialogTitle, DialogContent, DialogActions, TextField } from '@m
 import { USER_ACTIONS } from '../../redux/actions/userActions';
 import { CHALLENGE_ACTIONS } from '../../redux/actions/challengeActions';
 import DeleteCurrentChallengeButton from '../DeleteCurrentChallengeButton/DeleteCurrentChallengeButton';
+import CurrentChallengeTable from '../CurrentChallengeTable/CurrentChallengeTable';
 
 const mapStateToProps = state => ({
     currentChallengeData: state.challenge.current,
@@ -26,14 +27,10 @@ class CurrentChallenge extends Component {
             open: false,
         }
     }
+
     componentWillMount() {
         this.props.dispatch({ type: USER_ACTIONS.FETCH_USER });
         this.props.dispatch({ type: CHALLENGE_ACTIONS.FETCH_ACTIVE_CHALLENGE });
-        console.log('component will mount');
-    }
-
-    componentDidMount(){
-        console.log('component mounted');
     }
 
     handleClose = () => {
@@ -75,24 +72,6 @@ class CurrentChallenge extends Component {
         let currentChallengeTitle = this.props.currentChallenge.map((item, index) => {
             return (
                 <p key={index}>{item.title}</p>
-            )
-        })
-
-        let apiChallengeResults = null;
-        this.props.currentChallengeData.map((user) => {
-            return (
-                apiChallengeResults = user.map((eachUser, index) => {
-                    return (
-                        <tr key={index}>
-                            <td>{eachUser.first_name} {eachUser.last_name}</td>
-                            <td>{eachUser.commit_percentage}</td>
-                            <td>{eachUser.longest_streak}</td>
-                            <td>{eachUser.daily_email_reminders.toString()}</td>
-                            <td>{eachUser.weekly_email_reminders.toString()}</td>
-                            <td><button>Delete</button></td>
-                        </tr>
-                    )
-                })
             )
         })
 
@@ -141,23 +120,9 @@ class CurrentChallenge extends Component {
                         </Button>
                     </DialogActions>
                 </Dialog>
-                
                 <div>{currentChallengeTitle}</div>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Commit %</th>
-                            <th>Streak</th>
-                            <th>Daily Reminder</th>
-                            <th>Weekly Reminder</th>
-                            <th>Delete</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {apiChallengeResults}
-                    </tbody>
-                </table>
+                
+                <CurrentChallengeTable />
                 <DeleteCurrentChallengeButton />
             </div>
         )
