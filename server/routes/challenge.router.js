@@ -4,12 +4,28 @@ const { rejectUnauthenticated } = require('../modules/authentication-middleware'
 const { rejectNonAdmin } = require('../modules/admin-authentication');
 const router = express.Router();
 
+router.delete('/delete-user-from-current-challenge/:id', rejectUnauthenticated, (req,res) => {
+    console.log('/api/challenge/delete-user-from-current-challenge');
+    if(req.user.admin) {
+        console.log('the id of the user to be deleted is: ',req.params.id);
+        const queryText = '';
+
+
+        // pool.query(queryText).then(() => {
+        //     res.sendStatus(201);
+        // }).catch((error) => {
+        //     console.log('error deleting active challenge status: ', error);
+        //     res.sendStatus(500);
+        // })
+    } else {
+        res.sendStatus(403);
+    }
+});
+
 router.get('/fetch-active', rejectUnauthenticated, (req,res) => {
-    console.log('/api/challenge/fetch-active');
     if(req.user.admin) {
         const queryText = `SELECT * FROM challenges WHERE active = true;`;
         pool.query(queryText).then((result) => {
-            console.log(result.rows[0]);
             res.send(result.rows);
         }).catch((error) => {
             console.log('error fetching active challenge status: ', error)
@@ -20,7 +36,6 @@ router.get('/fetch-active', rejectUnauthenticated, (req,res) => {
 });
 
 router.delete('/delete-active', rejectUnauthenticated, (req,res) => {
-    console.log('/api/challenge/delete-active');
     if(req.user.admin) {
         const queryText = `DELETE FROM challenges WHERE active = true;`;
         pool.query(queryText).then(() => {

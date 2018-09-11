@@ -17,13 +17,16 @@ const mapStateToProps = state => ({
 });
 
 class CurrentChallengeTable extends Component {
-
     componentWillMount() {
         this.props.dispatch({ type: USER_ACTIONS.FETCH_USER });
         this.props.dispatch({ type: CHALLENGE_ACTIONS.FETCH_ACTIVE_CHALLENGE });
         this.props.dispatch({ type: CHALLENGE_ACTIONS.FETCH_USER_DATA_CURRENT_CHALLENGE });
     }
 
+    handleDeleteUserFromCurrentChallenge = (id) => {
+        console.log('the user to delete from current challenge id is :', id);
+        this.props.dispatch({ type: CHALLENGE_ACTIONS.DELETE_USER_FROM_CURRENT_CHALLENGE, payload: id })
+    }
     render() {
         let apiChallengeResults = this.props.currentChallengeUserData.map(user => {
             return (
@@ -33,7 +36,7 @@ class CurrentChallengeTable extends Component {
                     <TableCell>{user.streak}</TableCell>
                     <TableCell>{user.daily_reminder.toString()}</TableCell>
                     <TableCell>{user.weekly_reminder.toString()}</TableCell>
-                    <TableCell><Button>Delete</Button></TableCell>
+                    <TableCell><Button onClick={()=>{this.handleDeleteUserFromCurrentChallenge(user.id)}}>Delete</Button></TableCell>
                 </TableRow>
             )
         });

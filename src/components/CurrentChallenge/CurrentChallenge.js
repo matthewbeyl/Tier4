@@ -26,31 +26,31 @@ class CurrentChallenge extends Component {
             activeChallenge: true,
             open: false,
         }
-    }
+    };
 
     componentWillMount() {
         this.props.dispatch({ type: USER_ACTIONS.FETCH_USER });
         this.props.dispatch({ type: CHALLENGE_ACTIONS.FETCH_ACTIVE_CHALLENGE });
-    }
+    };
 
     handleClose = () => {
         this.setState({
             open: false
         })
-    }
+    };
 
     openNewChallengeDialog = () => {
         this.setState({
             open: true
         });
-    }
+    };
 
     handleCreateNewChallenge = () => {
         this.props.dispatch({ type: CHALLENGE_ACTIONS.CREATE_NEW_CHALLENGE, payload: this.state.newChallenge });
         this.setState({
             open: false
-        })
-    }
+        });
+    };
 
     handleChangeFor = (propertyName) => (event) => {
         this.setState({
@@ -58,35 +58,31 @@ class CurrentChallenge extends Component {
                 ...this.state.newChallenge,
                 [propertyName]: event.target.value
             }
-        })
-    }
+        });
+    };
 
     render() {
-        if (this.props.checkChallengeStatus.length === 0){
-            console.log('no current challenge');
-
-        } else {
-            console.log('active challenge');
-        }
-
         let currentChallengeTitle = this.props.currentChallenge.map((item, index) => {
             return (
                 <p key={index}>{item.title}</p>
             )
-        })
+        });
 
-        return (
-            <div>
-                {this.state.activeChallenge ?
-                    <Button
-                        onClick={this.openNewChallengeDialog}
-                    >Create New Challenge
-                    </Button>
-                    : null}
-                <Dialog
-                    open={this.state.open}
-                    onClose={this.handleClose}
-                >
+        let display = null;
+        if (this.props.checkChallengeStatus.length === 1) {
+            console.log('there is currently a challenge');
+            display = <div>
+                <div>{currentChallengeTitle}</div>
+                <CurrentChallengeTable />
+                <DeleteCurrentChallengeButton />
+            </div>
+        } else {
+            console.log('there is not currently a challenge');
+            display = <div>
+                <Button
+                    onClick={this.openNewChallengeDialog}
+                >Create New Challenge</Button>
+                <Dialog open={this.state.open} onClose={this.handleClose}>
                     <DialogTitle>Create a new challenge</DialogTitle>
                     <DialogContent>
                         <TextField
@@ -120,10 +116,11 @@ class CurrentChallenge extends Component {
                         </Button>
                     </DialogActions>
                 </Dialog>
-                <div>{currentChallengeTitle}</div>
-
-                <CurrentChallengeTable />
-                <DeleteCurrentChallengeButton />
+            </div>
+        }
+        return (
+            <div>
+                {display}
             </div>
         )
     }
