@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { fetchStartDate } from '../../redux/actions/homeActions';
 
 const mapStateToProps = state => ({
-    challengedate: state.challengedate
+    startDate: state.challengeDate.date
 });
 
 class Countdown extends Component {
     componentDidMount() {
-        this.props.dispatch({type: 'FETCH_STARTDATE'});
+        this.props.dispatch(fetchStartDate());
     }
 
     // triggerCountdown = () => {
@@ -72,6 +73,8 @@ class Countdown extends Component {
     // }
 
     render() {
+        console.log(this.props.startDate);
+        
         // let date = this.props.challengedate.map((item, index)=>{
         //     return(
         //         <div key={index}>
@@ -93,7 +96,7 @@ class Countdown extends Component {
                 <br />
                 <section>
                     {/* {dateItem} */}
-                    <h5>Sign up before next challenge!</h5>
+                    <h5>The next challenge starts {this.props.startDate}</h5>
                     <br />
                     <div id="clockdiv">
                         <div>
