@@ -10,7 +10,7 @@ const mapStateToProps = state => ({
 });
 
 class CurrentChallenge extends Component {
-    constructor(props){
+    constructor(props) {
         super(props);
         this.state = {
             newChallenge: {
@@ -52,39 +52,40 @@ class CurrentChallenge extends Component {
         })
     }
 
-    render(){
+    render() {
 
         let currentChallengeTitle = this.props.currentChallenge.map((item, index) => {
-            return(
+            return (
                 <p key={index}>{item.title}</p>
             )
         })
 
         let apiChallengeResults = null;
         this.props.currentChallengeData.map((user) => {
-            apiChallengeResults = user.map((eachUser, index) => {
-                return (
-                    <tr key={index}>
-                        <td>{eachUser.first_name} {eachUser.last_name}</td>
-                        <td>{eachUser.commit_percentage}</td>
-                        <td>{eachUser.longest_streak}</td>
-                        <td>{eachUser.daily_email_reminders.toString()}</td>
-                        <td>{eachUser.weekly_email_reminders.toString()}</td>
-                        <td><button>Delete</button></td>
-                    </tr>
-                )
-            })
+            return (
+                apiChallengeResults = user.map((eachUser, index) => {
+                    return (
+                        <tr key={index}>
+                            <td>{eachUser.first_name} {eachUser.last_name}</td>
+                            <td>{eachUser.commit_percentage}</td>
+                            <td>{eachUser.longest_streak}</td>
+                            <td>{eachUser.daily_email_reminders.toString()}</td>
+                            <td>{eachUser.weekly_email_reminders.toString()}</td>
+                            <td><button>Delete</button></td>
+                        </tr>
+                    )
+                })
+            )
         })
-        
+
         return (
             <div>
-
-                   {this.state.activeChallenge ?
+                {this.state.activeChallenge ?
                     <Button
                         onClick={this.openNewChallengeDialog}
                     >Create New Challenge
                     </Button>
-                : null}
+                    : null}
                 <Dialog
                     open={this.state.open}
                     onClose={this.handleClose}
@@ -122,8 +123,7 @@ class CurrentChallenge extends Component {
                         </Button>
                     </DialogActions>
                 </Dialog>
-
-
+                
                 <div>{currentChallengeTitle}</div>
                 <table>
                     <thead>

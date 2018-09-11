@@ -3,10 +3,8 @@ import { CHALLENGE_ACTIONS } from '../actions/challengeActions';
 import axios from 'axios';
 
 function* fetchActiveChallenge() {
-    console.log('rawr');
     try {
         const activeChallenge = yield call(axios.get, '/api/challenge/active');
-        console.log('hvyf6',activeChallenge);
         yield dispatch({
             type: CHALLENGE_ACTIONS.SET_ACTIVE_CHALLENGE,
             payload: activeChallenge.data
