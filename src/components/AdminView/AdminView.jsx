@@ -5,8 +5,6 @@ import PastChallenges from '../PastChallenges/PastChallenges';
 import CurrentChallenge from '../CurrentChallenge/CurrentChallenge';
 import { USER_ACTIONS } from '../../redux/actions/userActions';
 import { CHALLENGE_ACTIONS } from '../../redux/actions/challengeActions';
-import Button from '@material-ui/core/Button';
-import { Dialog, DialogTitle, DialogContent, DialogActions, TextField } from '@material-ui/core';
 import NavBar from '../NavBar/NavBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
@@ -21,17 +19,10 @@ class AdminView extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            open: false,
             displayCurrentChallenge: true,
             displayPastChallenges: false,
             adminName: '',
-            newChallenge: {
-                title: '',
-                date: new Date(),
-                exclude_weekends: false,
-                exclude_holidays: false
-            },
-            activeChallenge: false
+            value: 0,
         }
     }
 
@@ -78,34 +69,6 @@ class AdminView extends Component {
         }
     }
 
-    openNewChallengeDialog = () => {
-        this.setState({
-            open: true
-        });
-    }
-
-    handleClose = () => {
-        this.setState({
-            open: false
-        })
-    }
-
-    handleChangeFor = (propertyName) => (event) => {
-        this.setState({
-            newChallenge: {
-                ...this.state.newChallenge,
-                [propertyName]: event.target.value
-            }
-        })
-    }
-
-    handleCreateNewChallenge = () => {
-        this.props.dispatch({ type: CHALLENGE_ACTIONS.CREATE_NEW_CHALLENGE, payload: this.state.newChallenge });
-        this.setState({
-            open: false
-        })
-    }
-
     handleDisplayChange = (event, value) => {
         this.setState({
             value: value
@@ -113,11 +76,20 @@ class AdminView extends Component {
     }
 
     render() {
+
+        if (this.props.checkChallengeStatus.length === 0){
+            console.log('no current challenge');
+
+        } else {
+            console.log('active challenge');
+        }
+        const { value } = this.state;
         let content = null;
         content = (
             <div>
                 <p>Welcome,{this.state.adminName}</p>
                 <Tabs
+                    value={value}
                     indicatorColor="primary"
                     onChange={this.handleDisplayChange}>
                     <Tab
@@ -127,49 +99,7 @@ class AdminView extends Component {
                         label="Past Challenges"
                         onClick={this.displayPastChallenges} />
                 </Tabs>
-                {this.state.activeChallenge ?
-                    <Button
-                        onClick={this.openNewChallengeDialog}
-                    >Create New Challenge
-                    </Button>
-                : null}
-                <Dialog
-                    open={this.state.open}
-                    onClose={this.handleClose}
-                >
-                    <DialogTitle>Create a new challenge</DialogTitle>
-                    <DialogContent>
-                        <TextField
-                            autoFocus
-                            margin="dense"
-                            id="title"
-                            label="Title"
-                            type="text"
-                            fullWidth
-                            required
-                            onChange={this.handleChangeFor('title')}
-                        />
-                        <TextField
-                            autoFocus
-                            margin="dense"
-                            id="date"
-                            type="date"
-                            fullWidth
-                            required
-                            onChange={this.handleChangeFor('date')}
-                        />
-                    </DialogContent>
-                    <DialogActions>
-                        <Button
-                            onClick={this.handleClose}>
-                            Cancel
-                        </Button>
-                        <Button
-                            onClick={this.handleCreateNewChallenge}>
-                            Create
-                        </Button>
-                    </DialogActions>
-                </Dialog>
+             
                 {this.state.displayPastChallenges ? <PastChallenges /> : null}
                 {this.state.displayCurrentChallenge ? <CurrentChallenge /> : null}
             </div>
