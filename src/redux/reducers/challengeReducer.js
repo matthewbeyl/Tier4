@@ -23,7 +23,7 @@ const past = (state = '', action) => {
 const active = (state = [], action) => {
   switch (action.type) {
     case CHALLENGE_ACTIONS.SET_ACTIVE_CHALLENGE:
-      state = [...state, action.payload]
+      state = action.payload
       return state;
     default:
       return state;

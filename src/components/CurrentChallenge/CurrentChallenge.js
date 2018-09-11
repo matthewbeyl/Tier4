@@ -3,11 +3,19 @@ import { connect } from 'react-redux';
 import Button from '@material-ui/core/Button';
 
 const mapStateToProps = state => ({
-    currentChallengeData: state.challenge.current
+    currentChallengeData: state.challenge.current,
+    currentChallenge: state.challenge.active
 });
 
 class CurrentChallenge extends Component {
     render(){
+
+        let currentChallengeTitle = this.props.currentChallenge.map((item, index) => {
+            return(
+                <p key={index}>{item.title}</p>
+            )
+        })
+
         let apiChallengeResults = null;
         this.props.currentChallengeData.map((user) => {
             apiChallengeResults = user.map((eachUser, index) => {
@@ -25,7 +33,7 @@ class CurrentChallenge extends Component {
         })
         return (
             <div>
-                <p>Current Challenge</p>
+                <div>{currentChallengeTitle}</div>
                 <table>
                     <thead>
                         <tr>

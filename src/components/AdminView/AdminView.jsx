@@ -13,7 +13,8 @@ import Tab from '@material-ui/core/Tab';
 
 const mapStateToProps = state => ({
     user: state.user.user,
-    login: state.login
+    login: state.login,
+    checkChallengeStatus: state.challenge.active
 });
 
 class AdminView extends Component {
@@ -30,19 +31,25 @@ class AdminView extends Component {
                 exclude_weekends: false,
                 exclude_holidays: false
             },
-            value: 0,
+            activeChallenge: false
         }
     }
 
     componentWillMount() {
         this.props.dispatch({ type: USER_ACTIONS.FETCH_USER });
-        this.props.dispatch({ type: CHALLENGE_ACTIONS.FETCH_ACTIVE_CHALLENGE});
+        this.props.dispatch({ type: CHALLENGE_ACTIONS.FETCH_ACTIVE_CHALLENGE });
     }
 
     componentDidUpdate() {
         if (this.props.user === null || !this.props.user.admin) {
             this.props.history.push('/home');
         }
+    }
+
+    checkChallengeStatus = () => {
+        this.setState({
+            activeChallenge: true
+        })
     }
 
     displayCurrentChallenge = () => {
@@ -107,13 +114,11 @@ class AdminView extends Component {
 
     render() {
         let content = null;
-        const { value } = this.state;
         content = (
             <div>
                 <p>Welcome,{this.state.adminName}</p>
                 <Tabs
                     indicatorColor="primary"
-                    value={value}
                     onChange={this.handleDisplayChange}>
                     <Tab
                         label="Current Challenge"
@@ -122,10 +127,12 @@ class AdminView extends Component {
                         label="Past Challenges"
                         onClick={this.displayPastChallenges} />
                 </Tabs>
-                <Button
-                    onClick={this.openNewChallengeDialog}
-                >Create New Challenge
-                </Button>
+                {this.state.activeChallenge ?
+                    <Button
+                        onClick={this.openNewChallengeDialog}
+                    >Create New Challenge
+                    </Button>
+                : null}
                 <Dialog
                     open={this.state.open}
                     onClose={this.handleClose}
@@ -163,12 +170,8 @@ class AdminView extends Component {
                         </Button>
                     </DialogActions>
                 </Dialog>
-                {this.state.displayPastChallenges ?
-                    <PastChallenges /> : null
-                }
-                {this.state.displayCurrentChallenge ?
-                    <CurrentChallenge /> : null
-                }
+                {this.state.displayPastChallenges ? <PastChallenges /> : null}
+                {this.state.displayCurrentChallenge ? <CurrentChallenge /> : null}
             </div>
         );
         return (
