@@ -6,8 +6,19 @@ const mapStateToProps = state => ({
 });
 
 class Countdown extends Component {
-    componentDidMount() {
+    constructor(props){
+        super(props)
+        this.state = {
+            dateValue : new Date()
+        }
+    }
+
+    async componentDidMount() {
         this.props.dispatch({type: 'FETCH_STARTDATE'});
+        let challengeDate = await this.props.challengedate;
+        this.setState({
+            dateValue: challengeDate
+        })
     }
 
     // triggerCountdown = () => {
@@ -72,27 +83,13 @@ class Countdown extends Component {
     // }
 
     render() {
-        // let date = this.props.challengedate.map((item, index)=>{
-        //     return(
-        //         <div key={index}>
-        //             {item.date}
-        //         </div>
-        //     )
-        // })
-        // let dateArray = this.props.challengedate;
-        // console.log('date array is: ',dateArray);
-        // let dateItem = dateArray.map((item, index)=>{
-        //     return(
-        //         <div key={index}>
-        //             {item.date}
-        //         </div>
-        //     )
-        // })
+        console.log(this.props.challengedate);
+        console.log(this.state.dateValue);
         return (
             <main>
                 <br />
                 <section>
-                    {/* {dateItem} */}
+                    {JSON.stringify(this.props.challengedate)}
                     <h5>Sign up before next challenge!</h5>
                     <br />
                     <div id="clockdiv">

@@ -53,10 +53,11 @@ const App = () => (
           path="/dashboard"
           component={DashboardView}
         />
+        {/* <Route 
         <Route
           path="/test"
           component={TestComponent}
-        />
+        /> */}
         {/* OTHERWISE (no path!) */}
         <Route render={() => <h1>404</h1>} />
       </Switch>
