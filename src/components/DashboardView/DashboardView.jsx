@@ -14,6 +14,9 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import Cookie from 'universal-cookie';
+
+const cookie = new Cookie();
 
 const styles = {
     paper: {
@@ -33,7 +36,7 @@ class DashboardView extends Component {
     constructor(props) {
         super(props);
 
-        this.state = {
+        this.state = cookie.get('weeklySummary') || {
             applied: '',
             learned: '',
             built: '',
@@ -90,6 +93,7 @@ class DashboardView extends Component {
             && this.state.events_networking !== '') {
             this.props.dispatch(addFeedback(this.state))
             this.setState({ sumopen: false })
+            cookie.remove('weeklySummary')
         } else {
             alert('Please complete form before submitting')
         }
@@ -127,6 +131,7 @@ class DashboardView extends Component {
         this.setState({
             [property]: event.target.value
         })
+        cookie.set('weeklySummary', this.state)
     }
 
     render() {

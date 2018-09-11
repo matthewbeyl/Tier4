@@ -47,7 +47,7 @@ function getData() {
                 challengeDateString = JSON.stringify(challengeDate)
                 challengeDateString = challengeDateString.substring(1, 11)
 
-                let date1 = new Date(challengeDateString);
+                let date1 = new Date(challengeDateString); //fix
                 let date2 = new Date(todaysDate);
                 let timeDiff = Math.abs(date2.getTime() - date1.getTime());
                 let diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
@@ -250,15 +250,9 @@ function getPercent(data, diffDays) {
 
 function activateChallenge() {
 
-    pool.query(`SELECT "date", "id" FROM "challenges" WHERE "active" = false AND "date" >= '${todaysDate}' GROUP BY "date", "id";`)
+    pool.query(`SELECT "date", "id" FROM "challenges" WHERE "active" = false AND "date" = '${todaysDate}' GROUP BY "date", "id";`)
         .then((response) => { //grab all inactive challenges that are to start after todaysDate
-            let date = JSON.stringify(response.rows[0].date);
-            let date1 = date.substring(1, 11)
-            console.log('just before date comparison');
-            console.log(date1, todaysDate);
-            if (date1 === todaysDate) { //this runs once a day. if the date of the currentDay is the same as the start date of the next challenge, set it to active
-                console.log('date1 = date2');
-
+            if (response.rows.length !== 0) { //this runs once a day. if the date of the currentDay is the same as the start date of the next challenge, set it to activ
                 pool.query(`UPDATE "challenges" SET "active" = true WHERE "id" = ${response.rows[0].id};`)
                     .then((response) => {
                         didChallengeFinishRecently = false; //change this to false so we stop checking for the next challenge.
@@ -268,7 +262,8 @@ function activateChallenge() {
 
                     })
             }
-        })
+        }) //change initial query to search for a challenge that starts on todays date, and if the array that we get in response
+        //is not empty, set that challenge to active
         .catch((error) => {
             console.log(error);
 

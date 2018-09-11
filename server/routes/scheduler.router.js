@@ -32,7 +32,7 @@ let transporter = nodemailer.createTransport({
 
 //ALL THE NODECRON STUFF IS AT THE BOTTOM. THESE FUNCTIONS RUN AT SPECIFIC TIMES THROUGHOUT THE DAY. 
 
-function dailyEmail() { 
+function dailyEmail() {   //fix this its completely broken
     console.log('getting email stuff');
     pool.query(`SELECT "github", "email" FROM "users" WHERE "daily_email_reminders" = true;`) //retrieve a list of users who have subscribed to the daily reminder email.
         .then((response) => {
