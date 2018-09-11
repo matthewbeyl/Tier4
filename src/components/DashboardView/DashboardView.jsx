@@ -20,7 +20,7 @@ const styles = {
         padding: 20,
         marginTop: 10,
         marginBottom: 10,
-        height: 500,
+        height: 200,
     }
 }
 
@@ -135,12 +135,15 @@ class DashboardView extends Component {
         return (
             <main>
                 <NavBar />
-                <Button variant="outlined" color="primary">Join Challenge</Button>
-                <br/>
-                <Button onClick={this.openPreferences} variant="outlined" color="primary">E-mail Preferences</Button>
-                <Button onClick={this.openSummary} variant="outlined" color="primary">Weekly Summary</Button>
-
-                <div>                   
+                <Paper className={classes.paper}>
+                    {/* <Typography variant="display2">Streak</Typography>
+                    <Typography variant="display2">Commit Percentage</Typography> */}
+                    <Button variant="outlined" color="primary" size="large">Join Challenge</Button>
+                    <br />
+                    <Button onClick={this.openPreferences} variant="outlined" color="primary" size="small">E-mail Preferences</Button>
+                    <Button onClick={this.openSummary} variant="outlined" color="primary" size="small">Weekly Summary</Button>
+                </Paper>
+                <div>
                     <Dialog
                         open={this.state.prefopen}
                         onClose={this.closePreferences}
