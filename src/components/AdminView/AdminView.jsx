@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import CreateNewChallengeForm from '../CreateNewChallengeForm/CreateNewChallengeForm.js';
+// import CreateNewChallengeForm from '../CreateNewChallengeForm/CreateNewChallengeForm.js';
 import PastChallenges from '../PastChallenges/PastChallenges';
 import CurrentChallenge from '../CurrentChallenge/CurrentChallenge';
 import { USER_ACTIONS } from '../../redux/actions/userActions';
@@ -13,10 +13,8 @@ import Tab from '@material-ui/core/Tab';
 
 const mapStateToProps = state => ({
     user: state.user.user,
-    login: state.login,
+    login: state.login
 });
-
-//  Bug: if Admin, and on admin view => refreshing will bring admin back to home
 
 class AdminView extends Component {
     constructor(props) {
@@ -38,7 +36,7 @@ class AdminView extends Component {
 
     componentWillMount() {
         this.props.dispatch({ type: USER_ACTIONS.FETCH_USER });
-        this.props.dispatch({ type: CHALLENGE_ACTIONS.FETCH_CURRENT_CHALLENGE });
+        this.props.dispatch({ type: CHALLENGE_ACTIONS.FETCH_ACTIVE_CHALLENGE});
     }
 
     componentDidUpdate() {
@@ -113,7 +111,6 @@ class AdminView extends Component {
         content = (
             <div>
                 <p>Welcome,{this.state.adminName}</p>
-
                 <Tabs
                     indicatorColor="primary"
                     value={value}
@@ -125,8 +122,6 @@ class AdminView extends Component {
                         label="Past Challenges"
                         onClick={this.displayPastChallenges} />
                 </Tabs>
-                {value === 0}
-                {value === 1}
                 <Button
                     onClick={this.openNewChallengeDialog}
                 >Create New Challenge
@@ -135,7 +130,7 @@ class AdminView extends Component {
                     open={this.state.open}
                     onClose={this.handleClose}
                 >
-                    <DialogTitle>Create a new challenge:</DialogTitle>
+                    <DialogTitle>Create a new challenge</DialogTitle>
                     <DialogContent>
                         <TextField
                             autoFocus
@@ -168,25 +163,11 @@ class AdminView extends Component {
                         </Button>
                     </DialogActions>
                 </Dialog>
-
-
-
-
-                {/* <Button
-                    style={{ float: "right" }}
-                    onClick={this.displayCurrentChallenge}
-                >Current Challenge</Button>
-                <Button
-                    style={{ float: "right" }}
-                    onClick={this.displayPastChallenges}
-                >Past Challenges</Button> */}
                 {this.state.displayPastChallenges ?
-                    <PastChallenges
-                    /> : null
+                    <PastChallenges /> : null
                 }
                 {this.state.displayCurrentChallenge ?
-                    <CurrentChallenge
-                    /> : null
+                    <CurrentChallenge /> : null
                 }
             </div>
         );

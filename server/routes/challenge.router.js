@@ -4,26 +4,39 @@ const { rejectUnauthenticated } = require('../modules/authentication-middleware'
 const { rejectNonAdmin } = require('../modules/admin-authentication');
 const router = express.Router();
 
-router.get('/currentChallenge', rejectUnauthenticated, (req, res) => {
-    if (req.user.admin) {
-        console.log('/api/challenge/currentChallenge/get');
-
-        const queryText = `SELECT users.first_name, users.last_name, 
-                            user_challenge.commit_percentage, 
-                            user_challenge.longest_streak, 
-                            users.daily_email_reminders, 
-                            users.weekly_email_reminders 
-                            FROM users JOIN user_challenge 
-                            ON users.id = user_challenge.id;`
+router.get('/active', rejectUnauthenticated, (req,res) => {
+    console.log('/api/challenge/active');
+    if(req.user.admin) {
+        const queryText = `SELECT * FROM challenges WHERE active = true;`;
         pool.query(queryText).then((result) => {
+            console.log(result.rows);
             res.send(result.rows);
-        }).catch((err) => {
-            console.log('error fetching current ')
+        }).catch((error) => {
+            console.log('error fetching active challenge status: ', error)
         })
     } else {
         res.sendStatus(403);
     }
 });
+
+// router.get('/currentChallenge', rejectUnauthenticated, (req, res) => {
+//     if (req.user.admin) {
+//         const queryText = `SELECT users.first_name, users.last_name, 
+//                             user_challenge.commit_percentage, 
+//                             user_challenge.longest_streak, 
+//                             users.daily_email_reminders, 
+//                             users.weekly_email_reminders 
+//                             FROM users JOIN user_challenge 
+//                             ON users.id = user_challenge.id;`
+//         pool.query(queryText).then((result) => {
+//             res.send(result.rows);
+//         }).catch((error) => {
+//             console.log('error fetching current: ', error)
+//         })
+//     } else {
+//         res.sendStatus(403);
+//     }
+// });
 
 router.post('/newChallenge', rejectUnauthenticated, (req, res) => {
     if (req.user.admin) {
