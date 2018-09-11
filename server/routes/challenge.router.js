@@ -1,8 +1,10 @@
 const express = require('express');
 const pool = require('../modules/pool');
+const { rejectUnauthenticated } = require('../modules/authentication-middleware');
+const { rejectNonAdmin } = require('../modules/admin-authentication');
 const router = express.Router();
 
-router.get('/pastChallenge', (req, res) => {
+router.get('/pastChallenge', rejectUnauthenticated, rejectNonAdmin, (req, res) => {
     console.log('/api/challenge/get');
     // reconsider how to handle current challenge vs past:
     const queryText = `SELECT users.first_name, users.last_name, 
@@ -19,10 +21,10 @@ router.get('/pastChallenge', (req, res) => {
     })
 });
 
-router.post('/newChallenge', (req, res) => {
+router.post('/newChallenge', rejectUnauthenticated, rejectNonAdmin, (req, res) => {
     let newChallenge = req.body;
     const queryText = `INSERT INTO challenges ("title", "date", "exclude_weekends", "exclude_holidays") 
-    VALUES ($1, $2, $3, $4);`;
+        VALUES ($1, $2, $3, $4);`;
     const queryValues = [
         newChallenge.title,
         newChallenge.date,
@@ -38,16 +40,16 @@ router.post('/newChallenge', (req, res) => {
     })
 });
 
-router.get('/date', (req, res) => {
+router.get('/date', rejectUnauthenticated, rejectNonAdmin, (req, res) => {
     pool.query(`SELECT "date" FROM "challenges"
-    ORDER BY "date" DESC
-    LIMIT 1;`)
-        .then((result) => {
-            res.send(result.rows);
-        }).catch((error) => {
-            console.log('Error - ', error);
-            res.sendStatus(500)
-        })
+        ORDER BY "date" DESC
+        LIMIT 1;`)
+    .then((result) => {
+        res.send(result.rows);
+    }).catch((error) => {
+        console.log('Error - ', error);
+        res.sendStatus(500)
+    })
 });
 
 

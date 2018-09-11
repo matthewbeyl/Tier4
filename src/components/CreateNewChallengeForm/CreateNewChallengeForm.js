@@ -12,7 +12,6 @@ class CreateNewChallengeForm extends Component {
                 exclude_holidays: false
             }
         }
-
     }
 
     handleChangeFor = (propertyName) => (event) => {
@@ -34,15 +33,13 @@ class CreateNewChallengeForm extends Component {
     }
 
     handleNewChallengeSubmit = () => {
-        this.props.dispatch({type:'CREATE_NEW_CHALLENGE', payload: this.state.newChallenge})
+        this.props.dispatch({type:'CREATE_NEW_CHALLENGE', payload: this.state.newChallenge});
     }
 
     render() {
         return (
             <div style={{ display: 'flex', position: 'fixed', width: '100%', height: '100%', top: '0', left: '0', right: '0', bottom: '0', margin: 'auto', backgroundColor: 'rgba(0,0,0,0.5)' }}>
                 <div style={{ postion: 'absolute', width: '500px', height: '250px', margin: 'auto', backgroundColor: 'white' }}>
-                    
-                    
                     <form>
                         <p>{this.props.text}</p>
                         <label>Challenge Title</label>
@@ -61,6 +58,7 @@ class CreateNewChallengeForm extends Component {
                         /><br />
                         Exclude Weekends:
                     <input
+                            // STRETCH
                             // checkbox is not capturing true/false
                             // MYL : fix this bug
                             type="checkbox"

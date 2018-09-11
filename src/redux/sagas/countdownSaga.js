@@ -1,6 +1,6 @@
-import { COUNTDOWN_ACTIONS } from '../actions/countdownActions';
+import { COUNTDOWN_ACTIONS } from '../actions/homeActions';
 import { put, takeLatest } from 'redux-saga/effects';
-import { getChallengeDate } from '../requests/countdownRequests';
+import { getChallengeDate } from '../requests/homeRequests';
 
 function* countdownSaga() {
     yield takeLatest(COUNTDOWN_ACTIONS.FETCH_STARTDATE, fetchStartDate);
