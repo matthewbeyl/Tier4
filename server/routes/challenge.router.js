@@ -34,24 +34,28 @@ router.delete('/delete-active', rejectUnauthenticated, (req,res) => {
     }
 });
 
-// router.get('/currentChallenge', rejectUnauthenticated, (req, res) => {
-//     if (req.user.admin) {
-//         const queryText = `SELECT users.first_name, users.last_name, 
-//                             user_challenge.commit_percentage, 
-//                             user_challenge.longest_streak, 
-//                             users.daily_email_reminders, 
-//                             users.weekly_email_reminders 
-//                             FROM users JOIN user_challenge 
-//                             ON users.id = user_challenge.id;`
-//         pool.query(queryText).then((result) => {
-//             res.send(result.rows);
-//         }).catch((error) => {
-//             console.log('error fetching current: ', error)
-//         })
-//     } else {
-//         res.sendStatus(403);
-//     }
-// });
+router.get('/user-data-current-challenge', rejectUnauthenticated, (req, res) => {
+    if (req.user.admin) {
+        const queryText = `SELECT 
+                                users.id, 
+                                users.name, 
+                                user_challenge.commit_percentage, 
+                                user_challenge.longest_streak as "streak", 
+                                users.daily_email_reminders as "daily_reminder", 
+                                users.weekly_email_reminders as "weekly_reminder" 
+                            FROM users 
+                            JOIN user_challenge ON users.id = user_challenge.user_id
+                            JOIN challenges ON user_challenge.challenge_id = challenges.id
+                            WHERE challenges.active = true;`;
+        pool.query(queryText).then((result) => {
+            res.send(result.rows);
+        }).catch((error) => {
+            console.log('error fetching current: ', error)
+        })
+    } else {
+        res.sendStatus(403);
+    }
+});
 
 router.post('/newChallenge', rejectUnauthenticated, (req, res) => {
     if (req.user.admin) {

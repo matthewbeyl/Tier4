@@ -3,9 +3,14 @@ import { connect } from 'react-redux';
 import Button from '@material-ui/core/Button';
 import { CHALLENGE_ACTIONS } from '../../redux/actions/challengeActions';
 import { USER_ACTIONS } from '../../redux/actions/userActions';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
 
 const mapStateToProps = state => ({
-    currentChallengeData: state.challenge.current,
+    currentChallengeUserData: state.challenge.current,
     currentChallenge: state.challenge.active,
     user: state.user.user,
     login: state.login,
@@ -16,44 +21,40 @@ class CurrentChallengeTable extends Component {
     componentWillMount() {
         this.props.dispatch({ type: USER_ACTIONS.FETCH_USER });
         this.props.dispatch({ type: CHALLENGE_ACTIONS.FETCH_ACTIVE_CHALLENGE });
+        this.props.dispatch({ type: CHALLENGE_ACTIONS.FETCH_USER_DATA_CURRENT_CHALLENGE });
     }
 
-    render(){
-        let apiChallengeResults = null;
-        this.props.currentChallengeData.map((user) => {
+    render() {
+        let apiChallengeResults = this.props.currentChallengeUserData.map(user => {
             return (
-                apiChallengeResults = user.map((eachUser, index) => {
-                    return (
-                        <tr key={index}>
-                            <td>{eachUser.first_name} {eachUser.last_name}</td>
-                            <td>{eachUser.commit_percentage}</td>
-                            <td>{eachUser.longest_streak}</td>
-                            <td>{eachUser.daily_email_reminders.toString()}</td>
-                            <td>{eachUser.weekly_email_reminders.toString()}</td>
-                            <td><button>Delete</button></td>
-                        </tr>
-                    )
-                })
+                <TableRow key={user.id}>
+                    <TableCell>{user.name}</TableCell>
+                    <TableCell>{user.commit_percentage}</TableCell>
+                    <TableCell>{user.streak}</TableCell>
+                    <TableCell>{user.daily_reminder.toString()}</TableCell>
+                    <TableCell>{user.weekly_reminder.toString()}</TableCell>
+                    <TableCell><Button>Delete</Button></TableCell>
+                </TableRow>
             )
-        })
+        });
 
-        return(
+        return (
             <div>
-                    <table>
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Commit %</th>
-                            <th>Streak</th>
-                            <th>Daily Reminder</th>
-                            <th>Weekly Reminder</th>
-                            <th>Delete</th>
-                        </tr>
-                    </thead>
-                    <tbody>
+                <Table>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell>Name</TableCell>
+                            <TableCell numeric>Commit %</TableCell>
+                            <TableCell numeric>Streak</TableCell>
+                            <TableCell>Daily Reminder</TableCell>
+                            <TableCell>Weekly Reminder</TableCell>
+                            <TableCell>Delete</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
                         {apiChallengeResults}
-                    </tbody>
-                </table>
+                    </TableBody>
+                </Table>
             </div>
         )
     }

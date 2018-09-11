@@ -22,16 +22,16 @@ function* fetchActiveChallenge() {
     }
 }
 
-function* fetchCurrentChallenge() {
+function* fetchUserDataCurrentChallenge() {
     try {
-        const currentChallenge = yield call(axios.get, '/api/challenge/currentChallenge');
+        const currentChallenge = yield call(axios.get, '/api/challenge/user-data-current-challenge');
         console.log(currentChallenge);
         yield dispatch({
-            type: CHALLENGE_ACTIONS.SET_CURRENT_CHALLENGE,
+            type: CHALLENGE_ACTIONS.SET_USER_DATA_CURRENT_CHALLENGE,
             payload: currentChallenge.data
         })
     } catch (error) {
-        console.log('error fetching current challenge: ', error);
+        console.log('error fetching user data for current challenge: ', error);
     }
 }
 
@@ -44,7 +44,7 @@ function* createNewChallenge(action) {
 }
 
 function* challengeSaga() {
-    yield takeLatest(CHALLENGE_ACTIONS.FETCH_CURRENT_CHALLENGE, fetchCurrentChallenge);
+    yield takeLatest(CHALLENGE_ACTIONS.FETCH_USER_DATA_CURRENT_CHALLENGE, fetchUserDataCurrentChallenge);
     yield takeLatest(CHALLENGE_ACTIONS.CREATE_NEW_CHALLENGE, createNewChallenge);
     yield takeLatest(CHALLENGE_ACTIONS.FETCH_ACTIVE_CHALLENGE, fetchActiveChallenge);
     yield takeLatest(CHALLENGE_ACTIONS.DELETE_ACTIVE_CHALLENGE, deleteActiveChallenge);

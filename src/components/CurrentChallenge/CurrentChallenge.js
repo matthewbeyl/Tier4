@@ -121,7 +121,7 @@ class CurrentChallenge extends Component {
                     </DialogActions>
                 </Dialog>
                 <div>{currentChallengeTitle}</div>
-                
+
                 <CurrentChallengeTable />
                 <DeleteCurrentChallengeButton />
             </div>
