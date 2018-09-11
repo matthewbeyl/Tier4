@@ -14,6 +14,12 @@ let challengeDateString = ''
 let theData;
 //test variable so that you can retrieve api data when you click the button in testComponent.js
 
+// let didChallengeFinishRecently = false;
+// let challengeDate = '01-01-2018' 
+// let currentDate = new Date();
+// currentDate = JSON.stringify(currentDate)
+// currentDate = currentDate.substring(1, 11)
+
 
 let date = new Date();
 date = JSON.stringify(date)
@@ -46,7 +52,7 @@ function getData() {
                 challengeDateString = challengeDateString.substring(1, 11) //I don't think this variable is needed, will remove eventually
                 pool.query(`SELECT "github", "user_id", "calendar" FROM "users"
                 JOIN "user_challenge" ON "users"."id" = "user_challenge"."user_id"
-                WHERE "user_challenge"."challenge_id" = $1;`, [challengeID]) //retrieves the github, user_id, and calendar for users enrolled in the current challenge, using the challenge id just retrieved.
+                WHERE "user_challenge"."challenge_id" = $1 AND "users"."active" = true;`, [challengeID]) //retrieves the github, user_id, and calendar for users enrolled in the current challenge, using the challenge id just retrieved.
                     .then((response) => {
                         userList = response.rows //sets the userlist to the data we just got back.
                         console.log('getting gh data');
@@ -96,6 +102,7 @@ async function sortAndSendData(tempData) { //tempData is an array of the data(so
 
         let data = packageData(tempUserName, processedData); //package all the data we just generated into a single object for simplicity
 
+        setActiveUser(calendar, tempUserName, diffDays)
         //this is where everything has finished ok
 
         pool.query(`UPDATE "user_challenge" SET "longest_streak" = $1, "commit_percentage" = $2, "calendar" = $3 WHERE "user_id" = $4`,
@@ -109,13 +116,28 @@ async function sortAndSendData(tempData) { //tempData is an array of the data(so
     }
 }
 
+function setActiveUser(calendar, userInfo, diffDays){
+    tempCalendar = calendar.slice(0, diffDays)
+    tempCalendar.reverse();
+    if (tempCalendar[0] === false && tempCalendar[1] === false && tempCalendar[2] === false && tempCalendar[3] === false && tempCalendar[4] === false) {
+        console.log(`setting ${userInfo.github} to inactive.`);
+        
+        pool.query(`UPDATE "users" SET "active" = false WHERE "id" = ${userInfo.user_id};`)
+        .then((response)=>{
+        })
+        .catch((error)=>{
+            console.log(error);
+        })
+    }
+}
+
 function processData(userData, diffDays, username) {
     let userCommitArray = username.calendar 
     if (userData.length !== 0 && diffDays<= 30) { //set the corresponding array index to the value true if the user has committed that day.
         userCommitArray[diffDays] = true;         //if the user committed on the second day of the challenge, the second value in userCommitArray will be true, the rest will be false
     }
     else if (diffDays>30){
-        console.log('the current challenge should have ended or should end soon. ');
+        console.log('the current challenge should have ended or should end soon.');
     }
     return userCommitArray; //return the processed array.
 }
@@ -172,6 +194,77 @@ function getPercent(data, diffDays) {
 
     return commitCount //return the %
 }
+
+// function expireChallenge() {
+//     //checks if 30 days have passed from the last challenge. if they have, then the last challenge expires.
+
+//     pool.query(`SELECT "date", "id" FROM "challenges" WHERE "active" = true`)
+//         .then((response) => {
+//             if (response.rows.length !== 0) {
+//                 let date = JSON.stringify(response.rows[0].date);
+//                 let date1 = new Date(date.substring(1, 11));
+//                 let date2 = new Date(currentDate);
+//                 let timeDiff = Math.abs(date2.getTime() - date1.getTime());
+//                 let diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+//                 challengeDate = date.substring(1, 11) //finds how many days have passed since the challenge began
+                
+//                 if (diffDays >= 30) {  //if 30 days or more have passed, finish the challenge and set it to inactive.
+//                     pool.query(`UPDATE "challenges" SET "active" = false WHERE "id" =  ${response.rows[0].id};`)
+//                         .then((response) => {
+                            
+//                             didChallengeFinishRecently = true; //set this flag to true so that we know a challenge just finished.
+//                             console.log('challenge finished!', didChallengeFinishRecently);
+//                         })
+//                 }
+//                 console.log('this is the challengeDate',challengeDate);
+//                 return response.rows[0].date
+//             }
+//         })
+//         .catch((error)=>{
+//             console.log(error);
+//         })
+
+// }
+
+// function activateChallenge() {
+    
+//     pool.query(`SELECT "date", "id" FROM "challenges" WHERE "active" = false AND "date" > '${currentDate}' GROUP BY "date", "id";`)
+//         .then((response) => { //grab all inactive challenges that are to start after the currentDate
+//             let date = JSON.stringify(response.rows[0].date); 
+//             let date1 = date.substring(1, 11)
+//             console.log('just before date comparison');
+//             console.log(date1, currentDate);
+//             if (date1 === date2) { //this runs once a day. if the date of the currentDay is the same as the start date of the next challenge, set it to active
+//                 console.log('date1 = date2');
+
+//                 pool.query(`UPDATE "challenges" SET "active" = true WHERE "id" = ${response.rows[0].id};`)
+//                     .then((response) => {
+//                         didChallengeFinishRecently = false; //change this to false so we stop checking for the next challenge.
+//                     })
+//                     .catch((error)=>{
+//                         console.log(error);
+                        
+//                     })
+//             }
+//         })
+//         .catch((error)=>{
+//             console.log(error);
+            
+//         })
+// }
+
+
+// cron.schedule('*/20 * * * * *', function () {
+//     console.log('checking the challenge') //run the expirechallenge function once a day to check if the challenge should end 
+//     //expireChallenge(); 
+//     console.log(didChallengeFinishRecently, challengeDate);
+    
+//     if (didChallengeFinishRecently) { //if a challenge just finished, check to see if we need to activate the next challenge.
+//         console.log('challenge was recently finished');
+        
+//         //activateChallenge()
+//     }
+// });
 
 
 module.exports = router;
