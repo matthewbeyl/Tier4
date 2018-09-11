@@ -2,11 +2,14 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Button from '@material-ui/core/Button';
 import { Dialog, DialogTitle, DialogContent, DialogActions, TextField } from '@material-ui/core';
+import { USER_ACTIONS } from '../../redux/actions/userActions';
 import { CHALLENGE_ACTIONS } from '../../redux/actions/challengeActions';
+import DeleteCurrentChallengeButton from '../DeleteCurrentChallengeButton/DeleteCurrentChallengeButton';
 
 const mapStateToProps = state => ({
     currentChallengeData: state.challenge.current,
-    currentChallenge: state.challenge.active
+    currentChallenge: state.challenge.active,
+    checkChallengeStatus: state.challenge.active
 });
 
 class CurrentChallenge extends Component {
@@ -22,6 +25,15 @@ class CurrentChallenge extends Component {
             activeChallenge: true,
             open: false,
         }
+    }
+    componentWillMount() {
+        this.props.dispatch({ type: USER_ACTIONS.FETCH_USER });
+        this.props.dispatch({ type: CHALLENGE_ACTIONS.FETCH_ACTIVE_CHALLENGE });
+        console.log('component will mount');
+    }
+
+    componentDidMount(){
+        console.log('component mounted');
     }
 
     handleClose = () => {
@@ -53,6 +65,12 @@ class CurrentChallenge extends Component {
     }
 
     render() {
+        if (this.props.checkChallengeStatus.length === 0){
+            console.log('no current challenge');
+
+        } else {
+            console.log('active challenge');
+        }
 
         let currentChallengeTitle = this.props.currentChallenge.map((item, index) => {
             return (
@@ -140,7 +158,7 @@ class CurrentChallenge extends Component {
                         {apiChallengeResults}
                     </tbody>
                 </table>
-                <Button>Delete Current Challenge</Button>
+                <DeleteCurrentChallengeButton />
             </div>
         )
     }

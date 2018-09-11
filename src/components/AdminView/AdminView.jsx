@@ -12,7 +12,6 @@ import Tab from '@material-ui/core/Tab';
 const mapStateToProps = state => ({
     user: state.user.user,
     login: state.login,
-    checkChallengeStatus: state.challenge.active
 });
 
 class AdminView extends Component {
@@ -21,7 +20,6 @@ class AdminView extends Component {
         this.state = {
             displayCurrentChallenge: true,
             displayPastChallenges: false,
-            adminName: '',
             value: 0,
         }
     }
@@ -69,6 +67,7 @@ class AdminView extends Component {
         }
     }
 
+    // for navigating between each tag
     handleDisplayChange = (event, value) => {
         this.setState({
             value: value
@@ -76,18 +75,10 @@ class AdminView extends Component {
     }
 
     render() {
-
-        if (this.props.checkChallengeStatus.length === 0){
-            console.log('no current challenge');
-
-        } else {
-            console.log('active challenge');
-        }
         const { value } = this.state;
         let content = null;
         content = (
             <div>
-                <p>Welcome,{this.state.adminName}</p>
                 <Tabs
                     value={value}
                     indicatorColor="primary"
@@ -99,7 +90,7 @@ class AdminView extends Component {
                         label="Past Challenges"
                         onClick={this.displayPastChallenges} />
                 </Tabs>
-             
+                <p>Welcome, Luke</p> 
                 {this.state.displayPastChallenges ? <PastChallenges /> : null}
                 {this.state.displayCurrentChallenge ? <CurrentChallenge /> : null}
             </div>
