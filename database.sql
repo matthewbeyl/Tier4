@@ -38,7 +38,7 @@ CREATE TABLE "user_challenge" (
 	"challenge_id" int NOT NULL,
 	"longest_streak" int NOT NULL,
 	"commit_percentage" int NOT NULL,
-	calendar boolean[] NOT NULL DEFAULT '{f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f}'::boolean[]
+	"calendar" boolean[] NOT NULL DEFAULT '{f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f}'::boolean[],
 	CONSTRAINT user_challenge_pk PRIMARY KEY ("id")
 ) WITH (
   OIDS=FALSE

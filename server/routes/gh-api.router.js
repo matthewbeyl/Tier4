@@ -6,16 +6,15 @@ const cron = require('node-cron');
 
 
 
-let userList = []
-let challengeDate = ''
+// let userList = []
+let challengeDate = '01-01-2018'
 let challengeID = 0;
-let challengeDateString = ''
+let challengeDateString = '01-01-2018'
 //define global variables that will be used within multiple functions.
 let theData;
 //test variable so that you can retrieve api data when you click the button in testComponent.js
 
-// let didChallengeFinishRecently = false;
-// let challengeDate = '01-01-2018' 
+let didChallengeFinishRecently = false;
 // let currentDate = new Date();
 // currentDate = JSON.stringify(currentDate)
 // currentDate = currentDate.substring(1, 11)
@@ -26,14 +25,11 @@ date = JSON.stringify(date)
 todaysDate = date.substring(1, 11)
 //calculate todays date so that we only get todays commits in getData()
 
-cron.schedule('*/1 * * * * *', function () {
+cron.schedule('*/20 * * * * *', function () {
     console.log('running once every 20 seconds');
     getData();
 });
 //run getData() once every 20 seconds, will be changed to once a day at midnight.
-
-
-
 
 
 router.get('/get-data', (req, res) => {
@@ -43,48 +39,96 @@ router.get('/get-data', (req, res) => {
 
 function getData() {
     console.log('getting user list');
-    pool.query(`SELECT "date", "id" FROM "challenges" WHERE "active" = 'true';`) 
+    pool.query(`SELECT "date", "id" FROM "challenges" WHERE "active" = 'true';`)
         .then((response) => { //retrieve the start date and id of the current active challenge, there should only be one.
             if (response.rows.length !== 0) { //only run the api calls if there is a current active challenge.
                 challengeDate = response.rows[0].date //grab the start date of the current active challenge
                 challengeID = response.rows[0].id //grabs the id of the current active challenge
                 challengeDateString = JSON.stringify(challengeDate)
-                challengeDateString = challengeDateString.substring(1, 11) //I don't think this variable is needed, will remove eventually
+                challengeDateString = challengeDateString.substring(1, 11)
+
+                let date1 = new Date(challengeDateString);
+                let date2 = new Date(todaysDate);
+                let timeDiff = Math.abs(date2.getTime() - date1.getTime());
+                let diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+                if (diffDays >= 30) {
+                    pool.query(`UPDATE "challenges" SET "active" = false WHERE "id" =  ${challengeID};`)
+                        .then((response) => {
+
+                            didChallengeFinishRecently = true; //set this flag to true so that we know a challenge just finished.
+                            console.log('challenge finished!', didChallengeFinishRecently);
+                        })
+                        .catch((error) => {
+                            console.log('could not deactivate challenge', error);
+
+                        })
+                }
                 pool.query(`SELECT "github", "user_id", "calendar" FROM "users"
                 JOIN "user_challenge" ON "users"."id" = "user_challenge"."user_id"
-                WHERE "user_challenge"."challenge_id" = $1 AND "users"."active" = true;`, [challengeID]) //retrieves the github, user_id, and calendar for users enrolled in the current challenge, using the challenge id just retrieved.
+                WHERE "user_challenge"."challenge_id" = $1;`, [challengeID]) //retrieves the github, user_id, and calendar for users enrolled in the current challenge, using the challenge id just retrieved.
                     .then((response) => {
-                        userList = response.rows //sets the userlist to the data we just got back.
-                        console.log('getting gh data');
-                        const requestPromises = [] //create an array to store all the requests we will send to the github api
-                        userList.forEach(user => { //loop through the userlist we just got from postgres and generate an api call using each users information.
-                            const requestOptions = {
-                                uri: `https://api.github.com/search/commits?q=committer:${user.github}+committer-date:${todaysDate}&sort=committer-date&per_page=1`,
-                                headers: { "User-Agent": user.github, Accept: 'application/vnd.github.cloak-preview+json', Authorization: 'token 23982af669baa75e29e52bbd5a45594c65b7f7b2' },
-                                method: 'GET',
-                                json: true
+                        let tempUserList = response.rows
+                        //sets the userlist to the data we just got back.
+                        //reg for loop for batching
+                        let batchedUserList = [];
+                        let thisBatch = [];
+                        let counter = 0;
+                        for (let i = 0; i < tempUserList.length; i++) {
+                            if (counter < 15) {
+                                thisBatch.push(tempUserList[i])
+                                counter++;
+                                if (i === tempUserList.length) {
+                                    counter = 0;
+                                    batchedUserList.push(thisBatch);
+                                    thisBatch = [];
+                                }
                             }
-                            requestPromises.push(rp(requestOptions)); //create a promise for each api request
+                            else if (counter >= 15) {
+                                counter = 0;
+                                batchedUserList.push(thisBatch)
+                                thisBatch = [];
+                            }
+                        }
+
+                        batchedUserList.forEach(batch => {
+                            console.log('getting gh data');
+                            const requestPromises = [] //create an array to store all the requests we will send to the github api
+                            batch.forEach(user => { //loop through the userlist we just got from postgres and generate an api call using each users information.
+                                const requestOptions = {
+                                    uri: `https://api.github.com/search/commits?q=committer:${user.github}+committer-date:${todaysDate}&sort=committer-date&per_page=1`,
+                                    headers: { "User-Agent": user.github, Accept: 'application/vnd.github.cloak-preview+json', Authorization: 'token 23982af669baa75e29e52bbd5a45594c65b7f7b2' },
+                                    method: 'GET',
+                                    json: true
+                                }
+                                requestPromises.push(rp(requestOptions)); //create a promise for each api request
+                            })
+                            Promise.all(requestPromises) //run and wait for all promises to be fullfilled.
+                                .then((data) => {
+                                    theData = data; //set the response data to theData variable so that testcomponent can access it through the endpoint '/get-data'
+                                    sortAndSendData(data, batch); //parses through the data before posting the processed data to postgres
+                                })
+                                .catch((error) => {
+                                    console.log(error);
+                                })
+
+                            setTimeout(() => {
+                                console.log('waiting for github api to refresh');
+                            }, 60000);
                         })
-                        Promise.all(requestPromises) //run and wait for all promises to be fullfilled.
-                            .then((data) => {
-                                theData = data; //set the response data to theData variable so that testcomponent can access it through the endpoint '/get-data'
-                                sortAndSendData(data); //parses through the data before posting the processed data to postgres
-                            })
-                            .catch((error) => {
-                                console.log(error);
-                            })
                     })
                     .catch((error) => {
                         console.log('error on get-user-list', error);
                     })
             }
+            else if (response.rows.length === 0) {
+                activateChallenge()
+            }
         })
 }
 
 
-async function sortAndSendData(tempData) { //tempData is an array of the data(sorted by user) that we got from the api. its indexes correspond to the userList array. this is important.
-    let date = JSON.stringify(challengeDate) 
+async function sortAndSendData(tempData, userList) { //tempData is an array of the data(sorted by user) that we got from the api. its indexes correspond to the userList array. this is important.
+    let date = JSON.stringify(challengeDate)
     let currentDate = JSON.stringify(new Date())
     let date1 = new Date(date.substring(1, 11));
     let date2 = new Date(currentDate.substring(1, 11));
@@ -116,27 +160,35 @@ async function sortAndSendData(tempData) { //tempData is an array of the data(so
     }
 }
 
-function setActiveUser(calendar, userInfo, diffDays){
+function setActiveUser(calendar, userInfo, diffDays) {
     tempCalendar = calendar.slice(0, diffDays)
     tempCalendar.reverse();
     if (tempCalendar[0] === false && tempCalendar[1] === false && tempCalendar[2] === false && tempCalendar[3] === false && tempCalendar[4] === false) {
         console.log(`setting ${userInfo.github} to inactive.`);
-        
+
         pool.query(`UPDATE "users" SET "active" = false WHERE "id" = ${userInfo.user_id};`)
-        .then((response)=>{
-        })
-        .catch((error)=>{
-            console.log(error);
-        })
+            .then((response) => {
+            })
+            .catch((error) => {
+                console.log(error);
+            })
+    }
+    else if (tempCalendar[0] === true) {
+        pool.query(`UPDATE "users" SET "active" = true WHERE "id" = ${userInfo.user_id};`)
+            .then((response) => {
+            })
+            .catch((error) => {
+                console.log(error);
+            })
     }
 }
 
 function processData(userData, diffDays, username) {
-    let userCommitArray = username.calendar 
-    if (userData.length !== 0 && diffDays<= 30) { //set the corresponding array index to the value true if the user has committed that day.
+    let userCommitArray = username.calendar
+    if (userData.length !== 0 && diffDays <= 30) { //set the corresponding array index to the value true if the user has committed that day.
         userCommitArray[diffDays] = true;         //if the user committed on the second day of the challenge, the second value in userCommitArray will be true, the rest will be false
     }
-    else if (diffDays>30){
+    else if (diffDays > 30) {
         console.log('the current challenge should have ended or should end soon.');
     }
     return userCommitArray; //return the processed array.
@@ -153,14 +205,14 @@ function getStreakAndPercent(data, diffDays) {
     let longestStreak = getStreak(data) //call the getStreak function by sending it the calendar we just created.
     let commitPercent = Math.round(getPercent(data, diffDays)) //^^ but commit %
     //console.log(longestStreak, commitPercent);
-    return { 
+    return {
         longestStreak,
         commitPercent
     } //return an object of the two variables.
 }
 
 function getStreak(data) {
-    let currentStreak = 0; 
+    let currentStreak = 0;
     let maxStreak = 0;
     let previousVal = false;
     data.forEach(index => {
@@ -185,7 +237,7 @@ function getPercent(data, diffDays) {
     let newData = data.slice(0, diffDays) //grabs a sub-array that only includes days of the challenge which have already passed.
     //console.log('dataArray',newData );
     let commitCount = 0;
-    for (let i = 0; i < newData.length; i++) { 
+    for (let i = 0; i < newData.length; i++) {
         if (newData[i]) {
             commitCount++ //count up the commits within this sub-array
         }
@@ -195,76 +247,36 @@ function getPercent(data, diffDays) {
     return commitCount //return the %
 }
 
-// function expireChallenge() {
-//     //checks if 30 days have passed from the last challenge. if they have, then the last challenge expires.
 
-//     pool.query(`SELECT "date", "id" FROM "challenges" WHERE "active" = true`)
-//         .then((response) => {
-//             if (response.rows.length !== 0) {
-//                 let date = JSON.stringify(response.rows[0].date);
-//                 let date1 = new Date(date.substring(1, 11));
-//                 let date2 = new Date(currentDate);
-//                 let timeDiff = Math.abs(date2.getTime() - date1.getTime());
-//                 let diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
-//                 challengeDate = date.substring(1, 11) //finds how many days have passed since the challenge began
-                
-//                 if (diffDays >= 30) {  //if 30 days or more have passed, finish the challenge and set it to inactive.
-//                     pool.query(`UPDATE "challenges" SET "active" = false WHERE "id" =  ${response.rows[0].id};`)
-//                         .then((response) => {
-                            
-//                             didChallengeFinishRecently = true; //set this flag to true so that we know a challenge just finished.
-//                             console.log('challenge finished!', didChallengeFinishRecently);
-//                         })
-//                 }
-//                 console.log('this is the challengeDate',challengeDate);
-//                 return response.rows[0].date
-//             }
-//         })
-//         .catch((error)=>{
-//             console.log(error);
-//         })
+function activateChallenge() {
 
-// }
+    pool.query(`SELECT "date", "id" FROM "challenges" WHERE "active" = false AND "date" >= '${todaysDate}' GROUP BY "date", "id";`)
+        .then((response) => { //grab all inactive challenges that are to start after todaysDate
+            let date = JSON.stringify(response.rows[0].date);
+            let date1 = date.substring(1, 11)
+            console.log('just before date comparison');
+            console.log(date1, todaysDate);
+            if (date1 === todaysDate) { //this runs once a day. if the date of the currentDay is the same as the start date of the next challenge, set it to active
+                console.log('date1 = date2');
 
-// function activateChallenge() {
-    
-//     pool.query(`SELECT "date", "id" FROM "challenges" WHERE "active" = false AND "date" > '${currentDate}' GROUP BY "date", "id";`)
-//         .then((response) => { //grab all inactive challenges that are to start after the currentDate
-//             let date = JSON.stringify(response.rows[0].date); 
-//             let date1 = date.substring(1, 11)
-//             console.log('just before date comparison');
-//             console.log(date1, currentDate);
-//             if (date1 === date2) { //this runs once a day. if the date of the currentDay is the same as the start date of the next challenge, set it to active
-//                 console.log('date1 = date2');
+                pool.query(`UPDATE "challenges" SET "active" = true WHERE "id" = ${response.rows[0].id};`)
+                    .then((response) => {
+                        didChallengeFinishRecently = false; //change this to false so we stop checking for the next challenge.
+                    })
+                    .catch((error) => {
+                        console.log(error);
 
-//                 pool.query(`UPDATE "challenges" SET "active" = true WHERE "id" = ${response.rows[0].id};`)
-//                     .then((response) => {
-//                         didChallengeFinishRecently = false; //change this to false so we stop checking for the next challenge.
-//                     })
-//                     .catch((error)=>{
-//                         console.log(error);
-                        
-//                     })
-//             }
-//         })
-//         .catch((error)=>{
-//             console.log(error);
-            
-//         })
-// }
+                    })
+            }
+        })
+        .catch((error) => {
+            console.log(error);
+
+        })
+}
 
 
-// cron.schedule('*/20 * * * * *', function () {
-//     console.log('checking the challenge') //run the expirechallenge function once a day to check if the challenge should end 
-//     //expireChallenge(); 
-//     console.log(didChallengeFinishRecently, challengeDate);
-    
-//     if (didChallengeFinishRecently) { //if a challenge just finished, check to see if we need to activate the next challenge.
-//         console.log('challenge was recently finished');
-        
-//         //activateChallenge()
-//     }
-// });
+
 
 
 module.exports = router;
