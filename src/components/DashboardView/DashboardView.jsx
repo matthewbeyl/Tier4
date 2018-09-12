@@ -25,12 +25,9 @@ const styles = {
 
 const mapStateToProps = state => ({
     user: state.user.user,
-<<<<<<< HEAD
-    isLoading: state.user.isLoading
-=======
+    isLoading: state.user.isLoading,
     commitRate: state.userStats.commit_percentage,
     longestStreak: state.userStats.longest_streak,
->>>>>>> b9eabb7c84762ba4edb5e8f4e3c0708ab2dc5a2b
 });
 
 class DashboardView extends Component {
@@ -50,11 +47,7 @@ class DashboardView extends Component {
             email: '',
             prefopen: false,
             sumopen: false,
-<<<<<<< HEAD
         };
-=======
-            };
->>>>>>> b9eabb7c84762ba4edb5e8f4e3c0708ab2dc5a2b
     };
 
     openPreferences = () => {
@@ -87,13 +80,10 @@ class DashboardView extends Component {
 
     componentDidMount() {
         this.props.dispatch({ type: USER_ACTIONS.FETCH_USER });
-<<<<<<< HEAD
-=======
         if (!this.props.user && this.props.user === null) {
             this.props.history.push('home');
         }
             this.props.dispatch(fetchStats()); 
->>>>>>> b9eabb7c84762ba4edb5e8f4e3c0708ab2dc5a2b
     }
 
     componentDidUpdate() {
@@ -160,24 +150,22 @@ class DashboardView extends Component {
             
             <main>
                 <NavBar />
-<<<<<<< HEAD
                 <JoinChallengeButton />
                 <br/>
                 <Button onClick={this.openPreferences} variant="outlined" color="primary">E-mail Preferences</Button>
                 <Button onClick={this.openSummary} variant="outlined" color="primary">Weekly Summary</Button>
 
                 <div>                   
-=======
-                <Paper className={classes.paper}>
-                <Typography variant="display3">{this.props.commitRate}% Commit Rate</Typography>
-                <Typography variant="display3">Longest Streak - {this.props.longestStreak}</Typography>
-                
-                    <br />
-                    <Button onClick={this.openPreferences} variant="outlined" color="primary" size="small">E-mail Preferences</Button>
-                    <Button onClick={this.openSummary} variant="outlined" color="primary" size="small">Weekly Summary</Button>
-                </Paper>
+                    <Paper className={classes.paper}>
+                    <Typography variant="display3">{this.props.commitRate}% Commit Rate</Typography>
+                    <Typography variant="display3">Longest Streak - {this.props.longestStreak}</Typography>
+                    
+                        <br />
+                        <Button onClick={this.openPreferences} variant="outlined" color="primary" size="small">E-mail Preferences</Button>
+                        <Button onClick={this.openSummary} variant="outlined" color="primary" size="small">Weekly Summary</Button>
+                    </Paper>
+                </div>
                 <div>
->>>>>>> b9eabb7c84762ba4edb5e8f4e3c0708ab2dc5a2b
                     <Dialog
                         open={this.state.prefopen}
                         onClose={this.closePreferences}
