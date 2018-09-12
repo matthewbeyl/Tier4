@@ -9,7 +9,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 
 const mapStateToProps = state => ({
-    activeChallenges : state.challenge.active
+    activeChallenges : state.challenge.past
 });
 
 class PastChallenges extends Component {
@@ -22,7 +22,18 @@ class PastChallenges extends Component {
     }
 
     render() {
-        
+
+        let apiChallengeResults = this.props.activeChallenges.map((user, index) => {
+            return (
+                <TableRow key={index}>
+                    <TableCell>{user.name}</TableCell>
+                    <TableCell>{user.title}</TableCell>
+                    <TableCell>{user.commit_percentage}</TableCell>
+                    <TableCell>{user.longest_streak}</TableCell>
+                </TableRow>
+            )
+        });
+
         return (
             <div>
                 <p>Past Challenges</p>
@@ -36,7 +47,7 @@ class PastChallenges extends Component {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-
+                        {apiChallengeResults}
                     </TableBody>
                 </Table>
             </div>
