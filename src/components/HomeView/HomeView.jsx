@@ -95,9 +95,9 @@ class HomeView extends Component {
                 <Countdown />
                 <Typography variant="display1">Leaderboard</Typography>
                 <div className={classes.cardDiv}>
+                
                     {leaderCards}
                 </div>
-                {/* <p>JSON.stringify({this.props.leaders})</p> */}
             </main >
         )
     }
