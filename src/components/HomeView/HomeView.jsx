@@ -7,7 +7,7 @@ import { USER_ACTIONS } from '../../redux/actions/userActions';
 import NavBar from '../NavBar/NavBar';
 
 const mapStateToProps = state => ({
-    challengeDate: state.challengeDate,
+    startDate: state.challengeDate.date,
     user: state.user.user
 });
 
@@ -52,7 +52,7 @@ class HomeView extends Component {
                 <NavBar />
                 <button onClick={this.reqDotUser}>Log req.user</button>
                 <br />
-                <Countdown />
+                <Countdown deadline={this.props.startDate}/>
             </main >
         )
     }

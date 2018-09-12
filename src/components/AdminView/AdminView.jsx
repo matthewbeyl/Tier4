@@ -8,6 +8,8 @@ import NavBar from '../NavBar/NavBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 
+
+// CREATE BUTTON DISABLED WHEN THERE IS NO CURRENT CHALLENGE AND A CHALLENGE ALREADY CREATED FOR THE FUTURE
 const mapStateToProps = state => ({
     user: state.user.user,
     login: state.login,
