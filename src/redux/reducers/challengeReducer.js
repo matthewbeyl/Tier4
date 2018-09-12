@@ -20,6 +20,24 @@ const past = (state = [], action) => {
   }
 };
 
+const upcoming = (state = [], action) => {
+  switch (action.type) {
+    case CHALLENGE_ACTIONS.SET_UPCOMING_CHALLENGE:
+      return action.payload;
+    default:
+      return state;
+  }
+};
+
+const userInUpcomingChallenge = (state = [], action) => {
+  switch (action.type) {
+    case CHALLENGE_ACTIONS.SET_USER_IN_UPCOMING_CHALLENGE:
+      return action.payload;
+    default:
+      return state;
+  }
+}
+
 const active = (state = [], action) => {
   switch (action.type) {
     case CHALLENGE_ACTIONS.SET_ACTIVE_CHALLENGE:
@@ -33,5 +51,7 @@ const active = (state = [], action) => {
 export default combineReducers({
   current,
   past,
+  upcoming,
+  userInUpcomingChallenge,
   active
 });
