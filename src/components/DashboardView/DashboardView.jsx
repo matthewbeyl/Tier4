@@ -45,6 +45,7 @@ class DashboardView extends Component {
             email: '',
             prefopen: false,
             sumopen: false,
+            
             };
     };
 
@@ -133,6 +134,7 @@ class DashboardView extends Component {
             
             <main>
                 <NavBar />
+                <Typography variant="display1">Welcome {this.props.user.name}</Typography>
                 <Paper className={classes.paper}>
                 <Typography variant="display3">{this.props.commitRate}% Commit Rate</Typography>
                 <Typography variant="display3">Longest Streak - {this.props.longestStreak}</Typography>
