@@ -3,7 +3,6 @@ import { CHALLENGE_ACTIONS } from '../actions/challengeActions';
 import axios from 'axios';
 
 function* deleteUserFromCurrentChallenge(action) {
-    console.log('kjdfkjdfjbskjdfnkjsdfnksdfskdlfmksdf: ', action.payload)
     try {
         yield call(axios.delete, `/api/challenge/delete-user-from-current-challenge/${action.payload}`);
     } catch (error) {
@@ -34,7 +33,6 @@ function* fetchActiveChallenge() {
 function* fetchUserDataCurrentChallenge() {
     try {
         const currentChallenge = yield call(axios.get, '/api/challenge/user-data-current-challenge');
-        console.log(currentChallenge);
         yield dispatch({
             type: CHALLENGE_ACTIONS.SET_USER_DATA_CURRENT_CHALLENGE,
             payload: currentChallenge.data

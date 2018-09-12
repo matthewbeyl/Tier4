@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-// import CreateNewChallengeForm from '../CreateNewChallengeForm/CreateNewChallengeForm.js';
 import PastChallenges from '../PastChallenges/PastChallenges';
 import CurrentChallenge from '../CurrentChallenge/CurrentChallenge';
 import { USER_ACTIONS } from '../../redux/actions/userActions';
@@ -21,6 +20,7 @@ class AdminView extends Component {
             displayCurrentChallenge: true,
             displayPastChallenges: false,
             value: 0,
+            name: '',
         }
     }
 
@@ -33,12 +33,6 @@ class AdminView extends Component {
         if (this.props.user === null || !this.props.user.admin) {
             this.props.history.push('/home');
         }
-    }
-
-    checkChallengeStatus = () => {
-        this.setState({
-            activeChallenge: true
-        })
     }
 
     displayCurrentChallenge = () => {
@@ -67,7 +61,6 @@ class AdminView extends Component {
         }
     }
 
-    // for navigating between each tag
     handleDisplayChange = (event, value) => {
         this.setState({
             value: value
@@ -75,9 +68,9 @@ class AdminView extends Component {
     }
 
     render() {
-        const { value } = this.state;
-        let content = null;
-        content = (
+        const { value, displayCurrentChallenge, displayPastChallenges } = this.state;
+        // check is user is admin: 
+        let content = (
             <div>
                 <Tabs
                     value={value}
@@ -90,9 +83,9 @@ class AdminView extends Component {
                         label="Past Challenges"
                         onClick={this.displayPastChallenges} />
                 </Tabs>
-                <p>Welcome, Luke</p> 
-                {this.state.displayPastChallenges ? <PastChallenges /> : null}
-                {this.state.displayCurrentChallenge ? <CurrentChallenge /> : null}
+                <p>Welcome, {this.props.user.name}</p>
+                {displayPastChallenges && <PastChallenges />}
+                {displayCurrentChallenge && <CurrentChallenge />}
             </div>
         );
         return (
