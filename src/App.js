@@ -13,10 +13,23 @@ import DashboardView from './components/DashboardView/DashboardView';
 import AdminView from './components/AdminView/AdminView';
 import TestComponent from './components/TestComponent/TestComponent'
 
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+
 import './styles/main.css';
+
+const theme = createMuiTheme({
+  palette: {
+    primary: {
+      light: '#5adde1',
+      main: '#00abaf',
+      dark: '#007b80',
+    }
+  }
+});
 
 const App = () => (
   <div>
+    <MuiThemeProvider theme={theme}>
     <Router>
       <Switch>
         <Redirect exact from="/" to="/home" />
@@ -40,14 +53,16 @@ const App = () => (
           path="/dashboard"
           component={DashboardView}
         />
-        <Route 
+        {/* <Route 
+        <Route
           path="/test"
           component={TestComponent}
-        />
+        /> */}
         {/* OTHERWISE (no path!) */}
         <Route render={() => <h1>404</h1>} />
       </Switch>
     </Router>
+    </MuiThemeProvider>
   </div>
 );
 

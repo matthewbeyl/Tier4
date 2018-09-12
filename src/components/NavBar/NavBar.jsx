@@ -2,50 +2,98 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { USER_ACTIONS } from '../../redux/actions/userActions';
 import { connect } from 'react-redux';
-import LOGIN_ACTIONS from '../../redux/actions/loginActions'
+import LOGIN_ACTIONS from '../../redux/actions/loginActions';
+
+import { Toolbar, Typography, Button } from '@material-ui/core';
+import { withStyles } from '@material-ui/core/styles';
+
+const HomeLink = props => <Link to="/home" {...props} />
+const DashLink = props => <Link to="/dashboard" {...props} />
+const AdminLink = props => <Link to="/admin" {...props} />
+
+const styles = theme => ({
+  toolBar: {
+    background: theme.palette.primary.main,
+  },
+});
+
 
 class NavBar extends Component {
 
   componentWillMount() {
     this.props.dispatch({
-        type: USER_ACTIONS.FETCH_USER
+      type: USER_ACTIONS.FETCH_USER
     })
   }
 
-
   logout = () => {
-    this.props.dispatch({type: LOGIN_ACTIONS.LOGOUT})
+    this.props.dispatch({ type: LOGIN_ACTIONS.LOGOUT })
   }
 
-  signInSignOut = () => {
+  logInLogOut = () => {
     try { 
       if(this.props.user.github){
         return(
-          <button onClick={this.logout}>Log out</button>
+          <Button onClick={this.logout}>Log out</Button>
         )
       } else {
-        return (<a href="http://localhost:5000/api/auth/login">Log In</a>);
+        return (<Button href="http://localhost:5000/api/auth/login">Log In</Button>);
       } 
     } catch (error) {
-      return (<a href="http://localhost:5000/api/auth/login">Log In</a>);
+      return (<Button href="http://localhost:5000/api/auth/login">Log In</Button>);
+    }
+  }
+
+  adminNav = () => {
+    try {
+      if (this.props.user.admin) {
+        return (
+          <Button component={AdminLink}>
+            Admin
+          </Button>
+        )
+      } else {
+        return null;
+      }
+    } catch (error) {
+      return null;
+    }
+  }
+
+  dashboardNav = () => {
+    try {
+      if (this.props.user.github && !this.props.user.admin) {
+        return (
+          <Button component={DashLink}>
+            Dashboard
+         </Button>
+        )
+      } else {
+        return null;
+      }
+    } catch (error) {
+      return null;
     }
   }
 
   render() {
-    console.log('USER', this.props.user);
-    
+
+    let { classes } = this.props
+
     return (
-      <div className="NavBar" >
-        <Link to="/home">
+      <div className={classes.root}>
+      <Toolbar className={classes.toolBar}>
+      {/* //  style={{backgroundColor: '#00abaf'}}> */}
+        <Typography variant="display2" color="inherit">
+           Tier Four
+         </Typography>
+        <Button component={HomeLink} color="inherit">
           Home
-          </Link>
-        <Link to="/dashboard">
-          Dashboard
-          </Link>
-        <Link to="/admin">
-          Admin
-          </Link>
-        {this.signInSignOut()}
+        </Button>
+        {this.dashboardNav()}
+        {this.adminNav()}
+        {this.logInLogOut()}
+      </Toolbar>
       </div>
     )
   }
@@ -56,4 +104,5 @@ const mapStateToProps = state => ({
   user: state.user.user
 });
 
-export default connect(mapStateToProps)(NavBar);
+const StyledNavBar = withStyles(styles)(NavBar);
+export default connect(mapStateToProps)(StyledNavBar);

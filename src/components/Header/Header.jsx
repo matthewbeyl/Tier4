@@ -1,17 +1,20 @@
-import React, { Component } from 'react';
-import NavBar from '../NavBar/NavBar';
+// import React, { Component } from 'react';
+// import NavBar from '../NavBar/NavBar';
 
-class Header extends Component {
- render(){
-   return (
-     <div className="instructions">
-       <div>
-         <h1 className="lead">{this.props.title}</h1>
-         <NavBar />
-       </div>
-     </div>
-   )
- }
-}
+// import { AppBar, Typography } from '@material-ui/core';
 
-export default Header;
+// class Header extends Component {
+
+//   render() {
+//     return (
+//       <AppBar color="primary">
+//         <Typography variant="display2" color="inherit">
+//           {this.props.title}
+//         </Typography>
+//         <NavBar />
+//       </AppBar>
+//     )
+//   }
+// }
+
+// export default Header;
