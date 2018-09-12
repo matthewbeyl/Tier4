@@ -4,6 +4,7 @@ import { addFeedback } from '../../redux/actions/dashboardActions';
 import { addPreferences } from '../../redux/actions/dashboardActions';
 import { USER_ACTIONS } from '../../redux/actions/userActions';
 import NavBar from '../NavBar/NavBar';
+import JoinChallengeButton from '../JoinChallengeButton/JoinChallengeButton'
 
 import { Paper, Grid, Button, TextField, Checkbox, Typography } from '@material-ui/core';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -144,7 +145,7 @@ class DashboardView extends Component {
         return (
             <main>
                 <NavBar />
-                <Button variant="outlined" color="primary">Join Challenge</Button>
+                <JoinChallengeButton />
                 <br/>
                 <Button onClick={this.openPreferences} variant="outlined" color="primary">E-mail Preferences</Button>
                 <Button onClick={this.openSummary} variant="outlined" color="primary">Weekly Summary</Button>

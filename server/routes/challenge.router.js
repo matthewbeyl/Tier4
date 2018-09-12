@@ -40,8 +40,23 @@ router.post('/newChallenge', rejectUnauthenticated, rejectNonAdmin, (req, res) =
     })
 });
 
-router.get('/date', rejectUnauthenticated, rejectNonAdmin, (req, res) => {
+router.get('/date', rejectUnauthenticated, (req, res) => {
     pool.query(`SELECT "date" FROM "challenges"
+        ORDER BY "date" DESC
+        LIMIT 1;`)
+    .then((result) => {
+        res.send(result.rows[0]);
+    }).catch((error) => {
+        console.log('Error - ', error);
+        res.sendStatus(500)
+    })
+});
+
+
+//START - Join Challenge Button
+router.get('/futureChallenge', rejectUnauthenticated, (req, res) => {
+    pool.query(`SELECT * FROM "challenges"
+        WHERE challenges.date > current_date
         ORDER BY "date" DESC
         LIMIT 1;`)
     .then((result) => {
@@ -51,6 +66,46 @@ router.get('/date', rejectUnauthenticated, rejectNonAdmin, (req, res) => {
         res.sendStatus(500)
     })
 });
+
+router.get('/futureChallenge/joined', rejectUnauthenticated, (req, res) => {
+    pool.query(`SELECT * FROM "challenges"
+        JOIN user_challenge on challenges.id = user_challenge.challenge_id
+        JOIN users on users.id = user_challenge.user_id
+        WHERE challenges.date > current_date
+        ORDER BY "date" DESC
+        LIMIT 1;`)
+    .then((result) => {
+        res.send(result.rows);
+    }).catch((error) => {
+        console.log('Error - ', error);
+        res.sendStatus(500)
+    })
+});
+
+router.post('/join', rejectUnauthenticated, (req, res) => {
+    pool.query(`SELECT * FROM "challenges"
+        WHERE challenges.date > current_date
+        ORDER BY "date" DESC
+        LIMIT 1;`
+    ).then(response => {
+        let challenge_id = response.rows[0].id
+        pool.query(`INSERT INTO user_challenge 
+            (user_id, challenge_id, longest_streak, commit_percentage)
+            VALUES ($1, $2, 0, 0)`, [req.user.id, challenge_id]
+        ).then(response => {
+            res.sendStatus(201);
+        }).catch(err => {
+            console.log(err);
+            res.sendStatus(500);
+        })
+    }).catch(err => {
+        console.log(err);
+        res.sendStatus(500);
+    })
+    
+})
+
+// END - Join Challenge Button
 
 
 module.exports = router;
