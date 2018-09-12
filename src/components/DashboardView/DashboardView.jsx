@@ -273,7 +273,7 @@ class DashboardView extends Component {
                                     fullWidth
                                     margin="normal"
                                 />
-                                <br />
+                                {/* <br /> */}
                                 <TextField
                                     id="events_networking"
                                     label="What kind of events/networking did you do?"
@@ -282,7 +282,7 @@ class DashboardView extends Component {
                                     fullWidth
                                     margin="normal"
                                 />
-                                <br />
+                                {/* <br /> */}
                             </DialogContent>
                             <DialogActions>
                                 <Button onClick={this.closeSummary} color="primary">

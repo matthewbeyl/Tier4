@@ -1,14 +1,35 @@
 import React, { Component } from 'react';
-import { fetchStartDate } from '../../redux/actions/homeActions';
 import { connect } from 'react-redux';
+
 import Countdown from '../Countdown/Countdown';
+import NavBar from '../NavBar/NavBar';
+
+import { fetchStartDate, fetchLeaders } from '../../redux/actions/homeActions';
 import LOGIN_ACTIONS from '../../redux/actions/loginActions'
 import { USER_ACTIONS } from '../../redux/actions/userActions';
-import NavBar from '../NavBar/NavBar';
+
+import { Typography, withStyles } from '@material-ui/core';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import CardMedia from '@material-ui/core/CardMedia';
+import DashboardView from '../DashboardView/DashboardView';
+
+const styles = {
+    cardDiv: {
+        display: "flex",
+        flexDirection: "row",
+        flexWrap: "wrap",
+        padding: "6%"
+    },
+    leaderCard: {
+        margin: "1% 1% 1% 1%",
+    }
+}
 
 const mapStateToProps = state => ({
     challengeDate: state.challengeDate,
-    user: state.user.user
+    user: state.user.user,
+    leaders: state.leaderboard,
 });
 
 class HomeView extends Component {
@@ -23,6 +44,7 @@ class HomeView extends Component {
 
     componentDidMount() {
         this.props.dispatch(fetchStartDate()); 
+        this.props.dispatch(fetchLeaders());
     }
 
     componentWillMount() {
@@ -47,18 +69,40 @@ class HomeView extends Component {
     }
 
     render() {
+        let { classes } = this.props
+        console.log(this.props.leaders);
+        
+        const leaderCards = this.props.leaders.map((leader, index) => {
+            return(<Card className={classes.leaderCard}>
+                    <img src={leader.image_url} alt={leader.name} height="200px" width="auto"/>
+                    <CardContent>
+                        <Typography variant="title" key={index}>
+                            {leader.name}
+                        </Typography>
+                        <Typography variant="subheading">
+                            {leader.commit_percentage}% commit rate
+                            <br/>
+                            longest streak - {leader.longest_streak}
+                        </Typography>
+                    </CardContent>
+            </Card>)
+        })
         return (
             <main>
                 <NavBar />
                 <button onClick={this.reqDotUser}>Log req.user</button>
                 <br />
                 <Countdown />
+                <Typography variant="display1">Leaderboard</Typography>
+                <div className={classes.cardDiv}>
+                
+                    {leaderCards}
+                </div>
             </main >
         )
     }
 }
 
-export default connect(mapStateToProps)(HomeView);
 
-
-
+const StyledHomeView = withStyles(styles)(HomeView)
+export default connect(mapStateToProps)(StyledHomeView);
