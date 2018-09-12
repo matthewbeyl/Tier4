@@ -27,7 +27,7 @@ const styles = {
 }
 
 const mapStateToProps = state => ({
-    challengeDate: state.challengeDate,
+    startDate: state.challengeDate.date,
     user: state.user.user,
     leaders: state.leaderboard,
 });
@@ -92,7 +92,7 @@ class HomeView extends Component {
                 <NavBar />
                 <button onClick={this.reqDotUser}>Log req.user</button>
                 <br />
-                <Countdown />
+                <Countdown deadline={this.props.startDate}/>
                 <Typography variant="display1">Leaderboard</Typography>
                 <div className={classes.cardDiv}>
                 
