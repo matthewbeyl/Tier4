@@ -33,6 +33,8 @@ const userInUpcomingChallenge = (state = [], action) => {
   switch (action.type) {
     case CHALLENGE_ACTIONS.SET_USER_IN_UPCOMING_CHALLENGE:
       return action.payload;
+    default:
+      return state;
   }
 }
 
