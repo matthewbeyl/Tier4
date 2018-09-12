@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { addFeedback, addPreferences, fetchStats } from '../../redux/actions/dashboardActions';
 import { USER_ACTIONS } from '../../redux/actions/userActions';
 import NavBar from '../NavBar/NavBar';
+import JoinChallengeButton from '../JoinChallengeButton/JoinChallengeButton'
 
 import { Paper, Button, TextField, Checkbox, Typography } from '@material-ui/core';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -24,6 +25,7 @@ const styles = {
 
 const mapStateToProps = state => ({
     user: state.user.user,
+    isLoading: state.user.isLoading,
     commitRate: state.userStats.commit_percentage,
     longestStreak: state.userStats.longest_streak,
 });
@@ -45,12 +47,23 @@ class DashboardView extends Component {
             email: '',
             prefopen: false,
             sumopen: false,
-            
-            };
+        };
     };
 
     openPreferences = () => {
-        this.setState({ prefopen: true });
+        console.log('State before', this.state);
+        console.log('props.user before', this.props.user);
+        
+        this.setState({ 
+            queued_for_next_challenge: this.props.user.queued_for_next_challenge,
+            weekly_email_reminders: this.props.user.weekly_email_reminders,
+            daily_email_reminders: this.props.user.daily_email_reminders,
+            email: this.props.user.email 
+        });
+        console.log('State after', this.state);
+        this.setState({ 
+            prefopen: true
+        });
     };
 
     closePreferences = () => {
@@ -74,9 +87,10 @@ class DashboardView extends Component {
     }
 
     componentDidUpdate() {
-        if (!this.props.user && this.props.user === null) {
+        if (!this.props.isLoading && this.props.user === null) {
             this.props.history.push('home');
-        }
+        } 
+
     }
 
     submitFeedback = (event) => {
@@ -113,6 +127,8 @@ class DashboardView extends Component {
                 [property]: false
             })
         }
+        console.log(this.state);
+        
     }
 
     handleEmailInput = (property) => (event) => {
@@ -134,15 +150,21 @@ class DashboardView extends Component {
             
             <main>
                 <NavBar />
-                <Typography variant="display1">Welcome {this.props.user.name}</Typography>
-                <Paper className={classes.paper}>
-                <Typography variant="display3">{this.props.commitRate}% Commit Rate</Typography>
-                <Typography variant="display3">Longest Streak - {this.props.longestStreak}</Typography>
-                
-                    <br />
-                    <Button onClick={this.openPreferences} variant="outlined" color="primary" size="small">E-mail Preferences</Button>
-                    <Button onClick={this.openSummary} variant="outlined" color="primary" size="small">Weekly Summary</Button>
-                </Paper>
+                <JoinChallengeButton />
+                <br/>
+                <Button onClick={this.openPreferences} variant="outlined" color="primary">E-mail Preferences</Button>
+                <Button onClick={this.openSummary} variant="outlined" color="primary">Weekly Summary</Button>
+
+                <div>                   
+                    <Paper className={classes.paper}>
+                    <Typography variant="display3">{this.props.commitRate}% Commit Rate</Typography>
+                    <Typography variant="display3">Longest Streak - {this.props.longestStreak}</Typography>
+                    
+                        <br />
+                        <Button onClick={this.openPreferences} variant="outlined" color="primary" size="small">E-mail Preferences</Button>
+                        <Button onClick={this.openSummary} variant="outlined" color="primary" size="small">Weekly Summary</Button>
+                    </Paper>
+                </div>
                 <div>
                     <Dialog
                         open={this.state.prefopen}
@@ -158,7 +180,6 @@ class DashboardView extends Component {
                                         <Checkbox
                                             checked={this.state.queued_for_next_challenge}
                                             onChange={this.handleCheckboxBoolean('queued_for_next_challenge')}
-                                            value="challenge"
                                             color="primary"
                                         />
                                     }
@@ -170,7 +191,6 @@ class DashboardView extends Component {
                                         <Checkbox
                                             checked={this.state.daily_email_reminders}
                                             onChange={this.handleCheckboxBoolean('daily_email_reminders')}
-                                            value="commit"
                                             color="primary"
                                         />
                                     }
@@ -182,7 +202,6 @@ class DashboardView extends Component {
                                         <Checkbox
                                             checked={this.state.weekly_email_reminders}
                                             onChange={this.handleCheckboxBoolean('weekly_email_reminders')}
-                                            value="feedback"
                                             color="primary"
                                         />
                                     }
