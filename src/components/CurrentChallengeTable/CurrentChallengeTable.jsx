@@ -14,6 +14,7 @@ const mapStateToProps = state => ({
     currentChallenge: state.challenge.active,
     user: state.user.user,
     login: state.login,
+    activeChallenge: state.challenge.active
 });
 
 class CurrentChallengeTable extends Component {
@@ -23,10 +24,12 @@ class CurrentChallengeTable extends Component {
         this.props.dispatch({ type: CHALLENGE_ACTIONS.FETCH_USER_DATA_CURRENT_CHALLENGE });
     }
 
-    handleDeleteUserFromCurrentChallenge = (id) => {
-        console.log('the user to delete from current challenge id is :', id);
-        this.props.dispatch({ type: CHALLENGE_ACTIONS.DELETE_USER_FROM_CURRENT_CHALLENGE, payload: id })
+    handleDeleteUserFromCurrentChallenge = (userId, challengeId) => {
+        console.log('the user to delete from current challenge id is :', userId);
+        console.log('the challenge that user is to be deleted from is :', challengeId);
+        this.props.dispatch({ type: CHALLENGE_ACTIONS.DELETE_USER_FROM_CURRENT_CHALLENGE, payload: userId, additionalPayload: challengeId })
     }
+
     render() {
         let apiChallengeResults = this.props.currentChallengeUserData.map(user => {
             return (
@@ -36,7 +39,7 @@ class CurrentChallengeTable extends Component {
                     <TableCell>{user.streak}</TableCell>
                     <TableCell>{user.daily_reminder.toString()}</TableCell>
                     <TableCell>{user.weekly_reminder.toString()}</TableCell>
-                    <TableCell><Button onClick={()=>{this.handleDeleteUserFromCurrentChallenge(user.id)}}>Delete</Button></TableCell>
+                    <TableCell><Button onClick={()=>{this.handleDeleteUserFromCurrentChallenge(user.id,user.challenge_id)}}>Delete</Button></TableCell>
                 </TableRow>
             )
         });
