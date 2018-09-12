@@ -19,7 +19,7 @@ class CurrentChallenge extends Component {
         this.state = {
             newChallenge: {
                 title: '',
-                date: new Date(),
+                date: new Date(), //set default start date to today's date
                 exclude_weekends: false,
                 exclude_holidays: false
             },
@@ -70,15 +70,16 @@ class CurrentChallenge extends Component {
 
         let display = null;
         if (this.props.checkChallengeStatus.length === 1) {
-            console.log('there is currently a challenge');
-            display = <div>
+            display = (
+            <div>
                 <div>{currentChallengeTitle}</div>
                 <CurrentChallengeTable />
                 <DeleteCurrentChallengeButton />
             </div>
+            )
         } else {
-            console.log('there is not currently a challenge');
-            display = <div>
+            display = (
+            <div>
                 <Button
                     onClick={this.openNewChallengeDialog}
                 >Create New Challenge</Button>
@@ -117,6 +118,7 @@ class CurrentChallenge extends Component {
                     </DialogActions>
                 </Dialog>
             </div>
+            )    
         }
         return (
             <div>

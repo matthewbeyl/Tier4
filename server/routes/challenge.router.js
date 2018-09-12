@@ -4,19 +4,40 @@ const { rejectUnauthenticated } = require('../modules/authentication-middleware'
 const { rejectNonAdmin } = require('../modules/admin-authentication');
 const router = express.Router();
 
-router.delete('/delete-user-from-current-challenge/:id', rejectUnauthenticated, (req,res) => {
+router.get('/fetch-past', rejectUnauthenticated, (req,res) => {
+    console.log('/api/challenge/fetch-pst');
+    if(req.user.admin){
+        
+        const queryText = `SELECT users.name, 
+                                challenges.title, 
+                                user_challenge.commit_percentage, 
+                                user_challenge.longest_streak from challenges
+                            JOIN user_challenge ON challenges.id = user_challenge.challenge_id
+                            JOIN users ON user_challenge.user_id = users.id
+                            WHERE challenges.active = false;`;                 
+        pool.query(queryText).then((result)=> {
+            res.send(result.rows);
+        }).catch((error)=>{
+            console.log('error fetching past challenges: ', error);
+        })
+    } else {
+        res.sendStatus(403);
+    }
+});
+
+router.delete('/delete-user-from-current-challenge/:id/:challengeId', rejectUnauthenticated, (req,res) => {
     console.log('/api/challenge/delete-user-from-current-challenge');
     if(req.user.admin) {
         console.log('the id of the user to be deleted is: ',req.params.id);
-        const queryText = '';
-
-
-        // pool.query(queryText).then(() => {
-        //     res.sendStatus(201);
-        // }).catch((error) => {
-        //     console.log('error deleting active challenge status: ', error);
-        //     res.sendStatus(500);
-        // })
+        console.log('the challege id the user is to be deleted from is: ', req.params.challengeId);
+        const queryText = `DELETE FROM user_challenge
+        WHERE user_challenge.user_id = ${req.params.id} AND user_challenge.challenge_id = ${req.params.challengeId};`;
+        pool.query(queryText).then(() => {
+            res.sendStatus(201);
+        }).catch((error) => {
+            console.log('error deleting user from current challenge: ', error);
+            res.sendStatus(500);
+        })
     } else {
         res.sendStatus(403);
     }
@@ -57,7 +78,8 @@ router.get('/user-data-current-challenge', rejectUnauthenticated, (req, res) => 
                                 user_challenge.commit_percentage, 
                                 user_challenge.longest_streak as "streak", 
                                 users.daily_email_reminders as "daily_reminder", 
-                                users.weekly_email_reminders as "weekly_reminder" 
+                                users.weekly_email_reminders as "weekly_reminder",
+                                challenges.id as "challenge_id"
                             FROM users 
                             JOIN user_challenge ON users.id = user_challenge.user_id
                             JOIN challenges ON user_challenge.challenge_id = challenges.id
