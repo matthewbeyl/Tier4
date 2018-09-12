@@ -4,7 +4,10 @@ import axios from 'axios';
 
 function* deleteUserFromCurrentChallenge(action) {
     try {
-        yield call(axios.delete, `/api/challenge/delete-user-from-current-challenge/${action.payload}`);
+        yield call(axios.delete, `/api/challenge/delete-user-from-current-challenge/${action.payload}/${action.additionalPayload}`);
+        yield dispatch({
+            type: CHALLENGE_ACTIONS.FETCH_USER_DATA_CURRENT_CHALLENGE
+        })
     } catch (error) {
         console.log('error deleting user from current challenge: ', error);
     }
