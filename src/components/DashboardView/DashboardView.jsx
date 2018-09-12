@@ -1,19 +1,17 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { addFeedback } from '../../redux/actions/dashboardActions';
-import { addPreferences } from '../../redux/actions/dashboardActions';
+import { addFeedback, addPreferences, fetchStats } from '../../redux/actions/dashboardActions';
 import { USER_ACTIONS } from '../../redux/actions/userActions';
 import NavBar from '../NavBar/NavBar';
 import JoinChallengeButton from '../JoinChallengeButton/JoinChallengeButton'
 
-import { Paper, Grid, Button, TextField, Checkbox, Typography } from '@material-ui/core';
+import { Paper, Button, TextField, Checkbox, Typography } from '@material-ui/core';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import { withStyles } from '@material-ui/core/styles';
 
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
 const styles = {
@@ -21,13 +19,18 @@ const styles = {
         padding: 20,
         marginTop: 10,
         marginBottom: 10,
-        height: 500,
+        height: 200,
     }
 }
 
 const mapStateToProps = state => ({
     user: state.user.user,
+<<<<<<< HEAD
     isLoading: state.user.isLoading
+=======
+    commitRate: state.userStats.commit_percentage,
+    longestStreak: state.userStats.longest_streak,
+>>>>>>> b9eabb7c84762ba4edb5e8f4e3c0708ab2dc5a2b
 });
 
 class DashboardView extends Component {
@@ -47,7 +50,11 @@ class DashboardView extends Component {
             email: '',
             prefopen: false,
             sumopen: false,
+<<<<<<< HEAD
         };
+=======
+            };
+>>>>>>> b9eabb7c84762ba4edb5e8f4e3c0708ab2dc5a2b
     };
 
     openPreferences = () => {
@@ -80,6 +87,13 @@ class DashboardView extends Component {
 
     componentDidMount() {
         this.props.dispatch({ type: USER_ACTIONS.FETCH_USER });
+<<<<<<< HEAD
+=======
+        if (!this.props.user && this.props.user === null) {
+            this.props.history.push('home');
+        }
+            this.props.dispatch(fetchStats()); 
+>>>>>>> b9eabb7c84762ba4edb5e8f4e3c0708ab2dc5a2b
     }
 
     componentDidUpdate() {
@@ -140,17 +154,30 @@ class DashboardView extends Component {
     }
 
     render() {
-        let { classes } = this.props
+        let { classes } = this.props        
 
         return (
+            
             <main>
                 <NavBar />
+<<<<<<< HEAD
                 <JoinChallengeButton />
                 <br/>
                 <Button onClick={this.openPreferences} variant="outlined" color="primary">E-mail Preferences</Button>
                 <Button onClick={this.openSummary} variant="outlined" color="primary">Weekly Summary</Button>
 
                 <div>                   
+=======
+                <Paper className={classes.paper}>
+                <Typography variant="display3">{this.props.commitRate}% Commit Rate</Typography>
+                <Typography variant="display3">Longest Streak - {this.props.longestStreak}</Typography>
+                
+                    <br />
+                    <Button onClick={this.openPreferences} variant="outlined" color="primary" size="small">E-mail Preferences</Button>
+                    <Button onClick={this.openSummary} variant="outlined" color="primary" size="small">Weekly Summary</Button>
+                </Paper>
+                <div>
+>>>>>>> b9eabb7c84762ba4edb5e8f4e3c0708ab2dc5a2b
                     <Dialog
                         open={this.state.prefopen}
                         onClose={this.closePreferences}

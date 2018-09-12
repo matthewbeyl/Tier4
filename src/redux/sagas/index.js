@@ -5,11 +5,13 @@ import challengeSaga from './challengeSaga';
 import countdownSaga from './countdownSaga';
 import addFeedbackSaga from './feedbackSaga';
 import addPreferencesSaga from './emailSaga';
+import statsSaga from './statsSaga';
 
 
 export default function* rootSaga() {
   yield all([
     userSaga(),
+    statsSaga(),
     loginSaga(),
     challengeSaga(),
     countdownSaga(),

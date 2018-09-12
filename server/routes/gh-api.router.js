@@ -2,15 +2,13 @@
 // const pool = require('../modules/pool');
 // const router = express.Router();
 // const rp = require('request-promise')
-// const cron = require('node-cron');
-
 
 
 // let userList = []
 // let challengeDate = ''
 // let challengeDateID = 0;
 // let challengeDateString = ''
-
+// let calendar = []
 
 
 // var date = new Date();
@@ -19,13 +17,14 @@
 // date = JSON.stringify(date)
 // actualDate = date.substring(1, 11)
 
-// cron.schedule('*/20 * * * * *', function(){
-//     console.log('running once every 20 seconds');
-//     getData();
-// });
+// function findTotalWeekendDays(){
+//     if (tempDate === 'Sun') {
+        
+//     }
+// }
 
 
-// function getData(){
+// router.get('/get-gh-data', (req, res) => {
 //     console.log('getting user list');
 //         pool.query(`SELECT "date", "id" FROM "challenges" ORDER BY "date" DESC;`)
 //         .then((response)=>{
@@ -42,7 +41,7 @@
 //                 userList.forEach(user => {
 //                     const requestOptions = {
 //                         uri: `https://api.github.com/search/commits?q=committer:${user.github}+committer-date:>${challengeDateString}&sort=committer-date&per_page=100`,
-//                         headers: { "User-Agent": 'reverended', Accept: 'application/vnd.github.cloak-preview+json', Authorization: 'token 23982af669baa75e29e52bbd5a45594c65b7f7b2'},
+//                         headers: { "User-Agent": 'reverended', Accept: 'application/vnd.github.cloak-preview+json' },
 //                         method: 'GET',
 //                         json: true
 //                     }
@@ -51,8 +50,9 @@
 //                 Promise.all(requestPromises)
 //                 .then((data) => {
 
-//                     sortAndSendData(data);
+//                     sortData(data);
 
+//                     res.send(data)
 //                 })
 //                 .catch((error) => {
 //                     console.log(error);
@@ -62,10 +62,9 @@
 //             console.log('error on get-user-list', error);
 //         })
 //     })
-// }
+// })
 
-
-// function sortAndSendData(tempData){
+// function sortData(tempData){
 //     let date = JSON.stringify(challengeDate)
 //     let currentDate = JSON.stringify(new Date())
 //     let date1 = new Date(date.substring(1, 11));
@@ -73,35 +72,17 @@
 //     let timeDiff = Math.abs(date2.getTime() - date1.getTime());
 //     let diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24)); 
 
-//     pool.query(`DELETE FROM "user_challenge"`)
-//     .then((response)=>{
+//     for (let i = 0; i < tempData.length; i++) {
+//         let tempUserData = tempData[i].items;
+//         let tempUserName = userList[i];
+//         let tempDate = challengeDate;
+//         let processedData = getStreakAndPercent(processData(tempUserData, tempDate), diffDays)
 
-//         console.log(response);
-//         for (let i = 0; i < tempData.length; i++) {
-//             let tempUserData = tempData[i].items;
-//             let tempUserName = userList[i];
-//             let tempDate = challengeDate;
-//             let processedData = getStreakAndPercent(processData(tempUserData, tempDate), diffDays)
-        
-//             let data = packageData(tempUserName, processedData);
-//             console.log(data);
-                
-//             //this is where everything has finished ok
-        
-//             pool.query(`INSERT INTO "user_challenge" ("user_id", "challenge_id", "longest_streak", "commit_percentage")
-//             VALUES ($1,$2,$3,$4);`, [data.userID, data.challengeID, data.longestStreak, data.commitPercent])
-//             .then((response)=>{
-//                 console.log(response);
-//             })
-//             .catch((error)=>{
-//                 console.log(error);
-//             })
-//         }
+//         let data = packageData(tempUserName, processedData);
+//         console.log(data);
 
-//     })
-//     .catch((error)=>{
-//         console.log(error);
-//     })
+//         //this is where everything has finished ok
+//     }
 // }
 
 // function processData(userData, datestring){
@@ -128,7 +109,7 @@
 
 // function getStreakAndPercent(data, diffDays){
 //     let longestStreak = getStreak(data)
-//     let commitPercent = Math.round(getPercent(data, diffDays))
+//     let commitPercent = getPercent(data, diffDays)
 //     //console.log(longestStreak, commitPercent);
 //     return {
 //         longestStreak,
@@ -213,5 +194,9 @@
 // //         res.sendStatus(500)
 // //     })
 // // })
+
+
+
+
 
 // module.exports = router;

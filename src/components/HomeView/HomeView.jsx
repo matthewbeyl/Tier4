@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { fetchStartDate } from '../../redux/actions/homeActions';
 import { connect } from 'react-redux';
-import axios from 'axios';
 import Countdown from '../Countdown/Countdown';
 import LOGIN_ACTIONS from '../../redux/actions/loginActions'
 import { USER_ACTIONS } from '../../redux/actions/userActions';
@@ -52,8 +51,6 @@ class HomeView extends Component {
             <main>
                 <NavBar />
                 <button onClick={this.reqDotUser}>Log req.user</button>
-                {/* <button onClick={this.logout}>Sign out</button>
-                <a href="http://localhost:5000/api/auth/login">Sign In</a> */}
                 <br />
                 <Countdown />
             </main >

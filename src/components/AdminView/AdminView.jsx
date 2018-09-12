@@ -1,39 +1,38 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import CreateNewChallengeForm from '../CreateNewChallengeForm/CreateNewChallengeForm.js';
 import PastChallenges from '../PastChallenges/PastChallenges';
 import CurrentChallenge from '../CurrentChallenge/CurrentChallenge';
 import { USER_ACTIONS } from '../../redux/actions/userActions';
+import { CHALLENGE_ACTIONS } from '../../redux/actions/challengeActions';
 import NavBar from '../NavBar/NavBar';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
 
 const mapStateToProps = state => ({
     user: state.user.user,
     login: state.login,
 });
-//  Bug: if Admin, and on admin view => refreshing will bring admin back to home
+
 class AdminView extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            showPopupForm: false,
             displayCurrentChallenge: true,
-            displayPastChallenges: false
+            displayPastChallenges: false,
+            value: 0,
+            name: '',
         }
     }
 
-    componentDidUpdate() {
-        this.props.dispatch({ type: 'FETCH_CURRENT_CHALLENGE' });
-
-        // user who are logged in and are not Admin will be directed to the home view
-
-        if (!this.props.user.isLoading && (!this.props.user.admin || this.props.user.userName === null)) {
-            this.props.history.push('home');
-          }
+    componentWillMount() {
+        this.props.dispatch({ type: USER_ACTIONS.FETCH_USER });
+        this.props.dispatch({ type: CHALLENGE_ACTIONS.FETCH_ACTIVE_CHALLENGE });
     }
 
-    componentDidMount() {
-        this.props.dispatch({ type: USER_ACTIONS.FETCH_USER });
-
+    componentDidUpdate() {
+        if (this.props.user === null || !this.props.user.admin) {
+            this.props.history.push('/home');
+        }
     }
 
     displayCurrentChallenge = () => {
@@ -42,9 +41,11 @@ class AdminView extends Component {
                 displayPastChallenges: false
             })
         }
-        this.setState({
-            displayCurrentChallenge: !this.state.displayCurrentChallenge,
-        })
+        if (this.state.displayCurrentChallenge === false) {
+            this.setState({
+                displayCurrentChallenge: true
+            })
+        }
     }
 
     displayPastChallenges = () => {
@@ -53,47 +54,38 @@ class AdminView extends Component {
                 displayCurrentChallenge: false
             })
         }
+        if (this.state.displayPastChallenges === false) {
+            this.setState({
+                displayPastChallenges: true
+            })
+        }
+    }
+
+    handleDisplayChange = (event, value) => {
         this.setState({
-            displayPastChallenges: !this.state.displayPastChallenges,
+            value: value
         })
     }
 
-    toggleCreateNewChallengePopupForm = () => {
-        this.setState({
-            showPopupForm: !this.state.showPopupForm
-        });
-    }
-
     render() {
-        let content = null;
-        content = (
+        const { value, displayCurrentChallenge, displayPastChallenges } = this.state;
+        // check is user is admin: 
+        let content = (
             <div>
-                <p>Welcome, Luke</p>
-                <button onClick={this.toggleCreateNewChallengePopupForm.bind(this)}>Create New Challenge</button>
-                {this.state.showPopupForm ?
-                    <CreateNewChallengeForm
-                        text='Create a New Challenge'
-                        closePopupForm={this.toggleCreateNewChallengePopupForm.bind(this)}
-                    /> : null
-                }
-                <button
-                    style={{ float: "right" }}
-                    onClick={this.displayCurrentChallenge}
-                >Current Challenge</button>
-                <button
-                    style={{ float: "right" }}
-                    onClick={this.displayPastChallenges}
-                >Past Challenges</button>
-                {/* displays when past challenge state variable is true */}
-                {this.state.displayPastChallenges ?
-                    <PastChallenges
-                    /> : null
-                }
-                {/* displays when curent challenges state variable is true */}
-                {this.state.displayCurrentChallenge ?
-                    <CurrentChallenge
-                    /> : null
-                }
+                <Tabs
+                    value={value}
+                    indicatorColor="primary"
+                    onChange={this.handleDisplayChange}>
+                    <Tab
+                        label="Current Challenge"
+                        onClick={this.displayCurrentChallenge} />
+                    <Tab
+                        label="Past Challenges"
+                        onClick={this.displayPastChallenges} />
+                </Tabs>
+                <p>Welcome, {this.props.user.name}</p>
+                {displayPastChallenges && <PastChallenges />}
+                {displayCurrentChallenge && <CurrentChallenge />}
             </div>
         );
         return (

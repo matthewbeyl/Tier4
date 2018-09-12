@@ -10,14 +10,12 @@ import { withStyles } from '@material-ui/core/styles';
 const HomeLink = props => <Link to="/home" {...props} />
 const DashLink = props => <Link to="/dashboard" {...props} />
 const AdminLink = props => <Link to="/admin" {...props} />
-const LoginLink = props => <Link to="http://localhost:5000/api/auth/login" {...props} />
-const TestLink = props => <Link to="www.google.com" {...props} />
 
-const styles = {
-  root: {
-    
+const styles = theme => ({
+  toolBar: {
+    background: theme.palette.primary.main,
   },
-};
+});
 
 
 class NavBar extends Component {
@@ -80,18 +78,23 @@ class NavBar extends Component {
 
   render() {
 
+    let { classes } = this.props
+
     return (
-      <Toolbar>
-        <Typography variant="display2">
+      <div className={classes.root}>
+      <Toolbar className={classes.toolBar}>
+      {/* //  style={{backgroundColor: '#00abaf'}}> */}
+        <Typography variant="display2" color="inherit">
            Tier Four
          </Typography>
-        <Button component={HomeLink} color="primary">
+        <Button component={HomeLink} color="inherit">
           Home
         </Button>
         {this.dashboardNav()}
         {this.adminNav()}
         {this.logInLogOut()}
       </Toolbar>
+      </div>
     )
   }
 }
