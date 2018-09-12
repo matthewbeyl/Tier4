@@ -96,9 +96,17 @@ router.get('/github/callback',
   });
 
 router.get('/user', (req, res) => {
-  console.log(req.user);
+  pool.query(`SELECT * FROM users where id = $1`, [req.user.id]).then(response => {
+    console.log('Req.user:', req.user, 'response', response.rows[0]);
+    
+    res.send(response.rows[0]);
+  }).catch(err => {
+    console.log(err);
+    res.sendStatus(500);
+    
+  })
   
-  res.send(req.user);
+  
 })
 
 router.get('/profile',
