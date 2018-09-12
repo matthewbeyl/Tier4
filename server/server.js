@@ -32,8 +32,8 @@ app.use('/api/user', userRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/challenge', challengeRouter);
 app.use('/api/dashboard', dashboardRouter);
-app.use(GHAPIRouter)
-app.use(scheduler)
+app.use('/api/gh-router',GHAPIRouter);
+app.use('/api/scheduler',scheduler);
 
 // Serve static files
 app.use(express.static('build'));

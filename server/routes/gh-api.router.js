@@ -414,4 +414,4 @@ function activateChallenge() {
 
 
 
-// module.exports = router;
+module.exports = router;
