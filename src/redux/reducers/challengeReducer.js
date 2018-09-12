@@ -11,9 +11,9 @@ const current = (state = [], action) => {
   }
 };
 
-const past = (state = '', action) => {
+const past = (state = [], action) => {
   switch (action.type) {
-    case CHALLENGE_ACTIONS.SET_PAST_CHALLENGE:
+    case CHALLENGE_ACTIONS.SET_PAST_CHALLENGES:
       return action.payload;
     default:
       return state;

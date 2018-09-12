@@ -4,6 +4,27 @@ const { rejectUnauthenticated } = require('../modules/authentication-middleware'
 const { rejectNonAdmin } = require('../modules/admin-authentication');
 const router = express.Router();
 
+router.get('/fetch-past', rejectUnauthenticated, (req,res) => {
+    console.log('/api/challenge/fetch-pst');
+    if(req.user.admin){
+        
+        const queryText = `SELECT users.name, 
+                                challenges.title, 
+                                user_challenge.commit_percentage, 
+                                user_challenge.longest_streak from challenges
+                            JOIN user_challenge ON challenges.id = user_challenge.challenge_id
+                            JOIN users ON user_challenge.user_id = users.id
+                            WHERE challenges.active = false;`;                 
+        pool.query(queryText).then((result)=> {
+            res.send(result.rows);
+        }).catch((error)=>{
+            console.log('error fetching past challenges: ', error);
+        })
+    } else {
+        res.sendStatus(403);
+    }
+});
+
 router.delete('/delete-user-from-current-challenge/:id/:challengeId', rejectUnauthenticated, (req,res) => {
     console.log('/api/challenge/delete-user-from-current-challenge');
     if(req.user.admin) {
