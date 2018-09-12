@@ -15,11 +15,12 @@ import CardMedia from '@material-ui/core/CardMedia';
 import DashboardView from '../DashboardView/DashboardView';
 
 const styles = {
+    
     cardDiv: {
         display: "flex",
         flexDirection: "row",
         flexWrap: "wrap",
-        padding: "6%"
+        padding: "6%",
     },
     leaderCard: {
         margin: "1% 1% 1% 1%",
@@ -94,15 +95,15 @@ class HomeView extends Component {
                 <br />
                 <Countdown />
                 <Typography variant="display1">Leaderboard</Typography>
+                <section className={classes.card}>
                 <div className={classes.cardDiv}>
-                
                     {leaderCards}
                 </div>
+                </section>
             </main >
         )
     }
 }
-
 
 const StyledHomeView = withStyles(styles)(HomeView)
 export default connect(mapStateToProps)(StyledHomeView);
