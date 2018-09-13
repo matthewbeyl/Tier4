@@ -1,43 +1,70 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { fetchStartDate } from '../../redux/actions/homeActions';
-const mapStateToProps = state => ({
-    startDate: state.challengeDate.date
-});
+
 class Countdown extends Component {
-    componentDidMount() {
-        this.props.dispatch(fetchStartDate());
+    state = {
+        days: 0,
+        hours: 0,
+        minutes: 0,
+        seconds: 0,
+    };
+
+    componentWillMount = () => {
+        this.getTimeUntil(this.props.deadline);
     }
+
+    componentDidMount = () => {
+        setInterval(() => this.getTimeUntil(this.props.deadline), 1000);
+    }
+
+    displayDigits = (number) => {
+        return number < 10 ? '0' + number : number;
+    }
+
+    getTimeUntil = (deadline) => {
+        const time = Date.parse(deadline) - Date.parse(new Date());
+        if (time < 0) {
+            this.setState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+        } else {
+            const seconds = Math.floor((time / 1000) % 60);
+            const minutes = Math.floor((time / 1000 / 60) % 60);
+            const hours = Math.floor((time / (1000 * 60 * 60)) % 24);
+            const days = Math.floor(time / (1000 * 60 * 60 * 24));
+            this.setState({ days, hours, minutes, seconds });
+        }
+    }
+
     render() {
-        console.log(this.props.startDate);
-        return (
-            <main>
-                <br />
-                <section>
-                    {/* {dateItem} */}
-                    <h5>The next challenge starts {this.props.startDate}</h5>
-                    <br />
-                    <div id="clockdiv">
-                        <div>
-                            <span className="days"></span>
-                            <div>Days</div>
-                        </div>
-                        <div>
-                            <span className="hours"></span>
-                            <div>Hours</div>
-                        </div>
-                        <div>
-                            <span className="minutes"></span>
-                            <div>Minutes</div>
-                        </div>
-                        <div>
-                            <span className="seconds"></span>
-                            <div>Seconds</div>
-                        </div>
+        let content = '';
+        if (this.props.deadline === '') {
+            content = (
+                <div>
+                    <p>There is no upcoming challenge.</p>
+                </div>
+            )
+        } else {
+            content = (
+                <div>
+                    <p></p>
+                    <div>
+                        {this.displayDigits(this.state.days)} Days
                     </div>
-                </section>
-            </main >
+                    <div>
+                        {this.displayDigits(this.state.hours)} Hours
+                    </div>
+                    <div>
+                        {this.displayDigits(this.state.minutes)} Minutes
+                    </div>
+                    <div>
+                        {this.displayDigits(this.state.seconds)} Seconds
+                    </div>
+                </div>
+            )
+        }
+        return (
+            <div>
+                {content}
+            </div>
         )
     }
 }
-export default connect(mapStateToProps)(Countdown);
+export default Countdown;

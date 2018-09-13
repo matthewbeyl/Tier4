@@ -6,6 +6,7 @@ import countdownSaga from './countdownSaga';
 import addFeedbackSaga from './feedbackSaga';
 import addPreferencesSaga from './emailSaga';
 import statsSaga from './statsSaga';
+import leaderboardSaga from './leaderboardSaga';
 
 
 export default function* rootSaga() {
@@ -15,6 +16,7 @@ export default function* rootSaga() {
     loginSaga(),
     challengeSaga(),
     countdownSaga(),
+    leaderboardSaga(),
     addFeedbackSaga(),
     addPreferencesSaga(),
     // watchIncrementAsync()

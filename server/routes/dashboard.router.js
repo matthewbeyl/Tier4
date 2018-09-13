@@ -30,10 +30,7 @@ router.post('/feedback', rejectUnauthenticated, (req, res) => {
 });
 
 router.get('/stats', rejectUnauthenticated, (req, res) => {
-    console.log('__________________________');
     console.log(req.user.id);
-    console.log('__________________________');
-
     
     pool.query(`SELECT "longest_streak", "commit_percentage" FROM "user_challenge"
     JOIN "challenges" ON "user_challenge"."challenge_id" = "challenges"."id"

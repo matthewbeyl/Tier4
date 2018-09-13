@@ -58,6 +58,32 @@ function* fetchUserDataCurrentChallenge() {
     }
 }
 
+function* checkForUpcomingChallenge() {
+    try {
+        const upcomingChallenge = yield call(axios.get, '/api/challenge/futureChallenge');
+        // console.log(currentChallenge);
+        yield dispatch({
+            type: CHALLENGE_ACTIONS.SET_UPCOMING_CHALLENGE,
+            payload: upcomingChallenge.data
+        })
+    } catch (error) {
+        console.log('error checking for future challenge', error);
+    }
+}
+
+function* checkUserInUpcomingChallenge() {
+    try {
+        const userInUpcomingChallenge = yield call(axios.get, '/api/challenge/futureChallenge/joined');
+        // console.log(currentChallenge);
+        yield dispatch({
+            type: CHALLENGE_ACTIONS.SET_USER_IN_UPCOMING_CHALLENGE,
+            payload: userInUpcomingChallenge.data
+        })
+    } catch (error) {
+        console.log('error checking for future challenge', error);
+    }
+}
+
 function* createNewChallenge(action) {
     try {
         yield call(axios.post, `/api/challenge/newChallenge`, action.payload)
@@ -69,6 +95,8 @@ function* createNewChallenge(action) {
 function* challengeSaga() {
     yield takeLatest(CHALLENGE_ACTIONS.FETCH_USER_DATA_CURRENT_CHALLENGE, fetchUserDataCurrentChallenge);
     yield takeLatest(CHALLENGE_ACTIONS.CREATE_NEW_CHALLENGE, createNewChallenge);
+    yield takeLatest(CHALLENGE_ACTIONS.CHECK_FOR_UPCOMING_CHALLENGE, checkForUpcomingChallenge);
+    yield takeLatest(CHALLENGE_ACTIONS.CHECK_USER_IN_UPCOMING_CHALLENGE, checkUserInUpcomingChallenge);
     yield takeLatest(CHALLENGE_ACTIONS.FETCH_ACTIVE_CHALLENGE, fetchActiveChallenge);
     yield takeLatest(CHALLENGE_ACTIONS.DELETE_ACTIVE_CHALLENGE, deleteActiveChallenge);
     yield takeLatest(CHALLENGE_ACTIONS.DELETE_USER_FROM_CURRENT_CHALLENGE, deleteUserFromCurrentChallenge);

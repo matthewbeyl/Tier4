@@ -3,8 +3,9 @@ import { connect } from 'react-redux';
 import { addFeedback, addPreferences, fetchStats } from '../../redux/actions/dashboardActions';
 import { USER_ACTIONS } from '../../redux/actions/userActions';
 import NavBar from '../NavBar/NavBar';
+import JoinChallengeButton from '../JoinChallengeButton/JoinChallengeButton'
 
-import { Paper, Button, TextField, Checkbox, Typography } from '@material-ui/core';
+import { Paper, Button, TextField, Checkbox, Typography, Grid } from '@material-ui/core';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import { withStyles } from '@material-ui/core/styles';
 
@@ -18,12 +19,14 @@ const styles = {
         padding: 20,
         marginTop: 10,
         marginBottom: 10,
-        height: 200,
+        height: 500,
+        display: "center",
     }
 }
 
 const mapStateToProps = state => ({
     user: state.user.user,
+    isLoading: state.user.isLoading,
     commitRate: state.userStats.commit_percentage,
     longestStreak: state.userStats.longest_streak,
 });
@@ -44,24 +47,27 @@ class DashboardView extends Component {
             daily_email_reminders: false,
             email: '',
             prefopen: false,
-            sumopen: false,
-            };
+        };
     };
 
     openPreferences = () => {
-        this.setState({ prefopen: true });
+        console.log('State before', this.state);
+        console.log('props.user before', this.props.user);
+
+        this.setState({
+            queued_for_next_challenge: this.props.user.queued_for_next_challenge,
+            weekly_email_reminders: this.props.user.weekly_email_reminders,
+            daily_email_reminders: this.props.user.daily_email_reminders,
+            email: this.props.user.email
+        });
+        console.log('State after', this.state);
+        this.setState({
+            prefopen: true
+        });
     };
 
     closePreferences = () => {
         this.setState({ prefopen: false });
-    };
-
-    openSummary = () => {
-        this.setState({ sumopen: true });
-    };
-
-    closeSummary = () => {
-        this.setState({ sumopen: false });
     };
 
     componentDidMount() {
@@ -69,13 +75,14 @@ class DashboardView extends Component {
         if (!this.props.user && this.props.user === null) {
             this.props.history.push('home');
         }
-            this.props.dispatch(fetchStats()); 
+        this.props.dispatch(fetchStats());
     }
 
     componentDidUpdate() {
-        if (!this.props.user && this.props.user === null) {
+        if (!this.props.isLoading && this.props.user === null) {
             this.props.history.push('home');
         }
+
     }
 
     submitFeedback = (event) => {
@@ -112,6 +119,8 @@ class DashboardView extends Component {
                 [property]: false
             })
         }
+        console.log(this.state);
+
     }
 
     handleEmailInput = (property) => (event) => {
@@ -127,21 +136,26 @@ class DashboardView extends Component {
     }
 
     render() {
-        let { classes } = this.props        
+        let { classes } = this.props
 
         return (
-            
             <main>
                 <NavBar />
-                <Paper className={classes.paper}>
-                <Typography variant="display3">{this.props.commitRate}% Commit Rate</Typography>
-                <Typography variant="display3">Longest Streak - {this.props.longestStreak}</Typography>
-                
-                    <br />
-                    <Button onClick={this.openPreferences} variant="outlined" color="primary" size="small">E-mail Preferences</Button>
-                    <Button onClick={this.openSummary} variant="outlined" color="primary" size="small">Weekly Summary</Button>
-                </Paper>
-                <div>
+                <br />
+                <JoinChallengeButton />
+                <br />
+                <Grid container>
+                    <Grid item sm>
+                        <Paper className={classes.paper}>
+                            <img src={this.props.user.image_url} alt="" height="200px" width="auto"/>
+                            <Typography variant="display3">{this.props.commitRate}% Commit Rate</Typography>
+                            <Typography variant="display3">Longest Streak: {this.props.longestStreak}</Typography>
+                            {/* <Typography variant="display3">{this.props.longestStreak} Day Streak</Typography> */}
+
+                            <br />
+                            <Button onClick={this.openPreferences} variant="outlined" color="primary" size="small">E-mail Preferences</Button>
+                        </Paper>
+                    </Grid>
                     <Dialog
                         open={this.state.prefopen}
                         onClose={this.closePreferences}
@@ -156,7 +170,6 @@ class DashboardView extends Component {
                                         <Checkbox
                                             checked={this.state.queued_for_next_challenge}
                                             onChange={this.handleCheckboxBoolean('queued_for_next_challenge')}
-                                            value="challenge"
                                             color="primary"
                                         />
                                     }
@@ -168,7 +181,6 @@ class DashboardView extends Component {
                                         <Checkbox
                                             checked={this.state.daily_email_reminders}
                                             onChange={this.handleCheckboxBoolean('daily_email_reminders')}
-                                            value="commit"
                                             color="primary"
                                         />
                                     }
@@ -180,7 +192,6 @@ class DashboardView extends Component {
                                         <Checkbox
                                             checked={this.state.weekly_email_reminders}
                                             onChange={this.handleCheckboxBoolean('weekly_email_reminders')}
-                                            value="feedback"
                                             color="primary"
                                         />
                                     }
@@ -206,17 +217,10 @@ class DashboardView extends Component {
                             </DialogActions>
                         </form>
                     </Dialog>
-                </div>
-                <div>
-                    <Dialog
-                        open={this.state.sumopen}
-                        onClose={this.closeSummary}
-                        aria-labelledby="Summary Dialog"
-                    >
-                        <DialogTitle id="Summary Dialog">Weekly Summary</DialogTitle>
-                        <form onSubmit={this.submitFeedback}>
-                            <DialogContent>
-                                <Typography>Tell us about your week</Typography>
+                    <Grid item sm>
+                        <Paper className={classes.paper}>
+                            <form onSubmit={this.submitFeedback}>
+                                <Typography variant="title">Tell us about your week</Typography>
                                 <TextField
                                     id="learned"
                                     label="What did you learn?"
@@ -252,7 +256,6 @@ class DashboardView extends Component {
                                     fullWidth
                                     margin="normal"
                                 />
-                                <br />
                                 <TextField
                                     id="events_networking"
                                     label="What kind of events/networking did you do?"
@@ -261,19 +264,13 @@ class DashboardView extends Component {
                                     fullWidth
                                     margin="normal"
                                 />
-                                <br />
-                            </DialogContent>
-                            <DialogActions>
-                                <Button onClick={this.closeSummary} color="primary">
-                                    Cancel
-                                </Button>
-                                <Button type="submit" color="primary">
+                                <Button variant="outlined" type="submit" color="primary">
                                     Send
                                 </Button>
-                            </DialogActions>
-                        </form>
-                    </Dialog>
-                </div>
+                            </form>
+                        </Paper>
+                    </Grid>
+                </Grid>
             </main>
         )
     }

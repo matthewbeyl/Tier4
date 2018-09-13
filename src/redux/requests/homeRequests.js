@@ -8,6 +8,9 @@ export function getChallengeDate() {
     .catch((error) => { throw error; });
 }
 
-// export function getLeaders() {
-//     return axios.get('/api/')
-// }
+export function getLeaders() {
+    return axios.get('/api/leaderboard')
+    .then(response => {
+        console.log(response.data);
+        return response.data});
+};
