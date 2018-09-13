@@ -151,15 +151,10 @@ class DashboardView extends Component {
             <main>
                 <NavBar />
                 <JoinChallengeButton />
-                <br/>
-                <Button onClick={this.openPreferences} variant="outlined" color="primary">E-mail Preferences</Button>
-                <Button onClick={this.openSummary} variant="outlined" color="primary">Weekly Summary</Button>
-
                 <div>                   
                     <Paper className={classes.paper}>
                     <Typography variant="display3">{this.props.commitRate}% Commit Rate</Typography>
                     <Typography variant="display3">Longest Streak - {this.props.longestStreak}</Typography>
-                    
                         <br />
                         <Button onClick={this.openPreferences} variant="outlined" color="primary" size="small">E-mail Preferences</Button>
                         <Button onClick={this.openSummary} variant="outlined" color="primary" size="small">Weekly Summary</Button>

@@ -44,6 +44,7 @@ class Countdown extends Component {
         } else {
             content = (
                 <div>
+                    <p></p>
                     <div>
                         {this.displayDigits(this.state.days)} Days
                     </div>

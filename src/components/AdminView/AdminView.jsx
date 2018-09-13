@@ -85,7 +85,7 @@ class AdminView extends Component {
                         label="Past Challenges"
                         onClick={this.displayPastChallenges} />
                 </Tabs>
-                <p>Welcome, {this.props.user.name}</p>
+                {/* <p>Welcome, {this.props.user.name}</p> */}
                 {displayPastChallenges && <PastChallenges />}
                 {displayCurrentChallenge && <CurrentChallenge />}
             </div>
