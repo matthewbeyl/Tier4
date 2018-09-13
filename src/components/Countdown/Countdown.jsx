@@ -8,24 +8,22 @@ class Countdown extends Component {
         seconds: 0,
     };
 
-    componentWillMount() {
+    componentWillMount = () => {
         this.getTimeUntil(this.props.deadline);
     }
 
-    componentDidMount() {
-        setInterval(() => this.getTimeUntil(this.props.deadline),
-            1000);
+    componentDidMount = () => {
+        setInterval(() => this.getTimeUntil(this.props.deadline), 1000);
     }
 
-    leading0(num) {
-        return num < 10 ? '0' + num : num;
+    displayDigits = (number) => {
+        return number < 10 ? '0' + number : number;
     }
 
-    getTimeUntil(deadline) {
+    getTimeUntil = (deadline) => {
         const time = Date.parse(deadline) - Date.parse(new Date());
         if (time < 0) {
             this.setState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
-
         } else {
             const seconds = Math.floor((time / 1000) % 60);
             const minutes = Math.floor((time / 1000 / 60) % 60);
@@ -34,23 +32,23 @@ class Countdown extends Component {
             this.setState({ days, hours, minutes, seconds });
         }
     }
-    
+
     render() {
         return (
-            <main>
-                <div className="Clock-days">
-                    {this.leading0(this.state.days)} Days
-                    </div>
-                <div className="Clock-hours">
-                    {this.leading0(this.state.hours)} Hours
-                    </div>
-                <div className="Clock-minutes">
-                    {this.leading0(this.state.minutes)} Minutes
-                    </div>
-                <div className="Clock-seconds">
-                    {this.leading0(this.state.seconds)} Seconds
-                    </div>
-            </main >
+            <div>
+                <div>
+                    {this.displayDigits(this.state.days)} Days
+                </div>
+                <div>
+                    {this.displayDigits(this.state.hours)} Hours
+                </div>
+                <div>
+                    {this.displayDigits(this.state.minutes)} Minutes
+                </div>
+                <div>
+                    {this.displayDigits(this.state.seconds)} Seconds
+                </div>
+            </div>
         )
     }
 }
