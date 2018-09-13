@@ -8,6 +8,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import TablePagination from '@material-ui/core/TablePagination';
+import PastChallengesTable from '../PastChallengesTable/PastChallengesTable';
 
 const mapStateToProps = state => ({
     activeChallenges: state.challenge.past
@@ -53,7 +54,7 @@ class PastChallenges extends Component {
 
         return (
             <div>
-                <p>Past Challenges</p>
+                {/* <p>Past Challenges</p>
                 <Table>
                     <TableHead>
                         <TableRow>
@@ -74,7 +75,9 @@ class PastChallenges extends Component {
                     page={page}
                     onChangePage={this.handleChangePage}
                     onChangeRowsPerPage={this.handleChangeRowsPerPage}
-                />
+                /> */}
+                <br/><br /><br/><br />
+                <PastChallengesTable />
             </div>
         )
     }
