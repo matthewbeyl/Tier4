@@ -40,7 +40,8 @@
     "redux-saga": "^0.16.0",
     "request": "^2.88.0",
     "request-promise": "^4.2.2",
-    "twilio": "^3.19.2"
+    "twilio": "^3.19.2",
+    "universal-cookie": "^3.0.4"
   },
   "scripts": {
     "start": "node server/server.js",
