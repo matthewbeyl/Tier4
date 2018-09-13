@@ -13,6 +13,7 @@ const userRouter = require('./routes/user.router');
 const challengeRouter = require('./routes/challenge.router');
 const authRouter = require('./routes/auth.router.js');
 const dashboardRouter = require('./routes/dashboard.router');
+const scheduler = require('./routes/scheduler.router')
 const GHAPIRouter = require('./routes/gh-api.router');
 const leaderboardRouter = require('./routes/leaderboard.router');
 //const rossRouter = require('./routes/ross.router')
@@ -33,8 +34,9 @@ app.use('/api/user', userRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/challenge', challengeRouter);
 app.use('/api/dashboard', dashboardRouter);
+app.use(GHAPIRouter);
+app.use(scheduler);
 app.use('/api/leaderboard', leaderboardRouter);
-// app.use('/api/gh-router', GHAPIRouter)
 
 // Serve static files
 app.use(express.static('build'));

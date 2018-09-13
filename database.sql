@@ -24,6 +24,7 @@ CREATE TABLE "challenges" (
 	"date" DATE NOT NULL UNIQUE,
 	"exclude_weekends" BOOLEAN NOT NULL DEFAULT 'false',
 	"exclude_holidays" BOOLEAN NOT NULL DEFAULT 'false',
+	"active" BOOLEAN NOT NULL DEFAULT 'false',
 	CONSTRAINT challenges_pk PRIMARY KEY ("id")
 ) WITH (
   OIDS=FALSE
@@ -37,6 +38,7 @@ CREATE TABLE "user_challenge" (
 	"challenge_id" int NOT NULL,
 	"longest_streak" int NOT NULL,
 	"commit_percentage" int NOT NULL,
+	"calendar" boolean[] NOT NULL DEFAULT '{f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f}'::boolean[],
 	CONSTRAINT user_challenge_pk PRIMARY KEY ("id")
 ) WITH (
   OIDS=FALSE
