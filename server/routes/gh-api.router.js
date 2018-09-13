@@ -26,10 +26,10 @@ date = JSON.stringify(date)
 todaysDate = date.substring(1, 11)
 //calculate todays date so that we only get todays commits in getData()
 
-cron.schedule('*/600 * * * * *', function () {
-    console.log('running once every 10 min');
-    getData();
-});
+// cron.schedule('*/600 * * * * *', function () {
+//     console.log('running once every 10 min');
+//     getData();
+// });
 //run getData() once every 20 seconds, will be changed to once a day at midnight.
 //getData();
 
