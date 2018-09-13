@@ -13,12 +13,14 @@ const AdminLink = props => <Link to="/admin" {...props} />
 
 const styles = theme => ({
   toolBar: {
-    background: theme.palette.primary.main,
+    // background: theme.palette.primary.main,
+    background: '#222222'
   },
 });
 
 
 class NavBar extends Component {
+  
 
   componentWillMount() {
     this.props.dispatch({
@@ -34,13 +36,13 @@ class NavBar extends Component {
     try { 
       if(this.props.user.github){
         return(
-          <Button onClick={this.logout}>Log out</Button>
+          <Button color="secondary" onClick={this.logout}>Log out</Button>
         )
       } else {
-        return (<Button href="http://localhost:5000/api/auth/login">Log In</Button>);
+        return (<Button color="secondary" href="http://localhost:5000/api/auth/login">Log In</Button>);
       } 
     } catch (error) {
-      return (<Button href="http://localhost:5000/api/auth/login">Log In</Button>);
+      return (<Button color="secondary" href="http://localhost:5000/api/auth/login">Log In</Button>);
     }
   }
 
@@ -48,11 +50,12 @@ class NavBar extends Component {
     try {
       if (this.props.user.admin) {
         return (
-          <Button component={AdminLink}>
+          <Button color="secondary" component={AdminLink}>
             Admin
           </Button>
         )
-      } else {
+      } 
+      else {
         return null;
       }
     } catch (error) {
@@ -64,7 +67,7 @@ class NavBar extends Component {
     try {
       if (this.props.user.github && !this.props.user.admin) {
         return (
-          <Button component={DashLink}>
+          <Button color="secondary" component={DashLink}>
             Dashboard
          </Button>
         )
@@ -76,22 +79,22 @@ class NavBar extends Component {
     }
   }
 
-  render() {
+  render() {    
 
     let { classes } = this.props
 
     return (
       <div className={classes.root}>
       <Toolbar className={classes.toolBar}>
-      {/* //  style={{backgroundColor: '#00abaf'}}> */}
-        <Typography variant="display2" color="inherit">
-           Tier Four
-         </Typography>
-        <Button component={HomeLink} color="inherit">
+        <img src="https://dewiskbohv5c1.cloudfront.net/assets/logo-prime-horizontal-6909d23113b83bd59bf681f26f940f97.svg" alt=""/>
+        <Button component={HomeLink} color="secondary">
           Home
         </Button>
         {this.dashboardNav()}
         {this.adminNav()}
+        <Typography variant="display2" color="secondary">
+           Tier Four
+         </Typography>
         {this.logInLogOut()}
       </Toolbar>
       </div>

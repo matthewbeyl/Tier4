@@ -4,10 +4,7 @@ const { rejectUnauthenticated } = require('../modules/authentication-middleware'
 const { rejectNonAdmin } = require('../modules/admin-authentication');
 const router = express.Router();
 
-router.get('/fetch-past', rejectUnauthenticated, (req,res) => {
-    console.log('/api/challenge/fetch-pst');
-    if(req.user.admin){
-        
+router.get('/fetch-past', rejectUnauthenticated, rejectNonAdmin, (req,res) => {
         const queryText = `SELECT users.name, 
                                 challenges.title, 
                                 user_challenge.commit_percentage, 
@@ -20,44 +17,30 @@ router.get('/fetch-past', rejectUnauthenticated, (req,res) => {
         }).catch((error)=>{
             console.log('error fetching past challenges: ', error);
         })
-    } else {
-        res.sendStatus(403);
-    }
 });
 
-router.delete('/delete-user-from-current-challenge/:id/:challengeId', rejectUnauthenticated, (req,res) => {
-    console.log('/api/challenge/delete-user-from-current-challenge');
-    if(req.user.admin) {
-        console.log('the id of the user to be deleted is: ',req.params.id);
-        console.log('the challege id the user is to be deleted from is: ', req.params.challengeId);
+router.delete('/delete-user-from-current-challenge/:id/:challengeId', rejectUnauthenticated, rejectNonAdmin, (req,res) => {
         const queryText = `DELETE FROM user_challenge
-        WHERE user_challenge.user_id = ${req.params.id} AND user_challenge.challenge_id = ${req.params.challengeId};`;
+            WHERE user_challenge.user_id = ${req.params.id} 
+            AND user_challenge.challenge_id = ${req.params.challengeId};`;
         pool.query(queryText).then(() => {
             res.sendStatus(201);
         }).catch((error) => {
             console.log('error deleting user from current challenge: ', error);
             res.sendStatus(500);
         })
-    } else {
-        res.sendStatus(403);
-    }
 });
 
-router.get('/fetch-active', rejectUnauthenticated, (req,res) => {
-    if(req.user.admin) {
+router.get('/fetch-active', rejectUnauthenticated, rejectNonAdmin, (req,res) => {
         const queryText = `SELECT * FROM challenges WHERE active = true;`;
         pool.query(queryText).then((result) => {
             res.send(result.rows);
         }).catch((error) => {
             console.log('error fetching active challenge status: ', error)
         })
-    } else {
-        res.sendStatus(403);
-    }
 });
 
-router.delete('/delete-active', rejectUnauthenticated, (req,res) => {
-    if(req.user.admin) {
+router.delete('/delete-active', rejectUnauthenticated, rejectNonAdmin, (req,res) => {
         const queryText = `DELETE FROM challenges WHERE active = true;`;
         pool.query(queryText).then(() => {
             res.sendStatus(201);
@@ -65,13 +48,9 @@ router.delete('/delete-active', rejectUnauthenticated, (req,res) => {
             console.log('error deleting active challenge status: ', error);
             res.sendStatus(500);
         })
-    } else {
-        res.sendStatus(403);
-    }
 });
 
-router.get('/user-data-current-challenge', rejectUnauthenticated, (req, res) => {
-    if (req.user.admin) {
+router.get('/user-data-current-challenge', rejectUnauthenticated, rejectNonAdmin, (req, res) => {
         const queryText = `SELECT 
                                 users.id, 
                                 users.name, 
@@ -89,13 +68,9 @@ router.get('/user-data-current-challenge', rejectUnauthenticated, (req, res) => 
         }).catch((error) => {
             console.log('error fetching current: ', error)
         })
-    } else {
-        res.sendStatus(403);
-    }
 });
 
 router.post('/newChallenge', rejectUnauthenticated, rejectNonAdmin, (req, res) => {
-    if (req.user.admin) {
         let newChallenge = req.body;
         const queryText = `INSERT INTO challenges ("title", "date", "exclude_weekends", "exclude_holidays") 
         VALUES ($1, $2, $3, $4);`;
@@ -112,15 +87,13 @@ router.post('/newChallenge', rejectUnauthenticated, rejectNonAdmin, (req, res) =
                 console.log('error creating new challenge: ', error);
                 res.sendStatus(500);
             })
-    } else {
-        res.sendStatus(403);
-    }
 });
 
 router.get('/date', (req, res) => {
-    pool.query(`SELECT "date" FROM "challenges"
-        ORDER BY "date" DESC
-        LIMIT 1;`)
+    pool.query(`SELECT * FROM "challenges"
+    WHERE challenges.date > current_date
+    ORDER BY "date" DESC
+    LIMIT 1;`)
     .then((result) => {
         res.send(result.rows[0]);
     }).catch((error) => {
@@ -183,6 +156,5 @@ router.post('/join', rejectUnauthenticated, (req, res) => {
 })
 
 // END - Join Challenge Button
-
 
 module.exports = router;

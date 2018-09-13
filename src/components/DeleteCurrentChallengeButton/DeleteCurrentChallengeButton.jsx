@@ -2,17 +2,26 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Button from '@material-ui/core/Button';
 import { CHALLENGE_ACTIONS } from '../../redux/actions/challengeActions';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 class DeleteCurrentChallengeButton extends Component {
     handleDelete = () => {
-        console.log('delete clicked');
-        this.props.dispatch({ type: CHALLENGE_ACTIONS.DELETE_ACTIVE_CHALLENGE });
+        this.props.dispatch({ 
+            type: CHALLENGE_ACTIONS.DELETE_ACTIVE_CHALLENGE 
+        });
     }
     
     render(){
         return(
             <div>
-                <Button onClick={this.handleDelete}>Delete Current Challenge</Button>
+                <Button 
+                    variant="outlined"
+                    color="primary"
+                    onClick={this.handleDelete}>
+                    <DeleteIcon />
+                    <div style={{paddingLeft:"10px"}}>
+                    Delete Current Challenge</div>
+                </Button>
             </div>
         )
     }

@@ -20,9 +20,14 @@ import './styles/main.css';
 const theme = createMuiTheme({
   palette: {
     primary: {
-      light: '#5adde1',
-      main: '#00abaf',
-      dark: '#007b80',
+      light: '#5adccf',
+      main: '#07AA9E',
+      dark: '#007a70',
+    },
+    secondary: {
+      light: '#ffffff',
+      main: '#ffffff',
+      dark: '#cccccc',
     }
   }
 });
