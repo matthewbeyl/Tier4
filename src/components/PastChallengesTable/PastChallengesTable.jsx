@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -9,26 +8,12 @@ import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import Paper from '@material-ui/core/Paper';
-import Checkbox from '@material-ui/core/Checkbox';
-import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
-import DeleteIcon from '@material-ui/icons/Delete';
-import FilterListIcon from '@material-ui/icons/FilterList';
-import { lighten } from '@material-ui/core/styles/colorManipulator';
 import { connect } from 'react-redux';
 
 const mapStateToProps = state => ({
     activeChallenges: state.challenge.past
 });
-
-// let counter = 0;
-// function createData(name, title, commit_percentage, longest_streak) {
-//   counter += 1;
-//   return { id: counter, name, title, commit_percentage, longest_streak) };
-// }
 
 function desc(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -161,8 +146,6 @@ class PastChallengesTable extends Component {
         this.setState({ rowsPerPage: event.target.value });
     };
 
-    isSelected = id => this.state.selected.indexOf(id) !== -1;
-
     render() {
         let apiChallengeResults = this.props.activeChallenges.map((user, index) => {
             return (
@@ -197,29 +180,22 @@ class PastChallengesTable extends Component {
                             {stableSort(this.props.activeChallenges, getSorting(order, orderBy))
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 .map(n => {
-                                    const isSelected = this.isSelected(n.id);
                                     return (
                                         <TableRow
                                             hover
                                             onClick={event => this.handleClick(event, n.id)}
-                                            role="checkbox"
-                                            aria-checked={isSelected}
-                                            tabIndex={-1}
                                             key={n.id}
-                                            selected={isSelected}
                                         >
-                                            <TableCell component="th" scope="row" padding="none">
-                                                {n.name}
-                                            </TableCell>
-                                            <TableCell numeric>{n.title}</TableCell>
+                                            <TableCell>{n.name}</TableCell>
+                                            <TableCell >{n.title}</TableCell>
                                             <TableCell numeric>{n.commit_percentage}</TableCell>
                                             <TableCell numeric>{n.longest_streak}</TableCell>
                                         </TableRow>
                                     );
                                 })}
                             {emptyRows > 0 && (
-                                <TableRow style={{ height: 49 * emptyRows }}>
-                                    <TableCell colSpan={6} />
+                                <TableRow >
+                                    <TableCell/>
                                 </TableRow>
                             )}
                         </TableBody>
@@ -230,14 +206,9 @@ class PastChallengesTable extends Component {
                     count={this.props.activeChallenges.length}
                     rowsPerPage={rowsPerPage}
                     page={page}
-                    backIconButtonProps={{
-                        'aria-label': 'Previous Page',
-                    }}
-                    nextIconButtonProps={{
-                        'aria-label': 'Next Page',
-                    }}
                     onChangePage={this.handleChangePage}
                     onChangeRowsPerPage={this.handleChangeRowsPerPage}
+                    // rowsPerPageOptions={['5','7','9']}
                 />
             </div>
         );
