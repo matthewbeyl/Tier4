@@ -80,7 +80,9 @@ class CurrentChallenge extends Component {
         } else {
             display = (
             <div>
+                <p>There is not a current challenge.</p>
                 <Button
+                    variant="outlined" color="primary"
                     onClick={this.openNewChallengeDialog}
                 >Create New Challenge</Button>
                 <Dialog open={this.state.open} onClose={this.handleClose}>

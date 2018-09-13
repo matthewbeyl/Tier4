@@ -7,36 +7,54 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import TablePagination from '@material-ui/core/TablePagination';
+import PastChallengesTable from '../PastChallengesTable/PastChallengesTable';
 
 const mapStateToProps = state => ({
-    activeChallenges : state.challenge.past
+    activeChallenges: state.challenge.past
 });
 
 class PastChallenges extends Component {
-
+    constructor(props) {
+        super(props);
+        this.state = {
+            rowsPerPage: 5,
+            page: 0,
+        }
+    }
     componentWillMount() {
-        this.props.dispatch({ type: CHALLENGE_ACTIONS.FETCH_PAST_CHALLENGES});
+        this.props.dispatch({ type: CHALLENGE_ACTIONS.FETCH_PAST_CHALLENGES });
         this.props.dispatch({
             type: USER_ACTIONS.FETCH_USER
         })
     }
 
-    render() {
+    handleChangePage = (event, page) => {
+        this.setState({ page });
+    }
 
+    handleChangeRowsPerPage = (event) => {
+        this.setState({ rowsPerPage: event.target.value });
+    }
+
+    render() {
         let apiChallengeResults = this.props.activeChallenges.map((user, index) => {
             return (
-                <TableRow key={index}>
+                <TableRow hover
+                    key={index}>
                     <TableCell>{user.name}</TableCell>
                     <TableCell>{user.title}</TableCell>
-                    <TableCell>{user.commit_percentage}</TableCell>
-                    <TableCell>{user.longest_streak}</TableCell>
+                    <TableCell numeric>{user.commit_percentage}</TableCell>
+                    <TableCell numeric>{user.longest_streak}</TableCell>
                 </TableRow>
             )
         });
 
+        const { rowsPerPage, page } = this.state;
+
         return (
             <div>
-                <p>Past Challenges</p>
+                {/* <p>Past Challenges</p>
                 <Table>
                     <TableHead>
                         <TableRow>
@@ -50,9 +68,20 @@ class PastChallenges extends Component {
                         {apiChallengeResults}
                     </TableBody>
                 </Table>
+                <TablePagination
+                    component="div"
+                    count={apiChallengeResults.length}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    onChangePage={this.handleChangePage}
+                    onChangeRowsPerPage={this.handleChangeRowsPerPage}
+                /> */}
+                <br/><br /><br/><br />
+                <PastChallengesTable />
             </div>
         )
     }
 }
+
 
 export default connect(mapStateToProps)(PastChallenges);
