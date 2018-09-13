@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-
+import Card from '@material-ui/core/Card';
 class CreateNewChallengeForm extends Component {
     constructor(props) {
         super(props);

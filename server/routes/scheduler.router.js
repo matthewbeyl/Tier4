@@ -37,108 +37,128 @@ function dailyEmail() {   //fix this its completely broken
     pool.query(`SELECT "github", "email" FROM "users" WHERE "daily_email_reminders" = true;`) //retrieve a list of users who have subscribed to the daily reminder email.
         .then((response) => {
 
-            let tempMailList = [];
-            response.rows.forEach(user => {
-                tempMailList.push(user.email)
-            }) //generate a temporary mailing list which we will trim in just a second.
 
             let userList = response.rows //create a userList which will be used to search the github api to see if the user has committed today.
 
             // let currentDate = new Date();
             // currentDate = JSON.stringify(currentDate)
             // currentDate = currentDate.substring(1, 11) //grabs a string of todays date to be used when searching the api.
-
-            const requestPromises = [] //creates an array of requests we are going to send to the api.
-            userList.forEach(user => {
-                const requestOptions = {
-                    uri: `https://api.github.com/search/commits?q=committer:${user.github}+committer-date:${currentDate}&sort=committer-date&per_page=1`,
-                    headers: { "User-Agent": 'reverended', Accept: 'application/vnd.github.cloak-preview+json', Authorization: 'token  23982af669baa75e29e52bbd5a45594c65b7f7b2' },
-                    method: 'GET',
-                    json: true
-                } 
-                requestPromises.push(rp(requestOptions)); //push each request to the array
-            })
-            Promise.all(requestPromises) //promise and wait for each request to complete
-                .then((data) => {
-
-                    console.log(data);
-                    console.log(tempMailList);
-                    let mailList = []; //create our finalized mailList
-
-                    for (let i = 0; i < data.length; i++) {
-                        if (data[i].total_count === 0) {
-                            mailList.push(tempMailList[i])
-                        } //if the user in the tempMailList has no commit for the day, push them to the mailList, 
-
+            let tempUserList = response.rows
+            //sets the userlist to the data we just got back.
+            //reg for loop for batching
+            let batchedUserList = [];
+            let thisBatch = [];
+            let counter = 0;
+            for (let i = 0; i < tempUserList.length; i++) {
+                if (counter < 15) {
+                    thisBatch.push(tempUserList[i])
+                    counter++;
+                    if (i === tempUserList.length) {
+                        counter = 0;
+                        batchedUserList.push(thisBatch);
+                        thisBatch = [];
                     }
+                }
+                else if (counter >= 15) {
+                    counter = 0;
+                    batchedUserList.push(thisBatch)
+                    thisBatch = [];
+                }
+            }
 
-                    console.log(mailList);
+            batchedUserList.forEach(batch => {
 
-
-                    //adjust email content
-
-
-                    const output = `<p>daily email...... ${JSON.stringify(userList)}</p>`;
-
-                    // setup email data with unicode symbols
-                    let mailOptions = {
-                        from: 'God', // sender address
-                        to: mailList, // list of receivers
-                        subject: 'Hi Im God', // Subject line
-                        text: 'Happy Birthday.....', // plain text body
-                        html: output // html body
-                    }; //send email to all those on the mailList
-
-                    // send mail with defined transport object
-                    transporter.sendMail(mailOptions, (error, info) => {
-                        if (error) {
-                            return console.log(error);
-                        }
-                        console.log('Message sent: %s', info.messageId);
-                        console.log('info rawL ', info);
-                        console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
-                        console.log('email has been sent');
-                    });
+                const requestPromises = [] //creates an array of requests we are going to send to the api.
+                batch.forEach(user => {
+                    const requestOptions = {
+                        uri: `https://api.github.com/search/commits?q=committer:${user.github}+committer-date:${currentDate}&sort=committer-date&per_page=1`,
+                        headers: { "User-Agent": 'reverended', Accept: 'application/vnd.github.cloak-preview+json', Authorization: 'token  23982af669baa75e29e52bbd5a45594c65b7f7b2' },
+                        method: 'GET',
+                        json: true
+                    }
+                    requestPromises.push(rp(requestOptions)); //push each request to the array
                 })
-        })
-}
+                Promise.all(requestPromises) //promise and wait for each request to complete
+                    .then((data) => {
+
+                        console.log(data);
+                        
+                        let mailList = []; //create our finalized mailList
+
+                        for (let i = 0; i < data.length; i++) {
+                            if (data[i].total_count === 0) {
+                                mailList.push(batch[i].email)
+                            } //if the user in the tempMailList has no commit for the day, push them to the mailList, 
+                        }
+
+                        console.log(mailList);
+
+
+                        //adjust email content
+
+
+                        const output = `<p>daily email...... ${JSON.stringify(userList)}</p>`;
+
+                        // setup email data with unicode symbols
+                        let mailOptions = {
+                            from: 'God', // sender address
+                            to: mailList, // list of receivers
+                            subject: 'Hi Im God', // Subject line
+                            text: 'Happy Birthday.....', // plain text body
+                            html: output // html body
+                        }; //send email to all those on the mailList
+
+                        // send mail with defined transport object
+                        transporter.sendMail(mailOptions, (error, info) => {
+                            if (error) {
+                                return console.log(error);
+                            }
+                            console.log('Message sent: %s', info.messageId);
+                            console.log('info rawL ', info);
+                            console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+                            console.log('email has been sent');
+                        });
+                    })
+                })    
+            })
+        }
 
 function weeklyEmail() { //send weekly feedback email
-    console.log('getting email stuff');
-    pool.query(`SELECT "github", "email" FROM "users" WHERE "weekly_email_reminders" = true;`) //grab all users who are subscribed to the weekly feedback email.
-        .then((response) => {
+                console.log('getting email stuff');
+                pool.query(`SELECT "github", "email" FROM "users" WHERE "weekly_email_reminders" = true;`) //grab all users who are subscribed to the weekly feedback email.
+                    .then((response) => {
 
-            let mailList = [];
-            response.rows.forEach(user => {
-                mailList.push(user.email)
-            }) //send them to the mailList array
+                        let mailList = [];
+                        response.rows.forEach(user => {
+                            mailList.push(user.email)
+                        }) //send them to the mailList array
 
-            //adjust email content
+                        //adjust email content
 
 
-            const output = `<p>weekly email...... ${JSON.stringify(mailList)}</p>`;
+                        const output = `<p>weekly email...... ${JSON.stringify(mailList)}</p>`;
 
-            // setup email data with unicode symbols
-            let mailOptions = {
-                from: 'God', // sender address
-                to: mailList, // list of receivers
-                subject: 'Hi Im God', // Subject line
-                text: 'Happy Birthday.....', // plain text body
-                html: output // html body
-            }; //send email to all those on the mailList
+                        // setup email data with unicode symbols
+                        let mailOptions = {
+                            from: 'God', // sender address
+                            to: mailList, // list of receivers
+                            subject: 'Hi Im God', // Subject line
+                            text: 'Happy Birthday.....', // plain text body
+                            html: output // html body
+                        }; //send email to all those on the mailList
 
-            // send mail with defined transport object
-            transporter.sendMail(mailOptions, (error, info) => {
-                if (error) {
-                    return console.log(error);
-                }
-                console.log('Message sent: %s', info.messageId);
-                console.log('info rawL ', info);
-                console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
-                console.log('email has been sent');
-            });
-        })
-}
+                        // send mail with defined transport object
+                        transporter.sendMail(mailOptions, (error, info) => {
+                            if (error) {
+                                return console.log(error);
+                            }
+                            console.log('Message sent: %s', info.messageId);
+                            console.log('info rawL ', info);
+                            console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+                            console.log('email has been sent');
+                        });
+                    })
+            }
 
 // function expireChallenge() {
 //     //checks if 30 days have passed from the last challenge. if they have, then the last challenge expires.
@@ -152,11 +172,11 @@ function weeklyEmail() { //send weekly feedback email
 //                 let timeDiff = Math.abs(date2.getTime() - date1.getTime());
 //                 let diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
 //                 challengeDate = date.substring(1, 11) //finds how many days have passed since the challenge began
-                
+
 //                 if (diffDays >= 30) {  //if 30 days or more have passed, finish the challenge and set it to inactive.
 //                     pool.query(`UPDATE "challenges" SET "active" = false WHERE "id" =  ${response.rows[0].id};`)
 //                         .then((response) => {
-                            
+
 //                             didChallengeFinishRecently = true; //set this flag to true so that we know a challenge just finished.
 //                             console.log('challenge finished!', didChallengeFinishRecently);
 //                         })
@@ -172,7 +192,7 @@ function weeklyEmail() { //send weekly feedback email
 // }
 
 // function activateChallenge() {
-    
+
 //     pool.query(`SELECT "date", "id" FROM "challenges" WHERE "active" = false AND "date" > '${currentDate}' GROUP BY "date", "id";`)
 //         .then((response) => { //grab all inactive challenges that are to start after the currentDate
 //             let date = JSON.stringify(response.rows[0].date); 
@@ -188,36 +208,36 @@ function weeklyEmail() { //send weekly feedback email
 //                     })
 //                     .catch((error)=>{
 //                         console.log(error);
-                        
+
 //                     })
 //             }
 //         })
 //         .catch((error)=>{
 //             console.log(error);
-            
+
 //         })
 // }
 
 
 //daily email function '0 18 * * * '
 cron.schedule('* 0 18 * * * ', function () {
-    //dailyEmail();
-}); //run the daily email function once a day
+                //dailyEmail();
+            }); //run the daily email function once a day
 
-cron.schedule('* * 18 * * 1 ', function () {
-    //weeklyEmail();
-}); //run the weekly email function once a week
+    cron.schedule('* * 18 * * 1 ', function () {
+        //weeklyEmail();
+    }); //run the weekly email function once a week
 
-// cron.schedule('*/20 * * * * *', function () {
-//     console.log('checking the challenge') //run the expirechallenge function once a day to check if the challenge should end 
-//     //expireChallenge(); 
-//     console.log(didChallengeFinishRecently, challengeDate);
-    
-//     if (didChallengeFinishRecently) { //if a challenge just finished, check to see if we need to activate the next challenge.
-//         console.log('challenge was recently finished');
-        
-//         //activateChallenge()
-//     }
-// });
+    // cron.schedule('*/20 * * * * *', function () {
+    //     console.log('checking the challenge') //run the expirechallenge function once a day to check if the challenge should end 
+    //     //expireChallenge(); 
+    //     console.log(didChallengeFinishRecently, challengeDate);
 
-module.exports = router;
+    //     if (didChallengeFinishRecently) { //if a challenge just finished, check to see if we need to activate the next challenge.
+    //         console.log('challenge was recently finished');
+
+    //         //activateChallenge()
+    //     }
+    // });
+
+    module.exports = router;
