@@ -94,7 +94,7 @@ router.get('/user-data-current-challenge', rejectUnauthenticated, (req, res) => 
     }
 });
 
-router.post('/newChallenge', rejectUnauthenticated, (req, res) => {
+router.post('/newChallenge', rejectUnauthenticated, rejectNonAdmin, (req, res) => {
     if (req.user.admin) {
         let newChallenge = req.body;
         const queryText = `INSERT INTO challenges ("title", "date", "exclude_weekends", "exclude_holidays") 
