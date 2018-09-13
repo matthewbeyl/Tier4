@@ -12,7 +12,6 @@ import { Typography, withStyles } from '@material-ui/core';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
-import DashboardView from '../DashboardView/DashboardView';
 
 const styles = {
     cardDiv: {
@@ -95,7 +94,6 @@ class HomeView extends Component {
                 <Countdown deadline={this.props.startDate}/>
                 <Typography variant="display1">Leaderboard</Typography>
                 <div className={classes.cardDiv}>
-                
                     {leaderCards}
                 </div>
             </main >

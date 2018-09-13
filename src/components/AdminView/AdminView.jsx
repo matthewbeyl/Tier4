@@ -22,7 +22,6 @@ class AdminView extends Component {
             displayCurrentChallenge: true,
             displayPastChallenges: false,
             value: 0,
-            name: '',
         }
     }
 
@@ -75,6 +74,7 @@ class AdminView extends Component {
         let content = (
             <div>
                 <Tabs
+                    style={{float:"right"}}
                     value={value}
                     indicatorColor="primary"
                     onChange={this.handleDisplayChange}>
@@ -86,8 +86,12 @@ class AdminView extends Component {
                         onClick={this.displayPastChallenges} />
                 </Tabs>
                 {/* <p>Welcome, {this.props.user.name}</p> */}
-                {displayPastChallenges && <PastChallenges />}
-                {displayCurrentChallenge && <CurrentChallenge />}
+                <div>
+                    {displayPastChallenges && <PastChallenges />}
+                </div>
+                <div>
+                    {displayCurrentChallenge && <CurrentChallenge />}
+                </div>
             </div>
         );
         return (

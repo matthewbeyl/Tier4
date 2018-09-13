@@ -8,6 +8,7 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 const mapStateToProps = state => ({
     currentChallengeUserData: state.challenge.current,
@@ -25,9 +26,11 @@ class CurrentChallengeTable extends Component {
     }
 
     handleDeleteUserFromCurrentChallenge = (userId, challengeId) => {
-        console.log('the user to delete from current challenge id is :', userId);
-        console.log('the challenge that user is to be deleted from is :', challengeId);
-        this.props.dispatch({ type: CHALLENGE_ACTIONS.DELETE_USER_FROM_CURRENT_CHALLENGE, payload: userId, additionalPayload: challengeId })
+        this.props.dispatch({ 
+            type: CHALLENGE_ACTIONS.DELETE_USER_FROM_CURRENT_CHALLENGE, 
+            payload: userId, 
+            additionalPayload: challengeId 
+        })
     }
 
     render() {
@@ -39,7 +42,14 @@ class CurrentChallengeTable extends Component {
                     <TableCell>{user.streak}</TableCell>
                     <TableCell>{user.daily_reminder.toString()}</TableCell>
                     <TableCell>{user.weekly_reminder.toString()}</TableCell>
-                    <TableCell><Button onClick={()=>{this.handleDeleteUserFromCurrentChallenge(user.id,user.challenge_id)}}>Delete</Button></TableCell>
+                    <TableCell>
+                        <Button 
+                            color="secondary" 
+                            onClick={()=>{this.handleDeleteUserFromCurrentChallenge(user.id,user.challenge_id)}}>
+                           <div style={{paddingRight: "10px"}}>Delete</div>
+                            <DeleteIcon />
+                        </Button>
+                    </TableCell>
                 </TableRow>
             )
         });
