@@ -8,11 +8,9 @@ import { fetchStartDate, fetchLeaders } from '../../redux/actions/homeActions';
 import LOGIN_ACTIONS from '../../redux/actions/loginActions'
 import { USER_ACTIONS } from '../../redux/actions/userActions';
 
-import { Typography, withStyles } from '@material-ui/core';
+import { Typography, withStyles, Paper } from '@material-ui/core';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
-import DashboardView from '../DashboardView/DashboardView';
 
 const styles = {
 
@@ -64,18 +62,11 @@ class HomeView extends Component {
         })
     }
 
-    reqDotUser = () => {
-        console.log('from REDUX, USER:', this.props.user);
-
-    }
+    // reqDotUser = () => {
+    //     console.log('from REDUX, USER:', this.props.user);
+    // }
 
     sortLeaders = () => {
-        // if (!this.props.leaders) {
-        //     return []
-        // }
-
-        console.log('========== Got here ==============');
-
         try {
             let displayedLeaders = []
             for (const leader of this.props.leaders) {
@@ -88,15 +79,9 @@ class HomeView extends Component {
                 }
                 else {
                     let tenPercent = Math.ceil(this.props.leaders.length / 10)
-                    
-                    console.log(tenPercent);
-                    
                     for (let i = 0; i < tenPercent; i++) {
                         displayedLeaders.push(this.props.leaders[i])
                     }
-
-                    console.log(displayedLeaders);
-
                     return displayedLeaders
                 }
             }
@@ -110,10 +95,7 @@ class HomeView extends Component {
     render() {
         let { classes } = this.props
 
-        // console.log(this.sortLeaders());
-
         let leaderCards;
-
 
         if (this.props.leaders.length > 0) {
             leaderCards = this.sortLeaders().map((leader, index) => {
@@ -126,7 +108,7 @@ class HomeView extends Component {
                         <Typography variant="subheading">
                             {leader.commit_percentage}% commit rate
                                 <br />
-                            longest streak - {leader.longest_streak}
+                            longest streak: {leader.longest_streak}
                         </Typography>
                     </CardContent>
                 </Card>)
@@ -139,12 +121,14 @@ class HomeView extends Component {
                 {/* <button onClick={this.reqDotUser}>Log req.user</button> */}
                 <br />
                 <Countdown deadline={this.props.startDate} />
+                <Paper>
                 <Typography variant="display1">Leaderboard</Typography>
                 <section className={classes.card}>
                     <div className={classes.cardDiv}>
                         {leaderCards}
                     </div>
                 </section>
+                </Paper>
             </main >
         )
     }
