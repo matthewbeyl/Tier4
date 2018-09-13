@@ -34,20 +34,34 @@ class Countdown extends Component {
     }
 
     render() {
+        let content = '';
+        if (this.props.deadline === '') {
+            content = (
+                <div>
+                    <p>There is no upcoming challenge.</p>
+                </div>
+            )
+        } else {
+            content = (
+                <div>
+                    <div>
+                        {this.displayDigits(this.state.days)} Days
+                    </div>
+                    <div>
+                        {this.displayDigits(this.state.hours)} Hours
+                    </div>
+                    <div>
+                        {this.displayDigits(this.state.minutes)} Minutes
+                    </div>
+                    <div>
+                        {this.displayDigits(this.state.seconds)} Seconds
+                    </div>
+                </div>
+            )
+        }
         return (
             <div>
-                <div>
-                    {this.displayDigits(this.state.days)} Days
-                </div>
-                <div>
-                    {this.displayDigits(this.state.hours)} Hours
-                </div>
-                <div>
-                    {this.displayDigits(this.state.minutes)} Minutes
-                </div>
-                <div>
-                    {this.displayDigits(this.state.seconds)} Seconds
-                </div>
+                {content}
             </div>
         )
     }
