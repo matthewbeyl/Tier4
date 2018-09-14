@@ -103,6 +103,17 @@ class DashboardView extends Component {
         }
     }
 
+    fill = () => {
+        this.setState({
+            applied: 'I applied for 3 jobs on Indeed.',
+            learned: 'I have started learning node cron and I have been tinkering with momentjs.',
+            built: 'I am revisiting my server-side calculator assignment, working on styling.',
+            followed_up: 'I have followed up with two companies I applied to last week.',
+            events_networking: 'No networking with week, I was out of town.'
+
+        })
+    }
+
     setPreferences = (event) => {
         event.preventDefault();
         if (this.state.email !== '') {
@@ -225,7 +236,7 @@ class DashboardView extends Component {
                     <Grid item sm>
                         <Paper className={classes.paper}>
                             <form onSubmit={this.submitFeedback}>
-                                <Typography variant="title">Tell us about your week</Typography>
+                                <Typography variant="title" onClick={this.fill}>Tell us about your week</Typography>
                                 <TextField
                                     id="learned"
                                     label="What did you learn?"

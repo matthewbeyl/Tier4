@@ -200,7 +200,7 @@ function weeklyEmail() { //send weekly feedback email
 //     dailyEmail();
 // }); //run the daily email function once a day
 
-dailyEmail();
+// dailyEmail();
 
 cron.schedule('* * 18 * * 1 ', function () {
     //weeklyEmail();
