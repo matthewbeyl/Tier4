@@ -31,7 +31,7 @@ todaysDate = date.substring(1, 11)
 //     getData();
 // });
 //run getData() once every 20 seconds, will be changed to once a day at midnight.
-getData();
+//getData();
 
 router.get('/get-data', (req, res) => {
     res.send(theData)

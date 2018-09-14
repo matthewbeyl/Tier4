@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-
+import Paper from '@material-ui/core/Paper';
 class Countdown extends Component {
     state = {
         days: 0,
@@ -35,7 +35,7 @@ class Countdown extends Component {
 
     render() {
         let content = '';
-        if (this.props.deadline === '') {
+        if (this.props.deadline == null) {
             content = (
                 <div>
                     <p>There is no upcoming challenge.</p>
@@ -44,18 +44,35 @@ class Countdown extends Component {
         } else {
             content = (
                 <div>
-                    <p></p>
-                    <div>
-                        {this.displayDigits(this.state.days)} Days
-                    </div>
-                    <div>
-                        {this.displayDigits(this.state.hours)} Hours
-                    </div>
-                    <div>
-                        {this.displayDigits(this.state.minutes)} Minutes
-                    </div>
-                    <div>
-                        {this.displayDigits(this.state.seconds)} Seconds
+
+                    <div style={{ display: "grid", alignContent: "center", width: "100%", height: "350px", backgroundColor: "#cccccc" }}>
+                        <div style={{ justifySelf: "center" }}>
+                            <h1>Code now.</h1>
+                        </div>
+                        <div style={{ justifySelf: "center" }}>
+                            <p>
+                                Track your progress by signing up!
+                            </p>
+                        </div>
+                        <Paper style={{justifySelf: "center", padding: "20px"}}>
+                            <div>
+                                <h3>30 Day Sprint Challenge</h3></div>
+                            <div>
+                                {this.displayDigits(this.state.days)} Days <br />
+                            </div>
+                            <div>
+                                {this.displayDigits(this.state.hours)} Hours <br />
+                            </div>
+                            <div>
+                                {this.displayDigits(this.state.minutes)} Minutes <br />
+                            </div>
+                            <div>
+                                {this.displayDigits(this.state.seconds)} Seconds <br />
+                            </div>
+                            <div>
+                                <p>Sign up before the next deadline! </p>
+                            </div>
+                        </Paper>
                     </div>
                 </div>
             )

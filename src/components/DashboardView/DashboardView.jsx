@@ -14,6 +14,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Cookie from 'universal-cookie';
+import swal from 'sweetalert';
 
 const cookie = new Cookie();
 
@@ -98,8 +99,15 @@ class DashboardView extends Component {
             this.props.dispatch(addFeedback(this.state))
             this.setState({ sumopen: false })
             cookie.remove('weeklySummary')
+            this.setState({
+                applied: '',
+                learned: '',
+                built: '',
+                followed_up: '',
+                events_networking: ''
+            })
         } else {
-            alert('Please complete form before submitting')
+            swal('Please complete form before submitting')
         }
     }
 
@@ -109,7 +117,7 @@ class DashboardView extends Component {
             this.props.dispatch(addPreferences(this.state))
             this.setState({ prefopen: false })
         } else {
-            alert('Please enter e-mail address')
+            swal('Please enter e-mail address')
         }
     }
 
@@ -152,7 +160,7 @@ class DashboardView extends Component {
                 <Grid container>
                     <Grid item sm>
                         <Paper className={classes.paper}>
-                            <img src={this.props.user.image_url} alt="" height="200px" width="auto"/>
+                            {/* <img src={this.props.user.image_url} alt="" height="200px" width="auto"/> */}
                             <Typography variant="display3">{this.props.commitRate}% Commit Rate</Typography>
                             <Typography variant="display3">Longest Streak: {this.props.longestStreak}</Typography>
                             {/* <Typography variant="display3">{this.props.longestStreak} Day Streak</Typography> */}

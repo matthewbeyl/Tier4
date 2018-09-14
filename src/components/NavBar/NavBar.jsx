@@ -12,15 +12,25 @@ const DashLink = props => <Link to="/dashboard" {...props} />
 const AdminLink = props => <Link to="/admin" {...props} />
 
 const styles = theme => ({
+
+  root: {
+
+  },
   toolBar: {
     // background: theme.palette.primary.main,
-    background: '#222222'
+    backgroundImage: 'linear-gradient(black, grey)',
+    height: 200,
+    margin: 0,
+    textAlign: "center"
   },
+  title: {
+    
+  }
 });
 
 
 class NavBar extends Component {
-  
+
 
   componentWillMount() {
     this.props.dispatch({
@@ -33,14 +43,14 @@ class NavBar extends Component {
   }
 
   logInLogOut = () => {
-    try { 
-      if(this.props.user.github){
-        return(
+    try {
+      if (this.props.user.github) {
+        return (
           <Button color="secondary" onClick={this.logout}>Log out</Button>
         )
       } else {
         return (<Button color="secondary" href="http://localhost:5000/api/auth/login">Log In</Button>);
-      } 
+      }
     } catch (error) {
       return (<Button color="secondary" href="http://localhost:5000/api/auth/login">Log In</Button>);
     }
@@ -54,7 +64,7 @@ class NavBar extends Component {
             Admin
           </Button>
         )
-      } 
+      }
       else {
         return null;
       }
@@ -79,24 +89,27 @@ class NavBar extends Component {
     }
   }
 
-  render() {    
+  render() {
 
     let { classes } = this.props
 
     return (
       <div className={classes.root}>
-      <Toolbar className={classes.toolBar}>
-        <img src="https://dewiskbohv5c1.cloudfront.net/assets/logo-prime-horizontal-6909d23113b83bd59bf681f26f940f97.svg" alt=""/>
-        <Button component={HomeLink} color="secondary">
-          Home
-        </Button>
-        {this.dashboardNav()}
-        {this.adminNav()}
-        <Typography variant="display2" color="secondary">
-           Tier Four
-         </Typography>
-        {this.logInLogOut()}
-      </Toolbar>
+        <Toolbar className={classes.toolBar}>
+          <img src="https://dewiskbohv5c1.cloudfront.net/assets/logo-prime-horizontal-6909d23113b83bd59bf681f26f940f97.svg" alt="" height="40%" width="auto" />
+          <Typography className={classes.title} variant="display2" color="secondary">
+            Tier Four
+          </Typography>
+          <Button component={HomeLink} color="secondary">
+            Home
+          </Button>
+          {this.dashboardNav()}
+          {this.adminNav()}
+
+
+          {this.logInLogOut()}
+
+        </Toolbar>
       </div>
     )
   }

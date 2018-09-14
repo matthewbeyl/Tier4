@@ -1,4 +1,4 @@
-body {
+/* body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif
 }
 
@@ -11,7 +11,7 @@ body {
     background-color: #00acb0;
     padding: 5px;
     color: #ece7e7;
-}
+} */
 
 /* form {
     background-color: #dbd5d5;
@@ -21,7 +21,7 @@ body {
     padding: 25px;
     border-radius: 2px;
 } */
-
+/* 
 input {
     margin: 5px;
     margin-bottom: 10px;
@@ -45,9 +45,9 @@ input[type="submit"] {
 
 .message:nth-child(even) {
     background-color: #f8f8f8;
-}
+} */
 
-.navbar {
+/* .navbar {
   background-color: #00acb0;
   width: 100%;
   border-radius: 0px;
@@ -62,19 +62,19 @@ ul {
 
 li {
     float: left;
-}
+} */
 
-li a {
+/* li a {
     display: block;
     color: white;
     text-align: center;
     padding: 14px 16px;
     text-decoration: none;
 
-}
+} */
 
 /* Change the link color to #111 (black) on hover */
-li a:hover {
+/* li a:hover {
     text-decoration: underline;
     color: #eee;
-}
+} */
