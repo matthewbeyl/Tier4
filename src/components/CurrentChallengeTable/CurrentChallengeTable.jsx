@@ -44,7 +44,6 @@ class CurrentChallengeTable extends Component {
                     <TableCell>{user.weekly_reminder.toString()}</TableCell>
                     <TableCell>
                         <Button 
-                            color="secondary" 
                             onClick={()=>{this.handleDeleteUserFromCurrentChallenge(user.id,user.challenge_id)}}>
                            <div style={{paddingRight: "10px"}}>Delete</div>
                             <DeleteIcon />

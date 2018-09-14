@@ -52,8 +52,7 @@ class EnhancedTableHead extends Component {
     };
 
     render() {
-        const { onSelectAllClick, order, orderBy, numSelected, rowCount } = this.props;
-
+        const { order, orderBy } = this.props;
         return (
             <TableHead>
                 <TableRow>
@@ -62,18 +61,15 @@ class EnhancedTableHead extends Component {
                             <TableCell
                                 key={row.id}
                                 numeric={row.numeric}
-                                sortDirection={orderBy === row.id ? order : false}
-                            >
+                                sortDirection={orderBy === row.id ? order : false}>
                                 <Tooltip
                                     title="Sort"
                                     placement={row.numeric ? 'bottom-end' : 'bottom-start'}
-                                    enterDelay={300}
-                                >
+                                    enterDelay={300}>
                                     <TableSortLabel
                                         active={orderBy === row.id}
                                         direction={order}
-                                        onClick={this.createSortHandler(row.id)}
-                                    >
+                                        onClick={this.createSortHandler(row.id)}>
                                         {row.label}
                                     </TableSortLabel>
                                 </Tooltip>
@@ -86,12 +82,10 @@ class EnhancedTableHead extends Component {
     }
 }
 
-
-// ################################################################################
 class PastChallengesTable extends Component {
     state = {
         order: 'asc',
-        orderBy: 'calories',
+        orderBy: '',
         selected: [],
         data: [],
         page: 0,
@@ -158,12 +152,8 @@ class PastChallengesTable extends Component {
                 </TableRow>
             )
         });
-        const { classes } = this.props;
+
         const { order, orderBy, selected, rowsPerPage, page } = this.state;
-        const emptyRows = rowsPerPage - Math.min(rowsPerPage, this.props.activeChallenges.length - page * rowsPerPage);
-
-
-
         return (
             <div>
                 <div>
@@ -179,25 +169,19 @@ class PastChallengesTable extends Component {
                         <TableBody>
                             {stableSort(this.props.activeChallenges, getSorting(order, orderBy))
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                .map(n => {
+                                .map(user => {
                                     return (
                                         <TableRow
                                             hover
-                                            onClick={event => this.handleClick(event, n.id)}
-                                            key={n.id}
-                                        >
-                                            <TableCell>{n.name}</TableCell>
-                                            <TableCell >{n.title}</TableCell>
-                                            <TableCell numeric>{n.commit_percentage}</TableCell>
-                                            <TableCell numeric>{n.longest_streak}</TableCell>
+                                            onClick={event => this.handleClick(event, user.id)}
+                                            key={user.id}>
+                                            <TableCell>{user.name}</TableCell>
+                                            <TableCell >{user.title}</TableCell>
+                                            <TableCell numeric>{user.commit_percentage}</TableCell>
+                                            <TableCell numeric>{user.longest_streak}</TableCell>
                                         </TableRow>
                                     );
                                 })}
-                            {emptyRows > 0 && (
-                                <TableRow >
-                                    <TableCell/>
-                                </TableRow>
-                            )}
                         </TableBody>
                     </Table>
                 </div>
@@ -208,7 +192,6 @@ class PastChallengesTable extends Component {
                     page={page}
                     onChangePage={this.handleChangePage}
                     onChangeRowsPerPage={this.handleChangeRowsPerPage}
-                    // rowsPerPageOptions={['5','7','9']}
                 />
             </div>
         );

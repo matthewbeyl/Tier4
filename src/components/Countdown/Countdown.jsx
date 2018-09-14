@@ -35,7 +35,7 @@ class Countdown extends Component {
 
     render() {
         let content = '';
-        if (this.props.deadline === '') {
+        if (this.props.deadline == null) {
             content = (
                 <div>
                     <p>There is no upcoming challenge.</p>
@@ -44,7 +44,6 @@ class Countdown extends Component {
         } else {
             content = (
                 <div>
-                    <p></p>
                     <div>
                         {this.displayDigits(this.state.days)} Days
                     </div>
