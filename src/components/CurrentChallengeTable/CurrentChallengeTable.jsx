@@ -9,6 +9,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import DeleteIcon from '@material-ui/icons/Delete';
+import CurrentChallengeTableWithSort from '../CurrentChallengeTableWithSort/CurrentChallengeTableWithSort';
 
 const mapStateToProps = state => ({
     currentChallengeUserData: state.challenge.current,
@@ -44,7 +45,6 @@ class CurrentChallengeTable extends Component {
                     <TableCell>{user.weekly_reminder.toString()}</TableCell>
                     <TableCell>
                         <Button 
-                            color="secondary" 
                             onClick={()=>{this.handleDeleteUserFromCurrentChallenge(user.id,user.challenge_id)}}>
                            <div style={{paddingRight: "10px"}}>Delete</div>
                             <DeleteIcon />
