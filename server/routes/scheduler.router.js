@@ -136,86 +136,16 @@ function weeklyEmail() { //send weekly feedback email
         })
 }
 
-// function expireChallenge() {
-//     //checks if 30 days have passed from the last challenge. if they have, then the last challenge expires.
-
-//     pool.query(`SELECT "date", "id" FROM "challenges" WHERE "active" = true`)
-//         .then((response) => {
-//             if (response.rows.length !== 0) {
-//                 let date = JSON.stringify(response.rows[0].date);
-//                 let date1 = new Date(date.substring(1, 11));
-//                 let date2 = new Date(currentDate);
-//                 let timeDiff = Math.abs(date2.getTime() - date1.getTime());
-//                 let diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
-//                 challengeDate = date.substring(1, 11) //finds how many days have passed since the challenge began
-
-//                 if (diffDays >= 30) {  //if 30 days or more have passed, finish the challenge and set it to inactive.
-//                     pool.query(`UPDATE "challenges" SET "active" = false WHERE "id" =  ${response.rows[0].id};`)
-//                         .then((response) => {
-
-//                             didChallengeFinishRecently = true; //set this flag to true so that we know a challenge just finished.
-//                             console.log('challenge finished!', didChallengeFinishRecently);
-//                         })
-//                 }
-//                 console.log('this is the challengeDate',challengeDate);
-//                 return response.rows[0].date
-//             }
-//         })
-//         .catch((error)=>{
-//             console.log(error);
-//         })
-
-// }
-
-// function activateChallenge() {
-
-//     pool.query(`SELECT "date", "id" FROM "challenges" WHERE "active" = false AND "date" > '${currentDate}' GROUP BY "date", "id";`)
-//         .then((response) => { //grab all inactive challenges that are to start after the currentDate
-//             let date = JSON.stringify(response.rows[0].date); 
-//             let date1 = date.substring(1, 11)
-//             console.log('just before date comparison');
-//             console.log(date1, currentDate);
-//             if (date1 === date2) { //this runs once a day. if the date of the currentDay is the same as the start date of the next challenge, set it to active
-//                 console.log('date1 = date2');
-
-//                 pool.query(`UPDATE "challenges" SET "active" = true WHERE "id" = ${response.rows[0].id};`)
-//                     .then((response) => {
-//                         didChallengeFinishRecently = false; //change this to false so we stop checking for the next challenge.
-//                     })
-//                     .catch((error)=>{
-//                         console.log(error);
-
-//                     })
-//             }
-//         })
-//         .catch((error)=>{
-//             console.log(error);
-
-//         })
-// }
-
-
 //daily email function '0 18 * * * '
-// cron.schedule('0 18 * * * ', function () {
-//     dailyEmail();
-// }); //run the daily email function once a day
+cron.schedule('0 0 18 * * * ', function () {
+    //dailyEmail();
+}); //run the daily email function once a day
 
-dailyEmail();
+//dailyEmail();
 
 cron.schedule('* * 18 * * 1 ', function () {
     //weeklyEmail();
 }); //run the weekly email function once a week
 
-// cron.schedule('*/20 * * * * *', function () {
-//     console.log('checking the challenge') //run the expirechallenge function once a day to check if the challenge should end 
-//     //expireChallenge(); 
-//     console.log(didChallengeFinishRecently, challengeDate);
-
-//     if (didChallengeFinishRecently) { //if a challenge just finished, check to see if we need to activate the next challenge.
-//         console.log('challenge was recently finished');
-
-//         //activateChallenge()
-//     }
-// });
 
 module.exports = router;

@@ -21,7 +21,7 @@ let didChallengeFinishRecently = false;
 // currentDate = currentDate.substring(1, 11)
 
 
-let date = new Date();
+let date = new Date('09-10-2018');
 date = JSON.stringify(date)
 todaysDate = date.substring(1, 11)
 //calculate todays date so that we only get todays commits in getData()
@@ -31,7 +31,7 @@ todaysDate = date.substring(1, 11)
 //     getData();
 // });
 //run getData() once every 20 seconds, will be changed to once a day at midnight.
-//getData();
+getData();
 
 router.get('/get-data', (req, res) => {
     res.send(theData)
@@ -210,7 +210,7 @@ function getStreak(data) {
 }
 
 function getPercent(data, diffDays) {
-    let newData = data.slice(0, diffDays) //grabs a sub-array that only includes days of the challenge which have already passed.
+    let newData = data.slice(0, diffDays+1) //grabs a sub-array that only includes days of the challenge which have already passed.
     //console.log('dataArray',newData );
     let commitCount = 0;
     for (let i = 0; i < newData.length; i++) {
