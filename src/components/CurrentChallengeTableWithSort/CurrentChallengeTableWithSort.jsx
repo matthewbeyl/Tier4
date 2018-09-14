@@ -10,9 +10,12 @@ import TableRow from '@material-ui/core/TableRow';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Tooltip from '@material-ui/core/Tooltip';
 import { connect } from 'react-redux';
+import CurrentChallengeTable from '../CurrentChallengeTable/CurrentChallengeTable';
+import { CHALLENGE_ACTIONS } from '../../redux/actions/challengeActions';
+import { USER_ACTIONS } from '../../redux/actions/userActions';
 
 const mapStateToProps = state => ({
-    activeChallenges: state.challenge.past
+    currentChallengeUserData: state.challenge.current,
 });
 
 function desc(a, b, orderBy) {
@@ -41,9 +44,10 @@ function getSorting(order, orderBy) {
 
 const rows = [
     { id: 'name', numeric: false, label: 'Name' },
-    { id: 'title', numeric: false, label: 'Title' },
-    { id: 'commit_percentage', numeric: true, label: 'Commit Percentage' },
-    { id: 'longest_streak', numeric: true, label: 'Longest Streak' },
+    { id: 'commit_percentage', numeric: false, label: 'Commit Percentage'},
+    { id: 'streak', numeric: true, label: 'Longest Streak' },
+    { id: 'daily_reminder', numeric: false, label: 'Daily Reminder' },
+    { id: 'weekly_reminder', numeric: false, label: 'Weekly Reminder' },
 ];
 
 class EnhancedTableHead extends Component {
@@ -82,7 +86,7 @@ class EnhancedTableHead extends Component {
     }
 }
 
-class PastChallengesTable extends Component {
+class CurrentChallengeTableWithSort extends Component {
     state = {
         order: 'asc',
         orderBy: '',
@@ -91,6 +95,12 @@ class PastChallengesTable extends Component {
         page: 0,
         rowsPerPage: 5,
     };
+
+    componentWillMount() {
+        this.props.dispatch({ type: USER_ACTIONS.FETCH_USER });
+        this.props.dispatch({ type: CHALLENGE_ACTIONS.FETCH_ACTIVE_CHALLENGE });
+        this.props.dispatch({ type: CHALLENGE_ACTIONS.FETCH_USER_DATA_CURRENT_CHALLENGE });
+    }
 
     handleRequestSort = (event, property) => {
         const orderBy = property;
@@ -141,14 +151,15 @@ class PastChallengesTable extends Component {
     };
 
     render() {
-        let apiChallengeResults = this.props.activeChallenges.map((user, index) => {
+        let apiChallengeResults = this.props.currentChallengeUserData.map((user, index) => {
             return (
                 <TableRow hover
                     key={index}>
                     <TableCell>{user.name}</TableCell>
-                    <TableCell>{user.title}</TableCell>
-                    <TableCell numeric>{user.commit_percentage}</TableCell>
-                    <TableCell numeric>{user.longest_streak}</TableCell>
+                    <TableCell>{user.commit_percentage}</TableCell>
+                    <TableCell>{user.streak}</TableCell>
+                    <TableCell>{user.daily_reminder.toString()}</TableCell>
+                    <TableCell>{user.weekly_reminder.toString()}</TableCell>
                 </TableRow>
             )
         });
@@ -167,7 +178,7 @@ class PastChallengesTable extends Component {
                             rowCount={apiChallengeResults.length}
                         />
                         <TableBody>
-                            {stableSort(this.props.activeChallenges, getSorting(order, orderBy))
+                            {stableSort(this.props.currentChallengeUserData, getSorting(order, orderBy))
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 .map(user => {
                                     return (
@@ -176,9 +187,10 @@ class PastChallengesTable extends Component {
                                             onClick={event => this.handleClick(event, user.id)}
                                             key={user.id}>
                                             <TableCell>{user.name}</TableCell>
-                                            <TableCell >{user.title}</TableCell>
-                                            <TableCell numeric>{user.commit_percentage}</TableCell>
-                                            <TableCell numeric>{user.longest_streak}</TableCell>
+                                            <TableCell >{user.commit_percentage}</TableCell>
+                                            <TableCell numeric>{user.streak}</TableCell>
+                                            <TableCell numeric>{user.daily_reminder.toString()}</TableCell>
+                                            <TableCell numeric>{user.weekly_reminder.toString()}</TableCell>
                                         </TableRow>
                                     );
                                 })}
@@ -187,7 +199,7 @@ class PastChallengesTable extends Component {
                 </div>
                 <TablePagination
                     component="div"
-                    count={this.props.activeChallenges.length}
+                    count={this.props.currentChallengeUserData.length}
                     rowsPerPage={rowsPerPage}
                     page={page}
                     onChangePage={this.handleChangePage}
@@ -198,8 +210,8 @@ class PastChallengesTable extends Component {
     }
 }
 
-PastChallengesTable.propTypes = {
+CurrentChallengeTableWithSort.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default connect(mapStateToProps)(withStyles()(PastChallengesTable));
+export default connect(mapStateToProps)(withStyles()(CurrentChallengeTableWithSort));
