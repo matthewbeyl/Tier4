@@ -152,7 +152,7 @@ class DashboardView extends Component {
                 <Grid container>
                     <Grid item sm>
                         <Paper className={classes.paper}>
-                            <img src={this.props.user.image_url} alt="" height="200px" width="auto"/>
+                            {/* <img src={this.props.user.image_url} alt="" height="200px" width="auto"/> */}
                             <Typography variant="display3">{this.props.commitRate}% Commit Rate</Typography>
                             <Typography variant="display3">Longest Streak: {this.props.longestStreak}</Typography>
                             {/* <Typography variant="display3">{this.props.longestStreak} Day Streak</Typography> */}
