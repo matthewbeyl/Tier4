@@ -74,6 +74,7 @@ class HomeView extends Component {
                 if (leader.commit_percentage === 100) {
                     displayedLeaders.push(leader)
                 }
+            }
                 if (displayedLeaders.length > 0) {
                     console.log(displayedLeaders);
                     return displayedLeaders
@@ -85,7 +86,7 @@ class HomeView extends Component {
                     }
                     return displayedLeaders
                 }
-            }
+            
         } catch (error) {
             console.log(error);
 
