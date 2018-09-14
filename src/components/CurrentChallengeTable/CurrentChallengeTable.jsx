@@ -9,6 +9,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import DeleteIcon from '@material-ui/icons/Delete';
+import CurrentChallengeTableWithSort from '../CurrentChallengeTableWithSort/CurrentChallengeTableWithSort';
 
 const mapStateToProps = state => ({
     currentChallengeUserData: state.challenge.current,
