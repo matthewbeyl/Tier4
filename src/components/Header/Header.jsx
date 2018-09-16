@@ -97,15 +97,13 @@ class Header extends Component {
 
         return (
             <div className={classes.header}>
-                <img src="https://dewiskbohv5c1.cloudfront.net/assets/logo-prime-horizontal-6909d23113b83bd59bf681f26f940f97.svg" alt="" height="40%" width="auto" className={classes.logo} />
+                <img src="https://dewiskbohv5c1.cloudfront.net/assets/logo-prime-horizontal-6909d23113b83bd59bf681f26f940f97.svg" alt="" height="40%" width="auto" className={classes.logo} />                              
                 <Button component={HomeLink} color="secondary">
                     Home
                 </Button>
-                {this.dashboardNav()}
+                {this.dashboardNav()}                
                 {this.adminNav()}
-                {/* <div className={classes.logOut}> */}
                 {this.logInLogOut()}
-                {/* </div> */}
             </div>
         )
     }
