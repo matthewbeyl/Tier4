@@ -39,6 +39,7 @@ const styles = {
     stats: {
         textAlign: 'center',
         contentAlign: 'center',
+        marginTop: 100,
     }
 }
 

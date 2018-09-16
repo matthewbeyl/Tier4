@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 
 import Countdown from '../Countdown/Countdown';
 import NavBar from '../NavBar/NavBar';
+import Header from '../Header/Header';
 
 import { fetchStartDate, fetchLeaders } from '../../redux/actions/homeActions';
 import LOGIN_ACTIONS from '../../redux/actions/loginActions'
@@ -12,6 +13,7 @@ import { Typography, withStyles, Paper } from '@material-ui/core';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
+import DemoLeaderboard from '../DemoLeaderboard/DemoLeaderboard';
 
 const styles = {
 
@@ -119,14 +121,16 @@ class HomeView extends Component {
 
         return (
             <main>
-                <NavBar />
+                <Header />
+                {/* <NavBar /> */}
                 {/* <button onClick={this.reqDotUser}>Log req.user</button> */}
                 <br />
                 <Countdown deadline={this.props.startDate} />
                 <Typography variant="display1" color="secondary">Leaderboard</Typography>
-                    <div className={classes.cardDiv}>
+                    {/* <div className={classes.cardDiv}>
                         {leaderCards}
-                    </div>
+                    </div> */}
+                    <DemoLeaderboard />
             </main >
         )
     }

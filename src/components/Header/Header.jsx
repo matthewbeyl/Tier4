@@ -24,9 +24,9 @@ const styles = theme => ({
         marginTop: 20,
         marginLeft: 10,
     },
-    logOut: {
-        float: 'right',
-    }
+    logout: {
+        marginLeft: 550,
+    },
 })
 
 
@@ -103,7 +103,9 @@ class Header extends Component {
                 </Button>
                 {this.dashboardNav()}                
                 {this.adminNav()}
+                <div className={classes.logout}>
                 {this.logInLogOut()}
+                </div>
             </div>
         )
     }
