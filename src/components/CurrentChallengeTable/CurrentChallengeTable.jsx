@@ -10,6 +10,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import DeleteIcon from '@material-ui/icons/Delete';
 import CurrentChallengeTableWithSort from '../CurrentChallengeTableWithSort/CurrentChallengeTableWithSort';
+import swal from 'sweetalert'
 
 const mapStateToProps = state => ({
     currentChallengeUserData: state.challenge.current,
@@ -27,11 +28,27 @@ class CurrentChallengeTable extends Component {
     }
 
     handleDeleteUserFromCurrentChallenge = (userId, challengeId) => {
-        this.props.dispatch({ 
-            type: CHALLENGE_ACTIONS.DELETE_USER_FROM_CURRENT_CHALLENGE, 
-            payload: userId, 
-            additionalPayload: challengeId 
-        })
+        swal({
+            title: "Are you sure?",
+            text: "This user will no longer be in this challenge.",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+          })
+          .then((willDelete) => {
+            if (willDelete) {
+              swal("This user has been removed.", {
+                icon: "success",
+              });
+              this.props.dispatch({ 
+                type: CHALLENGE_ACTIONS.DELETE_USER_FROM_CURRENT_CHALLENGE, 
+                payload: userId, 
+                additionalPayload: challengeId 
+            })
+            } else {
+              swal("This user has not been removed.");
+            }
+          });
     }
 
     render() {

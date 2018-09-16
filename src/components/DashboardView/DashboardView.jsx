@@ -16,6 +16,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Cookie from 'universal-cookie';
+import swal from 'sweetalert';
 
 const cookie = new Cookie();
 
@@ -142,10 +143,9 @@ class DashboardView extends Component {
                 built: '',
                 followed_up: '',
                 events_networking: ''
-
             })
         } else {
-            alert('Please complete form before submitting')
+            swal('Please complete form before submitting')
         }
     }
 
@@ -166,7 +166,7 @@ class DashboardView extends Component {
             this.props.dispatch(addPreferences(this.state))
             this.setState({ prefopen: false })
         } else {
-            alert('Please enter e-mail address')
+            swal('Please enter e-mail address')
         }
     }
 

@@ -6,6 +6,7 @@ import { USER_ACTIONS } from '../../redux/actions/userActions';
 import NavBar from '../NavBar/NavBar';
 import { fetchStartDate } from '../../redux/actions/homeActions';
 import axios from 'axios';
+import swal from 'sweetalert';
 
 import { CHALLENGE_ACTIONS } from '../../redux/actions/challengeActions';
 
@@ -46,7 +47,7 @@ class JoinChallengeButton extends Component {
             this.props.dispatch({type: CHALLENGE_ACTIONS.CHECK_USER_IN_UPCOMING_CHALLENGE});
         }).catch(err => {
             console.log(err);
-            alert('Whoops! There was an error joining this challenge.')
+            swal('Whoops! There was an error joining this challenge.')
         })
     }
 
