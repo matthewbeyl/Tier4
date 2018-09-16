@@ -19,7 +19,9 @@ function* addPreferences(action){
         yield put({
             type: USER_ACTIONS.FETCH_USER
         });
-        yield swal('Preferences Updated')
+        yield put({
+            type: 'OPEN_EMAIL_SNACKBAR'
+        });
     } catch (error) {
         console.log('Error - ', error);
     }

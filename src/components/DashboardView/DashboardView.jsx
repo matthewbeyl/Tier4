@@ -5,7 +5,9 @@ import { USER_ACTIONS } from '../../redux/actions/userActions';
 import NavBar from '../NavBar/NavBar';
 import JoinChallengeButton from '../JoinChallengeButton/JoinChallengeButton'
 
-import { Paper, Button, TextField, Checkbox, Typography, Grid } from '@material-ui/core';
+import { Paper, Button, TextField, Checkbox, Typography, Grid, Snackbar, Icon, IconButton } from '@material-ui/core';
+
+import CloseIcon from '@material-ui/icons/Close';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import { withStyles } from '@material-ui/core/styles';
 
@@ -33,6 +35,8 @@ const mapStateToProps = state => ({
     isLoading: state.user.isLoading,
     commitRate: state.userStats.commit_percentage,
     longestStreak: state.userStats.longest_streak,
+    emailSnackbar: state.snackbar.emailSnackbar,
+    feedbackSnackbar: state.snackbar.feedbackSnackbar
 });
 
 class DashboardView extends Component {
@@ -51,7 +55,30 @@ class DashboardView extends Component {
             daily_email_reminders: false,
             email: '',
             prefopen: false,
+            emailSnackbar: this.props.emailSnackbar,
+            feedbackSnackbar: this.props.feedbackSnackbar
         };
+    };
+
+    openSnack = () => {
+        this.props.dispatch({type:'OPEN_EMAIL_SNACKBAR'})
+    
+    }
+
+    handleCloseEmailSnack = (event, reason) => {
+        if (reason === 'clickaway') {
+          return;
+        }
+
+        this.props.dispatch({type:'CLOSE_EMAIL_SNACKBAR'})
+    };
+
+    handleCloseFeedbackSnack = (event, reason) => {
+        if (reason === 'clickaway') {
+          return;
+        }
+
+        this.props.dispatch({type:'CLOSE_FEEDBACK_SNACKBAR'})
     };
 
     openPreferences = () => {
@@ -82,10 +109,21 @@ class DashboardView extends Component {
         this.props.dispatch(fetchStats());
     }
 
-    componentDidUpdate() {
+    componentDidUpdate(prevProps) {
         if (!this.props.isLoading && this.props.user === null) {
             this.props.history.push('home');
         }
+        if(this.props.emailSnackbar !== prevProps.emailSnackbar){
+            this.setState({
+                emailSnackbar: this.props.emailSnackbar
+            })
+        }
+        if(this.props.feedbackSnackbar !== prevProps.feedbackSnackbar){
+            this.setState({
+                feedbackSnackbar: this.props.feedbackSnackbar
+            })
+        }
+        
 
     }
 
@@ -109,6 +147,17 @@ class DashboardView extends Component {
         } else {
             swal('Please complete form before submitting')
         }
+    }
+
+    fill = () => {
+        this.setState({
+            applied: 'I applied for 3 jobs on Indeed.',
+            learned: 'I have started learning node cron and I have been tinkering with momentjs.',
+            built: 'I am revisiting my server-side calculator assignment, working on styling.',
+            followed_up: 'I have followed up with two companies I applied to last week.',
+            events_networking: 'No networking with week, I was out of town.'
+
+        })
     }
 
     setPreferences = (event) => {
@@ -150,9 +199,59 @@ class DashboardView extends Component {
 
     render() {
         let { classes } = this.props
-
+        
         return (
             <main>
+                <Snackbar
+                    anchorOrigin={{
+                        vertical: 'bottom',
+                        horizontal: 'left',
+                    }}
+                    open={this.state.emailSnackbar}
+                    variant="success"
+                    autoHideDuration={6000}
+                    onClose={this.handleCloseEmailSnack}
+                    ContentProps={{
+                        'aria-describedby': 'message-id',
+                    }}
+                    message={<span id="message-id">Email preferences updated</span>}
+                    action={[
+                        <IconButton
+                            key="close"
+                            aria-label="Close"
+                            color="inherit"
+                            className={classes.close}
+                            onClick={this.handleClose}
+                        >
+                            <CloseIcon />
+                        </IconButton>,
+                    ]}
+                />
+                <Snackbar
+                    anchorOrigin={{
+                        vertical: 'bottom',
+                        horizontal: 'left',
+                    }}
+                    open={this.state.feedbackSnackbar}
+                    variant="success"
+                    autoHideDuration={6000}
+                    onClose={this.handleCloseFeedbackSnack}
+                    ContentProps={{
+                        'aria-describedby': 'message-id',
+                    }}
+                    message={<span id="message-id">Weekly Summary Submitted</span>}
+                    action={[
+                        <IconButton
+                            key="close"
+                            aria-label="Close"
+                            color="inherit"
+                            className={classes.close}
+                            onClick={this.handleCloseFeedbackSnack}
+                        >
+                            <CloseIcon />
+                        </IconButton>,
+                    ]}
+                />
                 <NavBar />
                 <br />
                 <JoinChallengeButton />
@@ -233,7 +332,7 @@ class DashboardView extends Component {
                     <Grid item sm>
                         <Paper className={classes.paper}>
                             <form onSubmit={this.submitFeedback}>
-                                <Typography variant="title">Tell us about your week</Typography>
+                                <Typography variant="title" onClick={this.fill}>Tell us about your week</Typography>
                                 <TextField
                                     id="learned"
                                     label="What did you learn?"
