@@ -17,20 +17,32 @@ const styles = theme => ({
 
   },
   toolBar: {
-    // background: theme.palette.primary.main,
-    backgroundImage: 'linear-gradient(black, grey)',
-    height: 200,
+    display: 'flex',
+    backgroundImage: 'linear-gradient(#07AA9E, #222222)',
+    height: 150,
     margin: 0,
-    textAlign: "center"
+    // backgroundImage: 'linear-gradient(to bottom, rgb(0,0,0,1) , rgb(0,0,0,0))',
+
+  },
+  logOut: {
+    display: 'flex',
+    // justifyContent: 'flexEnd'
+  },
+  logo: {
+    // marginRight: 200
   },
   title: {
-    
+    // marginRight: 100
+  },
+  toolDiv: {
+    // display: 'flex',
   }
 });
 
 
 class NavBar extends Component {
 
+  
 
   componentWillMount() {
     this.props.dispatch({
@@ -43,16 +55,18 @@ class NavBar extends Component {
   }
 
   logInLogOut = () => {
+    let { classes } = this.props
+
     try {
       if (this.props.user.github) {
         return (
-          <Button color="secondary" onClick={this.logout}>Log out</Button>
+          <Button className={classes.logOut} color="secondary" onClick={this.logout}>Log out</Button>
         )
       } else {
-        return (<Button color="secondary" href="http://localhost:5000/api/auth/login">Log In</Button>);
+        return (<Button className={classes.logOut} color="secondary" href="http://localhost:5000/api/auth/login">Log In</Button>);
       }
     } catch (error) {
-      return (<Button color="secondary" href="http://localhost:5000/api/auth/login">Log In</Button>);
+      return (<Button className={classes.logOut} color="secondary" href="http://localhost:5000/api/auth/login">Log In</Button>);
     }
   }
 
@@ -78,7 +92,7 @@ class NavBar extends Component {
       if (this.props.user.github && !this.props.user.admin) {
         return (
           <Button color="secondary" component={DashLink}>
-            Dashboard
+            {this.props.user.name}
          </Button>
         )
       } else {
@@ -94,9 +108,9 @@ class NavBar extends Component {
     let { classes } = this.props
 
     return (
-      <div className={classes.root}>
+      <div className={classes.toolDiv}>
         <Toolbar className={classes.toolBar}>
-          <img src="https://dewiskbohv5c1.cloudfront.net/assets/logo-prime-horizontal-6909d23113b83bd59bf681f26f940f97.svg" alt="" height="40%" width="auto" />
+          <img src="https://dewiskbohv5c1.cloudfront.net/assets/logo-prime-horizontal-6909d23113b83bd59bf681f26f940f97.svg" alt="" height="40%" width="auto" className={classes.logo} />
           <Typography className={classes.title} variant="display2" color="secondary">
             Tier Four
           </Typography>
@@ -105,10 +119,9 @@ class NavBar extends Component {
           </Button>
           {this.dashboardNav()}
           {this.adminNav()}
-
-
-          {this.logInLogOut()}
-
+          <div className={classes.logOut}>
+            {this.logInLogOut()}
+          </div>
         </Toolbar>
       </div>
     )

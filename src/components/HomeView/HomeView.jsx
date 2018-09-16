@@ -74,6 +74,7 @@ class HomeView extends Component {
                 if (leader.commit_percentage === 100) {
                     displayedLeaders.push(leader)
                 }
+            }
                 if (displayedLeaders.length > 0) {
                     console.log(displayedLeaders);
                     return displayedLeaders
@@ -85,7 +86,7 @@ class HomeView extends Component {
                     }
                     return displayedLeaders
                 }
-            }
+            
         } catch (error) {
             console.log(error);
 
@@ -122,14 +123,10 @@ class HomeView extends Component {
                 {/* <button onClick={this.reqDotUser}>Log req.user</button> */}
                 <br />
                 <Countdown deadline={this.props.startDate} />
-                <Paper>
-                <Typography variant="display1">Leaderboard</Typography>
-                <section className={classes.card}>
+                <Typography variant="display1" color="secondary">Leaderboard</Typography>
                     <div className={classes.cardDiv}>
                         {leaderCards}
                     </div>
-                </section>
-                </Paper>
             </main >
         )
     }

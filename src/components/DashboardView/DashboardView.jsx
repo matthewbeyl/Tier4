@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { addFeedback, addPreferences, fetchStats } from '../../redux/actions/dashboardActions';
 import { USER_ACTIONS } from '../../redux/actions/userActions';
 import NavBar from '../NavBar/NavBar';
+import Header from '../Header/Header';
 import JoinChallengeButton from '../JoinChallengeButton/JoinChallengeButton'
 
 import { Paper, Button, TextField, Checkbox, Typography, Grid, Snackbar, Icon, IconButton } from '@material-ui/core';
@@ -26,7 +27,18 @@ const styles = {
         marginTop: 10,
         marginBottom: 10,
         height: 500,
-        display: "center",
+        display: 'center',
+        marginLeft: 10,
+        marginRight: 10,
+        alignText: 'center',
+    },
+    prefs: {
+        float: 'right',
+        marginRight: 10,
+    },
+    stats: {
+        textAlign: 'center',
+        contentAlign: 'center',
     }
 }
 
@@ -201,7 +213,18 @@ class DashboardView extends Component {
         let { classes } = this.props
         
         return (
-            <main>
+            <main className={classes.page}>
+                {/* <NavBar /> */}
+                <Header />
+                <div>
+                    <Grid container>
+                        <Grid item sm>
+                        <JoinChallengeButton />
+                        </Grid>
+                        <Grid item sm>
+                        <Button className={classes.prefs} onClick={this.openPreferences} color="secondary" size="small">E-mail Preferences</Button>
+                        </Grid>
+                    </Grid>
                 <Snackbar
                     anchorOrigin={{
                         vertical: 'bottom',
@@ -252,20 +275,18 @@ class DashboardView extends Component {
                         </IconButton>,
                     ]}
                 />
-                <NavBar />
+                {/* <NavBar /> */}
                 <br />
-                <JoinChallengeButton />
+                {/* <JoinChallengeButton /> */}
                 <br />
                 <Grid container>
                     <Grid item sm>
                         <Paper className={classes.paper}>
-                            {/* <img src={this.props.user.image_url} alt="" height="200px" width="auto"/> */}
-                            <Typography variant="display3">{this.props.commitRate}% Commit Rate</Typography>
-                            <Typography variant="display3">Longest Streak: {this.props.longestStreak}</Typography>
-                            {/* <Typography variant="display3">{this.props.longestStreak} Day Streak</Typography> */}
-
-                            <br />
-                            <Button onClick={this.openPreferences} variant="outlined" color="primary" size="small">E-mail Preferences</Button>
+                            <div className={classes.stats}>
+                            <img src={this.props.user.image_url} alt="" height="200px" width="auto"/>
+                            <Typography variant="display1">{this.props.commitRate}% Commit Rate</Typography>
+                            <Typography variant="display1">Longest Streak: {this.props.longestStreak}</Typography>
+                            </div>
                         </Paper>
                     </Grid>
                     <Dialog
@@ -383,6 +404,8 @@ class DashboardView extends Component {
                         </Paper>
                     </Grid>
                 </Grid>
+                <br />
+            </div>
             </main>
         )
     }
