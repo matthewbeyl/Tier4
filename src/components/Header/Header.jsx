@@ -26,7 +26,8 @@ const styles = theme => ({
     },
     logout: {
         marginTop: 10,
-        marginLeft: 750,
+        marginLeft: 950,
+       
     },
     gradiant: {
         backgroundImage: 'linear-gradient(#07AA9E, #222222)',
