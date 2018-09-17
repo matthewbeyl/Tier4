@@ -20,11 +20,8 @@ const mapStateToProps = state => ({
 });
 
 const styles = {
-    paper: {
-        padding: 20,
-        marginTop: 10,
-        marginBottom: 10,
-        height: 500,
+    joinChallenge: {
+        marginLeft: 10,
     }
 }
 
@@ -66,32 +63,36 @@ class JoinChallengeButton extends Component {
     }
 
     render() {
+
+        let { classes } = this.props
+
+
         let button;
         console.log('Upcoming challenge?:', this.props.challenge.upcoming.length);
 
         console.log('Are they in the challenge already?:', this.props.challenge.userInUpcomingChallenge.length);
         // try{
-        if (this.props.challenge.userInUpcomingChallenge.length === 1) {
-            console.log('THERE SHOULD NOT NOT NOT BE A BUTTON');
-            button = <Button variant="outlined" disabled color="primary" disabled>Challenge Joined</Button>
-        } else if (this.props.challenge.upcoming.length === 0) {
-            console.log('THERE SHOULD NOT NOT NOT BE A BUTTON');
-            button = <Button variant="outlined" disabled color="primary">No Upcoming Challenge</Button>
-        } else if (this.props.challenge.upcoming.length === 1 && this.props.challenge.userInUpcomingChallenge.length === 0) {
-            console.log('THERE SHOULD BE A BUTTON');
-            button = <Button variant="outlined" color="primary" onClick={this.joinChallenge}>Join Challenge</Button>
-        }
-        else {
-            console.log('NOT TRUE');
-
-        }
+            if (this.props.challenge.userInUpcomingChallenge.length === 1){
+                console.log('THERE SHOULD NOT NOT NOT BE A BUTTON');
+                button = <Button variant="contained" color="#ffffff" disabled>Challenge Joined</Button>
+            } else if (this.props.challenge.upcoming.length === 0) {
+                console.log('THERE SHOULD NOT NOT NOT BE A BUTTON');
+                button = <Button variant="contained" color="#ffffff">No Upcoming Challenge</Button>
+            }else if (this.props.challenge.upcoming.length === 1 && this.props.challenge.userInUpcomingChallenge.length === 0) {
+                console.log('THERE SHOULD BE A BUTTON');
+                button = <Button variant="contained" color="primary" onClick={this.joinChallenge}>Join Challenge</Button>
+            }
+             else{
+                console.log('NOT TRUE');
+                
+            }
         // } catch (error){
         //     console.log('Whoops');
 
         // }
 
         return (
-            <div>
+            <div className={classes.joinChallenge}>
                 {button}
                 {/* <Button disabled>Join Challenge</Button> */}
                 {/* <Button disabled>You have already joined the upcoming challenge</Button> */}

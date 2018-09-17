@@ -16,6 +16,7 @@ import TestComponent from './components/TestComponent/TestComponent'
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 
 import './styles/main.css';
+// import { TaskQueueCumulativeStatisticsPage } from 'twilio/lib/rest/taskrouter/v1/workspace/taskQueue/taskQueueCumulativeStatistics';
 
 const theme = createMuiTheme({
   palette: {
@@ -31,6 +32,8 @@ const theme = createMuiTheme({
     }
   }
 });
+
+//hex code for black #000000
 
 const App = () => (
   <div>
