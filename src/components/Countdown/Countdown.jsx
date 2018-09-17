@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import Paper from '@material-ui/core/Paper';
+import { Grid, Paper, Typography  } from '@material-ui/core';
+
 class Countdown extends Component {
     state = {
         days: 0,
@@ -45,33 +46,47 @@ class Countdown extends Component {
             content = (
                 <div>
 
-                    <div style={{ display: "grid", alignContent: "center", width: "100%", height: "350px", backgroundColor: "#cccccc",
+                    <div style={{ display: "grid", alignContent: "center", width: "100%", height: "350px",
  }}>
+                        
                         <div style={{ justifySelf: "center" }}>
-                            <h1>Code today.</h1>
+                            <Typography variant="headline" color="secondary">Code Today</Typography>
                         </div>
                         <div style={{ justifySelf: "center" }}>
-                            <p>
-                                Track your progress by signing up!
-                            </p>
+                            <Typography variant="subheading" color="secondary">Track your progress by signing up!</Typography>
                         </div>
                         <Paper style={{justifySelf: "center", padding: "20px"}}>
                             <div>
-                                <h3>30 Day Sprint Challenge</h3></div>
+                                <Typography variant="headline" color="primary">30 Day Sprint Challenge</Typography>
+                            </div>
+                            <Grid container style={{justifySelf: "center", padding: "20px"}}>
                             <div>
-                                {this.displayDigits(this.state.days)} Days <br />
+                                <Paper style={{padding: "10px", margin: "2px"}}>
+                                    {this.displayDigits(this.state.days)} <br />
+                                </Paper>
+                                Days
                             </div>
                             <div>
-                                {this.displayDigits(this.state.hours)} Hours <br />
+                                <Paper style={{padding: "10px", margin: "2px"}}>
+                                    {this.displayDigits(this.state.hours)} <br />
+                                </Paper>
+                                Hrs
                             </div>
                             <div>
-                                {this.displayDigits(this.state.minutes)} Minutes <br />
+                                <Paper style={{padding: "10px", margin: "2px"}}>
+                                    {this.displayDigits(this.state.minutes)} <br />  
+                                </Paper>
+                                Min
                             </div>
                             <div>
-                                {this.displayDigits(this.state.seconds)} Seconds <br />
+                                <Paper style={{padding: "10px", margin: "2px"}}>
+                                    {this.displayDigits(this.state.seconds)} <br />  
+                                </Paper>
+                                Sec
                             </div>
-                            <div>
-                                <p>Sign up before the next deadline! </p>
+                            </Grid>
+                            <div style={{justifySelf: "center"}}>
+                                <Typography variant="subheading" color="primary">Sign up before the next deadline!</Typography>
                             </div>
                         </Paper>
                     </div>
