@@ -21,7 +21,7 @@ const mapStateToProps = state => ({
 
 const styles = {
     joinChallenge: {
-        marginLeft: 10,
+        // marginLeft: 10,
     }
 }
 
@@ -74,10 +74,10 @@ class JoinChallengeButton extends Component {
         // try{
             if (this.props.challenge.userInUpcomingChallenge.length === 1){
                 console.log('THERE SHOULD NOT NOT NOT BE A BUTTON');
-                button = <Button variant="contained" color="#ffffff" disabled>Challenge Joined</Button>
+                button = <Button color="primary" disabled>Challenge Joined</Button>
             } else if (this.props.challenge.upcoming.length === 0) {
                 console.log('THERE SHOULD NOT NOT NOT BE A BUTTON');
-                button = <Button variant="contained" color="#ffffff">No Upcoming Challenge</Button>
+                button = <Button color="primary" disabled>No Upcoming Challenge</Button>
             }else if (this.props.challenge.upcoming.length === 1 && this.props.challenge.userInUpcomingChallenge.length === 0) {
                 console.log('THERE SHOULD BE A BUTTON');
                 button = <Button variant="contained" color="primary" onClick={this.joinChallenge}>Join Challenge</Button>

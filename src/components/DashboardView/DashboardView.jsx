@@ -24,7 +24,7 @@ const cookie = new Cookie();
 const styles = {
     paper: {
         padding: 20,
-        marginTop: 10,
+        // marginTop: 5,
         marginBottom: 10,
         height: 500,
         display: 'center',
@@ -40,7 +40,11 @@ const styles = {
         textAlign: 'center',
         contentAlign: 'center',
         marginTop: 100,
-    }
+    },
+    buttonPaper: {
+        marginLeft: 10,
+        marginRight: 10,
+    },
 }
 
 const mapStateToProps = state => ({
@@ -218,14 +222,18 @@ class DashboardView extends Component {
                 {/* <NavBar /> */}
                 <Header />
                 <div>
+                    <Paper className={classes.buttonPaper}>
                     <Grid container>
+                    
                         <Grid item sm>
                         <JoinChallengeButton />
                         </Grid>
                         <Grid item sm>
-                        <Button className={classes.prefs} onClick={this.openPreferences} color="secondary" size="small">E-mail Preferences</Button>
+                        <Button className={classes.prefs} onClick={this.openPreferences} color="primary" size="small">E-mail Preferences</Button>
                         </Grid>
+                    
                     </Grid>
+                    </Paper>
                 <Snackbar
                     anchorOrigin={{
                         vertical: 'bottom',

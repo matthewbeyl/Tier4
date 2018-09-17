@@ -124,7 +124,6 @@ class HomeView extends Component {
                 <Header />
                 {/* <NavBar /> */}
                 {/* <button onClick={this.reqDotUser}>Log req.user</button> */}
-                <br />
                 <Countdown deadline={this.props.startDate} />
                 <Typography variant="display1" color="secondary">Leaderboard</Typography>
                     {/* <div className={classes.cardDiv}>

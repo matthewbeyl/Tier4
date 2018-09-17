@@ -28,7 +28,7 @@ const styles = theme => ({
         marginLeft: 550,
     },
     newNav: {
-        marginLeft: 20,
+        marginLeft: 30,
         marginTop: -20,
         marginBottom: 50,
     }
