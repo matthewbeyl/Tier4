@@ -34,18 +34,32 @@ class JoinChallengeButton extends Component {
 
     componentDidMount() {
         this.props.dispatch(fetchStartDate());
-        this.props.dispatch({type: CHALLENGE_ACTIONS.CHECK_FOR_UPCOMING_CHALLENGE});
-        this.props.dispatch({type: CHALLENGE_ACTIONS.CHECK_USER_IN_UPCOMING_CHALLENGE});
+        this.props.dispatch({ type: CHALLENGE_ACTIONS.CHECK_FOR_UPCOMING_CHALLENGE });
+        this.props.dispatch({ type: CHALLENGE_ACTIONS.CHECK_USER_IN_UPCOMING_CHALLENGE });
     }
 
     joinChallenge = () => {
-        axios.post('/api/challenge/join').then(response => {
-            this.props.dispatch({type: CHALLENGE_ACTIONS.CHECK_FOR_UPCOMING_CHALLENGE});
-            this.props.dispatch({type: CHALLENGE_ACTIONS.CHECK_USER_IN_UPCOMING_CHALLENGE});
-        }).catch(err => {
-            console.log(err);
-            swal('Whoops! There was an error joining this challenge.')
+        swal({
+            title: "Confirm Join?",
+            buttons: true,
         })
+            .then((willDelete) => {
+                if (willDelete) {
+                    swal("Welcome to the Challenge", {
+                        icon: "success",
+                    });
+                    axios.post('/api/challenge/join').then(response => {
+                        this.props.dispatch({ type: CHALLENGE_ACTIONS.CHECK_FOR_UPCOMING_CHALLENGE });
+                        this.props.dispatch({ type: CHALLENGE_ACTIONS.CHECK_USER_IN_UPCOMING_CHALLENGE });
+                    }).catch(err => {
+                        console.log(err);
+                        swal('Whoops! There was an error joining this challenge.')
+                    })
+                } else {
+                    swal("We're sorry to see you change your mind. :(");
+                }
+            });
+
     }
 
     render() {
@@ -74,7 +88,7 @@ class JoinChallengeButton extends Component {
             }
         // } catch (error){
         //     console.log('Whoops');
-            
+
         // }
 
         return (
