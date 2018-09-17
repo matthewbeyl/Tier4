@@ -43,7 +43,7 @@ const styles = {
 }
 
 const mapStateToProps = state => ({
-    user: state.user.user, 
+    user: state.user.user || '', 
     isLoading: state.user.isLoading,
     commitRate: state.userStats.commit_percentage,
     longestStreak: state.userStats.longest_streak,
@@ -122,7 +122,7 @@ class DashboardView extends Component {
     }
 
     componentDidUpdate(prevProps) {
-        if (!this.props.isLoading && this.props.user.github === null) {
+        if (!this.props.isLoading && this.props.user === '') {
             this.props.history.push('home');
         }
         if(this.props.emailSnackbar !== prevProps.emailSnackbar){
