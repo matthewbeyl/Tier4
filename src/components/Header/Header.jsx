@@ -22,11 +22,11 @@ const styles = theme => ({
     },
     logo: {
         marginTop: 20,
-        marginLeft: 10,
+        marginLeft: 20,
     },
     logout: {
         marginTop: 10,
-        marginLeft: 950,
+        marginLeft: 800,
        
     },
     gradiant: {
@@ -103,7 +103,7 @@ class Header extends Component {
         return (
             <div className={classes.gradiant}>
                 <div className={classes.header}>
-                    <img src="https://dewiskbohv5c1.cloudfront.net/assets/logo-prime-horizontal-6909d23113b83bd59bf681f26f940f97.svg" alt="" height="55%" width="auto" className={classes.logo} />
+                    <img src="https://dewiskbohv5c1.cloudfront.net/assets/logo-prime-horizontal-6909d23113b83bd59bf681f26f940f97.svg" alt="" height="50%" width="auto" className={classes.logo} />
                     {/* <Button component={HomeLink} color="secondary">
                     Home
                 </Button>

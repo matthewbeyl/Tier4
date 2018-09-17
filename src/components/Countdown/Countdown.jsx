@@ -46,7 +46,7 @@ class Countdown extends Component {
             content = (
                 <div>
 
-                    <div style={{ display: "grid", alignContent: "center", width: "100%", height: "350px",
+                    <div style={{ display: "grid", alignContent: "center", width: "100%", height: "350px", topMargin: "-20",
  }}>
                         
                         <div style={{ justifySelf: "center" }}>
