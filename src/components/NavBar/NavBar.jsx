@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { USER_ACTIONS } from '../../redux/actions/userActions';
 import { connect } from 'react-redux';
 import LOGIN_ACTIONS from '../../redux/actions/loginActions';
+import swal from 'sweetalert'
 
 import { Toolbar, Typography, Button } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
@@ -51,7 +52,16 @@ class NavBar extends Component {
   }
 
   logout = () => {
-    this.props.dispatch({ type: LOGIN_ACTIONS.LOGOUT })
+    swal({
+      title: "Are you sure you want to log out?",
+      buttons: true,
+    })
+    .then((willDelete) => {
+      if (willDelete) {
+        this.props.dispatch({ type: LOGIN_ACTIONS.LOGOUT })
+      } else {
+      }
+    });
   }
 
   logInLogOut = () => {
