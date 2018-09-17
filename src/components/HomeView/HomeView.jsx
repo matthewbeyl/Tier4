@@ -27,7 +27,7 @@ const styles = {
 }
 
 const mapStateToProps = state => ({
-    startDate: state.challengeDate.date || '01-01-0000',
+    startDate: state.challengeDate.date || '01-01-2018',
     user: state.user.user,
     leaders: state.leaderboard,
 });

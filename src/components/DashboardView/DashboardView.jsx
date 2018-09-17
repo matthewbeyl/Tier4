@@ -115,7 +115,7 @@ class DashboardView extends Component {
 
     componentDidMount() {
         this.props.dispatch({ type: USER_ACTIONS.FETCH_USER });
-        if (!this.props.user && this.props.user === null) {
+        if (!this.props.user && this.props.user === '') {
             this.props.history.push('home');
         }
         this.props.dispatch(fetchStats());
