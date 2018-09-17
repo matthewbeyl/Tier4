@@ -4,9 +4,8 @@ import PastChallenges from '../PastChallenges/PastChallenges';
 import CurrentChallenge from '../CurrentChallenge/CurrentChallenge';
 import { USER_ACTIONS } from '../../redux/actions/userActions';
 import { CHALLENGE_ACTIONS } from '../../redux/actions/challengeActions';
-import NavBar from '../NavBar/NavBar';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
+import Header from '../Header/Header';
+import {Tabs, Tab, Paper} from '@material-ui/core';
 
 
 // CREATE BUTTON DISABLED WHEN THERE IS NO CURRENT CHALLENGE AND A CHALLENGE ALREADY CREATED FOR THE FUTURE
@@ -73,6 +72,7 @@ class AdminView extends Component {
         // check is user is admin: 
         let content = (
             <div>
+                <Paper>
                 <Tabs
                     style={{float:"right"}}
                     value={value}
@@ -92,11 +92,12 @@ class AdminView extends Component {
                 <div>
                     {displayCurrentChallenge && <CurrentChallenge />}
                 </div>
+                </Paper>
             </div>
         );
         return (
             <main>
-                <NavBar />
+                <Header />
                 {content}
             </main>
         )

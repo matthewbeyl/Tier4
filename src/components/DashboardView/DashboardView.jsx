@@ -24,7 +24,7 @@ const cookie = new Cookie();
 const styles = {
     paper: {
         padding: 20,
-        marginTop: 10,
+        // marginTop: 5,
         marginBottom: 10,
         height: 500,
         display: 'center',
@@ -39,7 +39,12 @@ const styles = {
     stats: {
         textAlign: 'center',
         contentAlign: 'center',
-    }
+        marginTop: 100,
+    },
+    buttonPaper: {
+        marginLeft: 10,
+        marginRight: 10,
+    },
 }
 
 const mapStateToProps = state => ({
@@ -163,11 +168,11 @@ class DashboardView extends Component {
 
     fill = () => {
         this.setState({
-            applied: 'I applied for 3 jobs on Indeed.',
+            applied: 'I applied for 21 jobs on Indeed and have one upcoming interview',
             learned: 'I have started learning node cron and I have been tinkering with momentjs.',
             built: 'I am revisiting my server-side calculator assignment, working on styling.',
-            followed_up: 'I have followed up with two companies I applied to last week.',
-            events_networking: 'No networking with week, I was out of town.'
+            followed_up: 'I have followed up with 8 companies I applied to last week.',
+            events_networking: 'I went to MinneDemo this week'
 
         })
     }
@@ -217,14 +222,18 @@ class DashboardView extends Component {
                 {/* <NavBar /> */}
                 <Header />
                 <div>
+                    <Paper className={classes.buttonPaper}>
                     <Grid container>
+                    
                         <Grid item sm>
                         <JoinChallengeButton />
                         </Grid>
                         <Grid item sm>
-                        <Button className={classes.prefs} onClick={this.openPreferences} color="secondary" size="small">E-mail Preferences</Button>
+                        <Button className={classes.prefs} onClick={this.openPreferences} color="primary" size="small">E-mail Preferences</Button>
                         </Grid>
+                    
                     </Grid>
+                    </Paper>
                 <Snackbar
                     anchorOrigin={{
                         vertical: 'bottom',
@@ -244,7 +253,7 @@ class DashboardView extends Component {
                             aria-label="Close"
                             color="inherit"
                             className={classes.close}
-                            onClick={this.handleClose}
+                            onClick={this.handleCloseEmailSnack}
                         >
                             <CloseIcon />
                         </IconButton>,
