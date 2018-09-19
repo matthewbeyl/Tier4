@@ -2,7 +2,7 @@ const express = require('express');
 const pool = require('../modules/pool');
 const router = express.Router();
 
-
+//gets all current challenge participants
 router.get('/', (req, res) => {
     pool.query(`SELECT "name", "commit_percentage", "image_url", "longest_streak" FROM "users"
     JOIN "user_challenge" ON "users"."id" = "user_challenge"."user_id"
@@ -10,10 +10,8 @@ router.get('/', (req, res) => {
     WHERE "challenges"."active" = true
     ORDER BY "commit_percentage" DESC;`)
     .then((result) => {
-        console.log(result);
         res.send(result.rows);
     }).catch((error) => {
-        console.log('Error - ', error);
         res.sendStatus(500)
     })  
 });

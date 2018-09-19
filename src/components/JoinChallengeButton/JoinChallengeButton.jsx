@@ -1,16 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { addFeedback } from '../../redux/actions/dashboardActions';
-import { addPreferences } from '../../redux/actions/dashboardActions';
-import { USER_ACTIONS } from '../../redux/actions/userActions';
-import NavBar from '../NavBar/NavBar';
 import { fetchStartDate } from '../../redux/actions/homeActions';
 import axios from 'axios';
 import swal from 'sweetalert';
 
 import { CHALLENGE_ACTIONS } from '../../redux/actions/challengeActions';
 
-import { Paper, Grid, Button, TextField, Checkbox, Typography } from '@material-ui/core';
+import { Button } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
 const mapStateToProps = state => ({
@@ -21,7 +17,6 @@ const mapStateToProps = state => ({
 
 const styles = {
     joinChallenge: {
-        // marginLeft: 10,
     }
 }
 
@@ -66,37 +61,22 @@ class JoinChallengeButton extends Component {
 
         let { classes } = this.props
 
-
         let button;
-        console.log('Upcoming challenge?:', this.props.challenge.upcoming.length);
 
-        console.log('Are they in the challenge already?:', this.props.challenge.userInUpcomingChallenge.length);
         // try{
             if (this.props.challenge.userInUpcomingChallenge.length === 1){
-                console.log('THERE SHOULD NOT NOT NOT BE A BUTTON');
                 button = <Button color="primary" disabled>Challenge Joined</Button>
             } else if (this.props.challenge.upcoming.length === 0) {
-                console.log('THERE SHOULD NOT NOT NOT BE A BUTTON');
                 button = <Button color="primary" disabled>No Upcoming Challenge</Button>
             }else if (this.props.challenge.upcoming.length === 1 && this.props.challenge.userInUpcomingChallenge.length === 0) {
-                console.log('THERE SHOULD BE A BUTTON');
                 button = <Button variant="contained" color="primary" onClick={this.joinChallenge}>Join Challenge</Button>
             }
-             else{
-                console.log('NOT TRUE');
-                
+             else{                
             }
-        // } catch (error){
-        //     console.log('Whoops');
-
-        // }
 
         return (
             <div className={classes.joinChallenge}>
                 {button}
-                {/* <Button disabled>Join Challenge</Button> */}
-                {/* <Button disabled>You have already joined the upcoming challenge</Button> */}
-                {/* <Button disabled>There is currently no challenge to join</Button> */}
             </div>
         )
     }
