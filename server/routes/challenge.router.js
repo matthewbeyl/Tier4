@@ -91,11 +91,7 @@ router.post('/newChallenge', rejectUnauthenticated, rejectNonAdmin, (req, res) =
 
 router.get('/date', (req, res) => {
     pool.query(`SELECT * FROM "challenges"
-<<<<<<< HEAD
-    WHERE challenges.date = true
-=======
     WHERE challenges.active = true
->>>>>>> 3defe692161f21971c3ddb6c426912b9985f0530
     LIMIT 1;`)
     .then((result) => {
         res.send(result.rows[0]);
