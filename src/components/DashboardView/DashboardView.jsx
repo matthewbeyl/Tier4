@@ -75,6 +75,8 @@ class DashboardView extends Component {
         };
     };
 
+
+    //opening and closing of snackbar/toast notifications
     openSnack = () => {
         this.props.dispatch({ type: 'OPEN_EMAIL_SNACKBAR' })
     }
