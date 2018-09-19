@@ -9,12 +9,24 @@ class Countdown extends Component {
         seconds: 0,
     };
 
-    componentWillMount = () => {
-        this.getTimeUntil(this.props.deadline);
-    }
+    // componentWillMount = () => {
+    //     console.log(this.props.deadline);
+    //     let result = new Date(this.props.deadline);
+    //     result.setDate(result.getDate()+30)
+    //     console.log(result);
+    //     this.getTimeUntil(result);
+    // }
 
-    componentDidMount = () => {
-        setInterval(() => this.getTimeUntil(this.props.deadline), 1000);
+    // componentDidMount = () => {
+    //     // let result = new Date(this.props.deadline);
+    //     // result.setDate(result.getDate()+30)
+    //     setInterval(() => this.getTimeUntil(result), 1000);
+    // }
+
+    componentDidUpdate = () =>{
+        let result = new Date(this.props.deadline);
+        result.setDate(result.getDate()+30)
+        setInterval(() => this.getTimeUntil(result), 1000);
     }
 
     displayDigits = (number) => {
