@@ -2,8 +2,9 @@ const express = require('express');
 const pool = require('../modules/pool');
 const router = express.Router();
 const rp = require('request-promise')
-const request = require('request')
+
 const cron = require('node-cron');
+
 
 
 
@@ -21,22 +22,21 @@ let didChallengeFinishRecently = false;
 // currentDate = currentDate.substring(1, 11)
 
 
-let date = new Date('09-10-2018');
+
+
+let date = new Date();
 date = JSON.stringify(date)
 todaysDate = date.substring(1, 11)
 //calculate todays date so that we only get todays commits in getData()
 
-// cron.schedule('*/600 * * * * *', function () {
-//     console.log('running once every 10 min');
-//     getData();
-// });
+cron.schedule('0 0 0 * * *', function () {
+    console.log('running once every 10 min');
+    getData();
+});
 //run getData() once every 20 seconds, will be changed to once a day at midnight.
 //getData();
 
-router.get('/get-data', (req, res) => {
-    res.send(theData)
-})
-//test endpoint to send github api data
+
 
 function getData() {
     console.log('getting user list');
@@ -238,6 +238,7 @@ function activateChallenge() {
 
                     })
             }
+
         }) //change initial query to search for a challenge that starts on todays date, and if the array that we get in response
         //is not empty, set that challenge to active
         .catch((error) => {
