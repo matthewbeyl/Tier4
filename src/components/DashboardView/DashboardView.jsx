@@ -2,11 +2,10 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { addFeedback, addPreferences, fetchStats } from '../../redux/actions/dashboardActions';
 import { USER_ACTIONS } from '../../redux/actions/userActions';
-import NavBar from '../NavBar/NavBar';
 import Header from '../Header/Header';
 import JoinChallengeButton from '../JoinChallengeButton/JoinChallengeButton'
 
-import { Paper, Button, TextField, Checkbox, Typography, Grid, Snackbar, Icon, IconButton } from '@material-ui/core';
+import { Paper, Button, TextField, Checkbox, Typography, Grid, Snackbar, IconButton } from '@material-ui/core';
 
 import CloseIcon from '@material-ui/icons/Close';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -48,7 +47,7 @@ const styles = {
 }
 
 const mapStateToProps = state => ({
-    user: state.user.user || '', 
+    user: state.user.user, 
     isLoading: state.user.isLoading,
     commitRate: state.userStats.commit_percentage,
     longestStreak: state.userStats.longest_streak,
@@ -99,16 +98,12 @@ class DashboardView extends Component {
     };
 
     openPreferences = () => {
-        console.log('State before', this.state);
-        console.log('props.user before', this.props.user);
-
         this.setState({
             queued_for_next_challenge: this.props.user.queued_for_next_challenge,
             weekly_email_reminders: this.props.user.weekly_email_reminders,
             daily_email_reminders: this.props.user.daily_email_reminders,
             email: this.props.user.email
         });
-        console.log('State after', this.state);
         this.setState({
             prefopen: true
         });
@@ -120,14 +115,14 @@ class DashboardView extends Component {
 
     componentDidMount() {
         this.props.dispatch({ type: USER_ACTIONS.FETCH_USER });
-        if (!this.props.user && this.props.user === '') {
+        if (!this.props.user && this.props.user === null) {
             this.props.history.push('home');
         }
         this.props.dispatch(fetchStats());
     }
 
     componentDidUpdate(prevProps) {
-        if (!this.props.isLoading && this.props.user === '') {
+        if (!this.props.isLoading && this.props.user.github === null) {
             this.props.history.push('home');
         }
         if(this.props.emailSnackbar !== prevProps.emailSnackbar){
@@ -168,11 +163,11 @@ class DashboardView extends Component {
 
     fill = () => {
         this.setState({
-            applied: 'I applied for 21 jobs on Indeed and have one upcoming interview',
+            applied: 'I applied for 3 jobs on Indeed.',
             learned: 'I have started learning node cron and I have been tinkering with momentjs.',
             built: 'I am revisiting my server-side calculator assignment, working on styling.',
-            followed_up: 'I have followed up with 8 companies I applied to last week.',
-            events_networking: 'I went to MinneDemo this week'
+            followed_up: 'I have followed up with two companies I applied to last week.',
+            events_networking: 'No networking with week, I was out of town.'
 
         })
     }
@@ -197,8 +192,6 @@ class DashboardView extends Component {
                 [property]: false
             })
         }
-        console.log(this.state);
-
     }
 
     handleEmailInput = (property) => (event) => {
@@ -219,7 +212,6 @@ class DashboardView extends Component {
         
         return (
             <main className={classes.page}>
-                {/* <NavBar /> */}
                 <Header />
                 <div>
                     <Paper className={classes.buttonPaper}>
@@ -253,7 +245,7 @@ class DashboardView extends Component {
                             aria-label="Close"
                             color="inherit"
                             className={classes.close}
-                            onClick={this.handleCloseEmailSnack}
+                            onClick={this.handleClose}
                         >
                             <CloseIcon />
                         </IconButton>,

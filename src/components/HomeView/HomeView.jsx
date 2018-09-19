@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import Countdown from '../Countdown/Countdown';
-import NavBar from '../NavBar/NavBar';
 import Header from '../Header/Header';
 
 import { fetchStartDate, fetchLeaders } from '../../redux/actions/homeActions';
@@ -12,11 +11,9 @@ import { USER_ACTIONS } from '../../redux/actions/userActions';
 import { Typography, withStyles, Paper } from '@material-ui/core';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
 import DemoLeaderboard from '../DemoLeaderboard/DemoLeaderboard';
 
 const styles = {
-
     cardDiv: {
         display: "flex",
         flexDirection: "row",
@@ -24,8 +21,20 @@ const styles = {
         padding: "6%",
     },
     leaderCard: {
-        margin: "1% 1% 1% 1%",
-    }
+        // margin: "1% 1% 1% 1%",
+    },
+    card: {
+        display: 'flex',
+        backgroundColor: '#07AA9E',
+        minWidth: '100%',
+        minHeight: 200,
+        overflowX: 'auto',
+    },
+    cardContent: {
+        // backgroundColor: '#e74c3c',
+        minWidth: 200,
+        margin: 5,
+    },
 }
 
 const mapStateToProps = state => ({
@@ -38,7 +47,6 @@ class HomeView extends Component {
 
     constructor(props) {
         super(props);
-
         this.state = {
             challengeDate: ''
         }
@@ -65,10 +73,6 @@ class HomeView extends Component {
         })
     }
 
-    // reqDotUser = () => {
-    //     console.log('from REDUX, USER:', this.props.user);
-    // }
-
     sortLeaders = () => {
         try {
             let displayedLeaders = []
@@ -78,7 +82,6 @@ class HomeView extends Component {
                 }
             }
                 if (displayedLeaders.length > 0) {
-                    console.log(displayedLeaders);
                     return displayedLeaders
                 }
                 else {
@@ -88,10 +91,7 @@ class HomeView extends Component {
                     }
                     return displayedLeaders
                 }
-            
         } catch (error) {
-            console.log(error);
-
             return []
         }
     }
@@ -122,14 +122,14 @@ class HomeView extends Component {
         return (
             <main>
                 <Header />
-                {/* <NavBar /> */}
-                {/* <button onClick={this.reqDotUser}>Log req.user</button> */}
                 <Countdown deadline={this.props.startDate} />
                 <Typography variant="display1" color="secondary">Leaderboard</Typography>
-                    {/* <div className={classes.cardDiv}>
-                        {leaderCards}
-                    </div> */}
-                    <DemoLeaderboard />
+                    <section className={classes.card}>
+                        <div className={classes.cardContent}>
+                         {leaderCards}
+                        </div>
+                    </section>
+                    {/* <DemoLeaderboard /> */}
             </main >
         )
     }
