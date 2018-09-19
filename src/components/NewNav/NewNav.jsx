@@ -6,6 +6,7 @@ import { LOGIN_ACTIONS } from '../../redux/actions/loginActions';
 
 import { Button } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
+import swal from 'sweetalert';
 
 
 const HomeLink = props => <Link to="/home" {...props} />
@@ -44,7 +45,16 @@ class NewNav extends Component {
     }
 
     logout = () => {
-        this.props.dispatch({ type: LOGIN_ACTIONS.LOGOUT })
+        swal({
+            title: "Are you sure you want to log out?",
+            buttons: true,
+          })
+          .then((willDelete) => {
+            if (willDelete) {
+              this.props.dispatch({ type: LOGIN_ACTIONS.LOGOUT })
+            } else {
+            }
+          });
     }
 
     logInLogOut = () => {
