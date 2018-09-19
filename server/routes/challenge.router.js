@@ -91,8 +91,7 @@ router.post('/newChallenge', rejectUnauthenticated, rejectNonAdmin, (req, res) =
 
 router.get('/date', (req, res) => {
     pool.query(`SELECT * FROM "challenges"
-    WHERE challenges.date > current_date
-    ORDER BY "date" DESC
+    WHERE challenges.date = true
     LIMIT 1;`)
     .then((result) => {
         res.send(result.rows[0]);
