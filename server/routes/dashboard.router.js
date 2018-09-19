@@ -3,6 +3,7 @@ const pool = require('../modules/pool');
 const router = express.Router();
 const { rejectUnauthenticated } = require('../modules/authentication-middleware');
 
+//posts users email and preferences to database
 router.post('/email', rejectUnauthenticated, (req, res) => {
     console.log(req.body);
     pool.query(`UPDATE "users"
@@ -19,6 +20,7 @@ router.post('/email', rejectUnauthenticated, (req, res) => {
     })
 });
 
+//posts weekly summary form to database
 router.post('/feedback', rejectUnauthenticated, (req, res) => {
     pool.query(`INSERT INTO "weekly_progress_form" ("user_id", "applied", "learned", "built", "followed_up", "events_networking")
     VALUES ($1, $2, $3, $4, $5, $6);`, [req.user.id, req.body.applied, req.body.learned, req.body.built, req.body.followed_up, req.body.events_networking])
@@ -29,18 +31,14 @@ router.post('/feedback', rejectUnauthenticated, (req, res) => {
     })  
 });
 
+//gets user image, longest streak, and commit rate for logged in user
 router.get('/stats', rejectUnauthenticated, (req, res) => {
-    console.log(req.user.id);
-    
     pool.query(`SELECT "longest_streak", "commit_percentage" FROM "user_challenge"
     JOIN "challenges" ON "user_challenge"."challenge_id" = "challenges"."id"
     WHERE "user_id"=${[req.user.id]} AND "active" = true;`)
     .then((result) => {
-        console.log(result);
-        
         res.send(result.rows[0]);
     }).catch((error) => {
-        console.log('Error - ', error);
         res.sendStatus(500)
     })
 })

@@ -67,10 +67,11 @@ class Countdown extends Component {
                         <div style={{ justifySelf: "center" }}>
                             <Typography variant="subheading" color="secondary">Track your progress by signing up!</Typography>
                         </div>
-                        <Paper style={{justifySelf: "center", padding: "20px"}}>
-                            <div>
+                        <br/>
+                        <Paper style={{justifySelf: "center", padding: "10px"}}>
+                            {/* <div>
                                 <Typography variant="headline" color="primary">30 Day Sprint Challenge</Typography>
-                            </div>
+                            </div> */}
                             <Grid container style={{justifySelf: "center", padding: "20px"}}>
                             <div>
                                 <Paper style={{padding: "10px", margin: "2px"}}>
@@ -98,7 +99,7 @@ class Countdown extends Component {
                             </div>
                             </Grid>
                             <div style={{justifySelf: "center"}}>
-                                <Typography variant="subheading" color="primary">Sign up before the next deadline!</Typography>
+                                <Typography variant="headline" color="primary">left in current challenge</Typography>
                             </div>
                         </Paper>
                     </div>

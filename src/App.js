@@ -11,12 +11,10 @@ import RegisterPage from './components/RegisterPage/RegisterPage';
 import HomeView from './components/HomeView/HomeView';
 import DashboardView from './components/DashboardView/DashboardView';
 import AdminView from './components/AdminView/AdminView';
-import TestComponent from './components/TestComponent/TestComponent'
 
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 
 import './styles/main.css';
-// import { TaskQueueCumulativeStatisticsPage } from 'twilio/lib/rest/taskrouter/v1/workspace/taskQueue/taskQueueCumulativeStatistics';
 
 const theme = createMuiTheme({
   palette: {
@@ -32,8 +30,6 @@ const theme = createMuiTheme({
     }
   }
 });
-
-//hex code for black #000000
 
 const App = () => (
   <div>
@@ -61,12 +57,6 @@ const App = () => (
           path="/dashboard"
           component={DashboardView}
         />
-        {/* <Route 
-        <Route
-          path="/test"
-          component={TestComponent}
-        /> */}
-        {/* OTHERWISE (no path!) */}
         <Route render={() => <h1>404</h1>} />
       </Switch>
     </Router>
