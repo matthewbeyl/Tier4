@@ -1,6 +1,8 @@
-import { takeEvery, call } from 'redux-saga/effects';
+import { takeEvery, call, put } from 'redux-saga/effects';
 import axios from 'axios';
 import { EMAIL_ACTION } from '../actions/dashboardActions';
+import { USER_ACTIONS } from '../actions/userActions';
+import swal from 'sweetalert';
 
 function* addPreferencesSaga() {
     try {
@@ -14,7 +16,12 @@ function* addPreferences(action){
     console.log(action);
     try{
         yield call(axios.post, '/api/dashboard/email', action.payload)
-        yield alert('Preferences Updated')
+        yield put({
+            type: USER_ACTIONS.FETCH_USER
+        });
+        yield put({
+            type: 'OPEN_EMAIL_SNACKBAR'
+        });
     } catch (error) {
         console.log('Error - ', error);
     }

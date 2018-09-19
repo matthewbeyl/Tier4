@@ -1,16 +1,16 @@
-import React, { Component } from 'react';
-import axios from 'axios';
+// import React, { Component } from 'react';
+// import axios from 'axios';
 
 
-class TestComponent extends Component {
-    constructor(props){
-        super(props)
+// class TestComponent extends Component {
+//     constructor(props){
+//         super(props)
 
 
-    }
+//     }
 
-    componentDidMount(){
-        this.getGHData();
+    //componentDidMount(){
+        //this.getGHData();
     //     axios({
     //         url: 'https://api.github.com/graphql',
     //         headers: {
@@ -39,38 +39,38 @@ class TestComponent extends Component {
     //     .catch((error)=>{
     //         console.log(error);
     //     })
-    }
+    //}
 
 
-    getGHData = ()=>{
-        axios({
-            url: '/api/gh-router/get-gh-data',
-            method: 'GET'
-        })
-        .then((response)=>{
-            console.log(response.data);
-        })
-    }
+//     getGHData = ()=>{
+//         axios({
+//             url: '/api/gh-router/get-gh-data',
+//             method: 'GET'
+//         })
+//         .then((response)=>{
+//             console.log(response.data);
+//         })
+//     }
 
-    getSortedData = ()=>{
-        axios({
-            url: '/api/gh-router/get-sorted-data',
-            method: 'GET'
-        })
-        .then((response)=>{
-            console.log(response.data);
-        })
-    }
+    // getSortedData = ()=>{
+    //     axios({
+    //         url: '/api/gh-router/get-data',
+    //         method: 'GET'
+    //     })
+    //     .then((response)=>{
+    //         console.log(response.data);
+    //     })
+    // }
 
-    render() {
-        return (
-            <main>
+//     render() {
+//         return (
+//             <main>
 
-                <h1>I am the test component. My function is to be used for testing server routes and I have no purpose beyond that.</h1>
-                <button onClick={()=>this.getSortedData()}>Click me to do thing</button>
-            </main>
-        )
-    }
-}
+//                 <h1>I am the test component. My function is to be used for testing server routes and I have no purpose beyond that.</h1>
+//                 <button onClick={()=>this.getSortedData()}>Click me to do thing</button>
+//             </main>
+//         )
+//     }
+// }
 
-export default TestComponent;
+// export default TestComponent;

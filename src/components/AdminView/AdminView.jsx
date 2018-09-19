@@ -1,44 +1,36 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import CreateNewChallengeForm from '../CreateNewChallengeForm/CreateNewChallengeForm.js';
 import PastChallenges from '../PastChallenges/PastChallenges';
 import CurrentChallenge from '../CurrentChallenge/CurrentChallenge';
 import { USER_ACTIONS } from '../../redux/actions/userActions';
-import NavBar from '../NavBar/NavBar';
+import { CHALLENGE_ACTIONS } from '../../redux/actions/challengeActions';
+import Header from '../Header/Header';
+import {Tabs, Tab, Paper} from '@material-ui/core';
 
+
+// CREATE BUTTON DISABLED WHEN THERE IS NO CURRENT CHALLENGE AND A CHALLENGE ALREADY CREATED FOR THE FUTURE
 const mapStateToProps = state => ({
     user: state.user.user,
     login: state.login,
 });
-//  Bug: if Admin, and on admin view => refreshing will bring admin back to home
+
 class AdminView extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            showPopupForm: false,
             displayCurrentChallenge: true,
-            displayPastChallenges: false
+            displayPastChallenges: false,
+            value: 0,
         }
     }
 
     componentWillMount() {
-        this.props.dispatch({
-            type: USER_ACTIONS.FETCH_USER
-        })
-
-        // user who are not logged will directed to the home view
-        if (!this.props.user) {
-            this.props.history.push('/home');
-        }
+        this.props.dispatch({ type: USER_ACTIONS.FETCH_USER });
+        this.props.dispatch({ type: CHALLENGE_ACTIONS.FETCH_ACTIVE_CHALLENGE });
     }
 
     componentDidUpdate() {
-        console.log(this.props.user.admin)
-        this.props.dispatch({ type: 'FETCH_CURRENT_CHALLENGE' });
-
-        // user who are logged in and are not Admin will be directed to the home view
-        if (!this.props.user.admin || this.props.user.admin === null) {
-            console.log('user is not an admin')
+        if (this.props.user === null || !this.props.user.admin) {
             this.props.history.push('/home');
         }
     }
@@ -49,9 +41,11 @@ class AdminView extends Component {
                 displayPastChallenges: false
             })
         }
-        this.setState({
-            displayCurrentChallenge: !this.state.displayCurrentChallenge,
-        })
+        if (this.state.displayCurrentChallenge === false) {
+            this.setState({
+                displayCurrentChallenge: true
+            })
+        }
     }
 
     displayPastChallenges = () => {
@@ -60,52 +54,50 @@ class AdminView extends Component {
                 displayCurrentChallenge: false
             })
         }
+        if (this.state.displayPastChallenges === false) {
+            this.setState({
+                displayPastChallenges: true
+            })
+        }
+    }
+
+    handleDisplayChange = (event, value) => {
         this.setState({
-            displayPastChallenges: !this.state.displayPastChallenges,
+            value: value
         })
     }
 
-    toggleCreateNewChallengePopupForm = () => {
-        this.setState({
-            showPopupForm: !this.state.showPopupForm
-        });
-    }
-
     render() {
-        let content = null;
-        content = (
+        const { value, displayCurrentChallenge, displayPastChallenges } = this.state;
+        // check is user is admin: 
+        let content = (
             <div>
-                <p>Welcome, Luke</p>
-                <button onClick={this.toggleCreateNewChallengePopupForm.bind(this)}>Create New Challenge</button>
-                {this.state.showPopupForm ?
-                    <CreateNewChallengeForm
-                        text='Create a New Challenge'
-                        closePopupForm={this.toggleCreateNewChallengePopupForm.bind(this)}
-                    /> : null
-                }
-                <button
-                    style={{ float: "right" }}
-                    onClick={this.displayCurrentChallenge}
-                >Current Challenge</button>
-                <button
-                    style={{ float: "right" }}
-                    onClick={this.displayPastChallenges}
-                >Past Challenges</button>
-                {/* displays when past challenge state variable is true */}
-                {this.state.displayPastChallenges ?
-                    <PastChallenges
-                    /> : null
-                }
-                {/* displays when curent challenges state variable is true */}
-                {this.state.displayCurrentChallenge ?
-                    <CurrentChallenge
-                    /> : null
-                }
+                <Paper>
+                <Tabs
+                    style={{float:"right"}}
+                    value={value}
+                    indicatorColor="primary"
+                    onChange={this.handleDisplayChange}>
+                    <Tab
+                        label="Current Challenge"
+                        onClick={this.displayCurrentChallenge} />
+                    <Tab
+                        label="Past Challenges"
+                        onClick={this.displayPastChallenges} />
+                </Tabs>
+                {/* <p>Welcome, {this.props.user.name}</p> */}
+                <div>
+                    {displayPastChallenges && <PastChallenges />}
+                </div>
+                <div>
+                    {displayCurrentChallenge && <CurrentChallenge />}
+                </div>
+                </Paper>
             </div>
         );
         return (
             <main>
-                <NavBar />
+                <Header />
                 {content}
             </main>
         )

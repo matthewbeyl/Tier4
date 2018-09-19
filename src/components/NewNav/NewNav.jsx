@@ -6,7 +6,7 @@ import { LOGIN_ACTIONS } from '../../redux/actions/loginActions';
 
 import { Button } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
-import NewNav from '../NewNav/NewNav';
+import swal from 'sweetalert';
 
 
 const HomeLink = props => <Link to="/home" {...props} />
@@ -17,25 +17,25 @@ const styles = theme => ({
 
     header: {
         display: 'flex',
-        height: 100,
+        backgroundImage: 'linear-gradient(#07AA9E, #222222)',
+        height: 150,
         margin: 0,
     },
     logo: {
         marginTop: 20,
-        marginLeft: 20,
+        marginLeft: 10,
     },
     logout: {
-        marginTop: 10,
-        marginLeft: 800,
-       
+        marginLeft: 550,
     },
-    gradiant: {
-        backgroundImage: 'linear-gradient(#07AA9E, #222222)',
+    newNav: {
+        marginLeft: 30,
+        marginTop: -20,
+        marginBottom: 50,
     }
 })
 
-
-class Header extends Component {
+class NewNav extends Component {
 
     componentWillMount() {
         this.props.dispatch({
@@ -44,25 +44,35 @@ class Header extends Component {
     }
 
     logout = () => {
-        this.props.dispatch({ type: LOGIN_ACTIONS.LOGOUT })
+        swal({
+            title: "Are you sure you want to log out?",
+            buttons: true,
+          })
+          .then((willDelete) => {
+            if (willDelete) {
+              this.props.dispatch({ type: LOGIN_ACTIONS.LOGOUT })
+            } else {
+            }
+          });
     }
 
+    //conditionally rendering login/logout buttons dependant on whether the user is logged in with GitHub
     logInLogOut = () => {
         let { classes } = this.props
-
         try {
             if (this.props.user.github) {
                 return (
                     <Button color="secondary" onClick={this.logout}>Log out</Button>
                 )
             } else {
-                return (<Button color="secondary" href="http://localhost:5000/api/auth/login">Log In</Button>);
+                return (<Button  color="secondary" href="http://localhost:5000/api/auth/login">Log In</Button>);
             }
         } catch (error) {
-            return (<Button color="secondary" href="http://localhost:5000/api/auth/login">Log In</Button>);
+            return (<Button  color="secondary" href="http://localhost:5000/api/auth/login">Log In</Button>);
         }
     }
 
+    //conditionally rendering login/logout buttons dependant on whether the user is marked as admin in Database
     adminNav = () => {
         try {
             if (this.props.user.admin) {
@@ -80,6 +90,7 @@ class Header extends Component {
         }
     }
 
+    //displays user's name from github if logged in
     dashboardNav = () => {
         try {
             if (this.props.user.github && !this.props.user.admin) {
@@ -97,18 +108,14 @@ class Header extends Component {
     }
 
     render() {
-
         let { classes } = this.props
-
         return (
-            <div className={classes.gradiant}>
-                <div className={classes.header}>
-                    <img src="https://dewiskbohv5c1.cloudfront.net/assets/logo-prime-horizontal-6909d23113b83bd59bf681f26f940f97.svg" alt="" height="50%" width="auto" className={classes.logo} />
-                    <div className={classes.logout}>
-                        {this.logInLogOut()}
-                    </div>
-                </div>
-                <NewNav />
+            <div className={classes.newNav}>
+                <Button component={HomeLink} color="secondary">
+                    Home
+                </Button>
+                {this.dashboardNav()}                
+                {this.adminNav()}
             </div>
         )
     }
@@ -119,5 +126,5 @@ const mapStateToProps = state => ({
     user: state.user.user
 });
 
-const StyledHeader = withStyles(styles)(Header)
-export default connect(mapStateToProps)(StyledHeader);
+const StyledNewNav = withStyles(styles)(NewNav)
+export default connect(mapStateToProps)(StyledNewNav);

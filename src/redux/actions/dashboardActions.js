@@ -15,3 +15,12 @@ export const addPreferences = (payload) => ({
     type : EMAIL_ACTION.ADD_PREFERENCES,
     payload : payload
 })
+
+export const STATS_ACTIONS = {
+    FETCH_STATS: 'FETCH_STATS',
+    DISPLAY_STATS: 'DISPLAY_STATS',
+};
+
+export function fetchStats() {
+    return { type: STATS_ACTIONS.FETCH_STATS }
+};

@@ -11,7 +11,6 @@ import RegisterPage from './components/RegisterPage/RegisterPage';
 import HomeView from './components/HomeView/HomeView';
 import DashboardView from './components/DashboardView/DashboardView';
 import AdminView from './components/AdminView/AdminView';
-import TestComponent from './components/TestComponent/TestComponent'
 
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 
@@ -20,9 +19,14 @@ import './styles/main.css';
 const theme = createMuiTheme({
   palette: {
     primary: {
-      light: '#5adde1',
-      main: '#00abaf',
-      dark: '#007b80',
+      light: '#5adccf',
+      main: '#07AA9E',
+      dark: '#007a70',
+    },
+    secondary: {
+      light: '#ffffff',
+      main: '#ffffff',
+      dark: '#cccccc',
     }
   }
 });
@@ -53,11 +57,6 @@ const App = () => (
           path="/dashboard"
           component={DashboardView}
         />
-        <Route
-          path="/test"
-          component={TestComponent}
-        />
-        {/* OTHERWISE (no path!) */}
         <Route render={() => <h1>404</h1>} />
       </Switch>
     </Router>
